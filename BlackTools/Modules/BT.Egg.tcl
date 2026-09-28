@@ -29,15 +29,13 @@ proc egg:process {unick host hand chan chan1 setting result} {
 switch [string tolower $setting] {
 
 nick {
-	set result [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
 	set return [config:getinfo $config "set nick \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 	set ::lastnick [config:getinfo $config "set nick \"*\""]
-	set error [config:save $config "set nick \"*\"" "set nick \"$result\""]
-	set result [string map [list {\[} \[ {\]} \] {\?} \? {\\} \\] $result]
-	set nick [join $result]
+	set error [config:save $config "set nick \"*\"" "set nick \"[config:quote $result]\""]
+	set nick $result
 if {$error == "0"} {
 	return 0
 }
@@ -46,12 +44,11 @@ if {$error == "0"} {
 }
 
 realname {
-	set result [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
 	set return [config:getinfo $config "set realname \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $config "set realname \"*\"" "set realname \"$result\""]
+	set error [config:save $config "set realname \"*\"" "set realname \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -59,12 +56,11 @@ if {$error == "0"} {
 }
 
 homechan {
-	set result [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
 	set return [config:getinfo $tcl_config "set black(homechan) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(homechan) \"*\"" "set black(homechan) \"$result\""]
+	set error [config:save $tcl_config "set black(homechan) \"*\"" "set black(homechan) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -73,10 +69,10 @@ if {$error == "0"} {
 
 chanserv {
 	set return [config:getinfo $tcl_config "set black(chanserv) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(chanserv) \"*\"" "set black(chanserv) \"$result\""]
+	set error [config:save $tcl_config "set black(chanserv) \"*\"" "set black(chanserv) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -85,10 +81,10 @@ if {$error == "0"} {
 
 hostchanserv {
 	set return [config:getinfo $tcl_config "set black(hostchanserv) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(hostchanserv) \"*\"" "set black(hostchanserv) \"$result\""]
+	set error [config:save $tcl_config "set black(hostchanserv) \"*\"" "set black(hostchanserv) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -96,12 +92,11 @@ if {$error == "0"} {
 }
 
 userlogin {
-	set result [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
 	set return [config:getinfo $tcl_config "set black(username) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(username) \"*\"" "set black(username) \"$result\""]
+	set error [config:save $tcl_config "set black(username) \"*\"" "set black(username) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -109,12 +104,11 @@ if {$error == "0"} {
 }
 
 userpass {
-	set result [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
 	set return [config:getinfo $tcl_config "set black(password) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(password) \"*\"" "set black(password) \"$result\""]
+	set error [config:save $tcl_config "set black(password) \"*\"" "set black(password) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -123,10 +117,10 @@ if {$error == "0"} {
 
 add-defaultmask {
 	set return [config:getinfo $tcl_config "set black(hostadd) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(hostadd) \"*\"" "set black(hostadd) \"$result\""]
+	set error [config:save $tcl_config "set black(hostadd) \"*\"" "set black(hostadd) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -136,10 +130,10 @@ if {$error == "0"} {
 
 broadcast-showtime {
 	set return [config:getinfo $tcl_config "set black(bttime) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(bttime) \"*\"" "set black(bttime) \"$result\""]
+	set error [config:save $tcl_config "set black(bttime) \"*\"" "set black(bttime) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -156,10 +150,10 @@ if {[info exists black(broadcast:counter)]} {
 
 user-expire {
 	set return [config:getinfo $tcl_config "set black(user_expire_time) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(user_expire_time) \"*\"" "set black(user_expire_time) \"$result\""]
+	set error [config:save $tcl_config "set black(user_expire_time) \"*\"" "set black(user_expire_time) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -169,10 +163,10 @@ if {$error == "0"} {
 
 banmethod-expire {
 	set return [config:getinfo $tcl_config "set black(banmethod_memory_time) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(banmethod_memory_time) \"*\"" "set black(banmethod_memory_time) \"$result\""]
+	set error [config:save $tcl_config "set black(banmethod_memory_time) \"*\"" "set black(banmethod_memory_time) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -188,10 +182,10 @@ if {[info exists black(banmethod_rem:counter)]} {
 
 cmdchar {
 	set return [config:getinfo $tcl_config "set black(cmdchar) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(cmdchar) \"*\"" "set black(cmdchar) \"$result\""]
+	set error [config:save $tcl_config "set black(cmdchar) \"*\"" "set black(cmdchar) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0 
 	}
@@ -201,7 +195,7 @@ if {$error == "0"} {
 
 defaultlang {
 	set return [config:getinfo $tcl_config "set black(default_lang) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 	set found_lang 0
@@ -217,7 +211,7 @@ if {$found_lang == 0} {
 	blacktools:tell $unick $host $hand $chan $chan1 egg.5 "defaultlang $result"
 	return
 }
-	set error [config:save $tcl_config "set black(default_lang) \"*\"" "set black(default_lang) \"$result\""]
+	set error [config:save $tcl_config "set black(default_lang) \"*\"" "set black(default_lang) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -272,10 +266,10 @@ if {$error == "0"} {
 
 floodmenuprot {
 	set return [config:getinfo $tcl_config "set black(antiflood:cmd) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(antiflood:cmd) \"*\"" "set black(antiflood:cmd) \"$result\""]
+	set error [config:save $tcl_config "set black(antiflood:cmd) \"*\"" "set black(antiflood:cmd) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -284,10 +278,10 @@ if {$error == "0"} {
 
 userfloodmsgprot {
 	set return [config:getinfo $tcl_config "set black(msg:flood) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(msg:flood) \"*\"" "set black(msg:flood) \"$result\""]
+	set error [config:save $tcl_config "set black(msg:flood) \"*\"" "set black(msg:flood) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -296,10 +290,10 @@ if {$error == "0"} {
 
 massfloodmsgprot {
 	set return [config:getinfo $tcl_config "set black(mass:msg:flood) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(mass:msg:flood) \"*\"" "set black(mass:msg:flood) \"$result\""]
+	set error [config:save $tcl_config "set black(mass:msg:flood) \"*\"" "set black(mass:msg:flood) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -308,10 +302,10 @@ if {$error == "0"} {
 
 massfloodsilencetime {
 	set return [config:getinfo $tcl_config "set black(mass:msg:silence_time) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(mass:msg:silence_time) \"*\"" "set black(mass:msg:silence_time) \"$result\""]
+	set error [config:save $tcl_config "set black(mass:msg:silence_time) \"*\"" "set black(mass:msg:silence_time) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -320,10 +314,10 @@ if {$error == "0"} {
 
 floodnotcprot {
 	set return [config:getinfo $tcl_config "set black(notice:flood) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(notice:flood) \"*\"" "set black(notice:flood) \"$result\""]
+	set error [config:save $tcl_config "set black(notice:flood) \"*\"" "set black(notice:flood) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -332,10 +326,10 @@ if {$error == "0"} {
 
 pagelimit {
 	set return [config:getinfo $tcl_config "set black(modul:nr:entries) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set error [config:save $tcl_config "set black(modul:nr:entries) \"*\"" "set black(modul:nr:entries) \"$result\""]
+	set error [config:save $tcl_config "set black(modul:nr:entries) \"*\"" "set black(modul:nr:entries) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -344,15 +338,13 @@ if {$error == "0"} {
 
 away {
 	set return [config:getinfo $tcl_config "set black(default_away) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
-	set result [string map [list \" {\"} \[ {\[} \] {\]} \? {\?} \\ {\\}] $result]
-	set error [config:save $tcl_config "set black(default_away) \"*\"" "set black(default_away) \"$result\""]
+	set error [config:save $tcl_config "set black(default_away) \"*\"" "set black(default_away) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 }
-	set result [string map [list {\[} \[ {\]} \] {\?} \? {\\} \\] $result]
 	putserv "AWAY :"
 	putserv "AWAY :$result"
 	return 1
@@ -360,13 +352,13 @@ if {$error == "0"} {
 
 antibotidle {
 	set return [config:getinfo $tcl_config "set black(antibotidle_status) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 if {![regexp {^[01]} $result]} {
 	return 0
 }
-	set error [config:save $tcl_config "set black(antibotidle_status) \"*\"" "set black(antibotidle_status) \"$result\""]
+	set error [config:save $tcl_config "set black(antibotidle_status) \"*\"" "set black(antibotidle_status) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -376,13 +368,13 @@ if {$error == "0"} {
 
 quote-usage {
 	set return [config:getinfo $tcl_config "set black(quote:usage) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 if {![regexp {^[01]} $result]} {
 	return 0
 }
-	set error [config:save $tcl_config "set black(quote:usage) \"*\"" "set black(quote:usage) \"$result\""]
+	set error [config:save $tcl_config "set black(quote:usage) \"*\"" "set black(quote:usage) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -392,13 +384,13 @@ if {$error == "0"} {
 
 chanremove-setting {
 	set return [config:getinfo $tcl_config "set black(chanremove_all) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 if {![regexp {^[01]} $result]} {
 	return 0
 }
-	set error [config:save $tcl_config "set black(chanremove_all) \"*\"" "set black(chanremove_all) \"$result\""]
+	set error [config:save $tcl_config "set black(chanremove_all) \"*\"" "set black(chanremove_all) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}
@@ -408,13 +400,13 @@ if {$error == "0"} {
 
 add-mask {
 	set return [config:getinfo $tcl_config "set black(hostdefaultadd) \"*\""]
-if {[string equal -nocase $return $result]} {
+if {[config:same $return $result]} {
 	return 2
 }
 if {![regexp {^[12345]} $result]} {
 	return 0
 }
-	set error [config:save $tcl_config "set black(hostdefaultadd) \"*\"" "set black(hostdefaultadd) \"$result\""]
+	set error [config:save $tcl_config "set black(hostdefaultadd) \"*\"" "set black(hostdefaultadd) \"[config:quote $result]\""]
 if {$error == "0"} {
 	return 0
 	}

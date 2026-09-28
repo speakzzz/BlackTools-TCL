@@ -1,4 +1,13 @@
  2026-09-28 speakzzz
+  * Settings changed from IRC (nick, realname, homechan, cmdchar, etc.)
+    are now escaped correctly when written to eggdrop.conf or
+    BlackTools.tcl. Values containing " \ $ [ or ] could previously
+    leave the config unloadable, be saved wrongly, or run code when the
+    config was loaded. One shared helper (config:quote) replaces the
+    partial per-setting escaping
+  * away: messages containing quotes are no longer sent with \"
+  * nick: nicknames containing { } are no longer altered or rejected
+ 2026-09-28 speakzzz
   * New blacktools:write_atomic: files are written to a temp file and
     renamed into place, so a crash or full disk can never leave them
     half-written or missing. Original permissions are kept

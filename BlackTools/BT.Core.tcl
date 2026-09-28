@@ -594,6 +594,19 @@ if {[file exists $path]} {
 
 ############################### Config save ##################################
 
+#Fork change (speakzzz, 2026): make a value safe inside a double-quoted
+#Tcl string in a config file, so it reads back exactly as typed and can
+#never break the file ("), substitute a variable ($) or run a command ([]).
+proc config:quote {value} {
+	set value [regsub -all {[\x00-\x1f\x7f]} $value ""]
+	return [string map [list \\ \\\\ \" \\\" \$ \\\$ \[ \\\[ \] \\\]] $value]
+}
+
+#Is value what config:getinfo returned for this setting? (getinfo strips quotes)
+proc config:same {current value} {
+	return [string equal -nocase $current [string map [list \" ""] [config:quote $value]]]
+}
+
 proc config:save {f text_find text_replace} {
 	global black
 	set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
