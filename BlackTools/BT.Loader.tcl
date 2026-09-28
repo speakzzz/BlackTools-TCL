@@ -107,6 +107,58 @@ foreach e $black(load_errors) { lappend failed "[lindex $e 1] ([lindex $e 0])" }
 	putlog "\[BT\] Loaded with [llength $black(load_errors)] problem(s): [join $failed ", "]. The rest of BlackTools is running; fix or update the files above and .rehash."
 }
 
+#Fork change (speakzzz, 2026): tell boss owners by note when files were
+#skipped, and again once everything loads fine. Runs a minute after loading
+#because on startup eggdrop reads its user list after the scripts. Only
+#sends when the set of problems changes, so rehashing doesn't repeat notes.
+
+proc blacktools:load_state_file {} {
+	global black
+	return "$black(dirname)/BlackTools/FILES/load_state.txt"
+}
+
+proc blacktools:load_notify {} {
+	global black botnick
+	set problems [list]
+	set items [list]
+foreach e $black(load_errors) {
+	lassign $e kind name reason
+	lappend problems "$kind:$name"
+	lappend items "$name ($kind): [string range $reason 0 80]"
+}
+	set problems [lsort $problems]
+	set previous ""
+	set sf [blacktools:load_state_file]
+if {[file exists $sf]} {
+	catch {set fh [open $sf r]; set previous [string trim [read $fh]]; close $fh}
+}
+if {$problems eq $previous} { return }
+if {$problems eq "" && $previous eq ""} { return }
+if {[info procs notes:add] eq ""} {
+	putlog "\[BT\] Can't notify owners about load problems: the Notes module is not loaded."
+	return
+}
+	set key [expr {$problems eq "" ? "loader.2" : "loader.1"}]
+	set list [string range [join $items "; "] 0 350]
+foreach user [userlist n] {
+if {[getuser $user XTRA NO_NOTES] ne ""} { continue }
+	set lang [string tolower [getuser $user XTRA OUTPUT_LANG]]
+if {$lang eq ""} { set lang [string tolower $black(default_lang)] }
+if {![info exists black(say.$lang.$key)]} { set lang "en" }
+if {![info exists black(say.$lang.$key)]} { continue }
+	set text [black:color:set $botnick $black(say.$lang.$key)]
+	set text [string map [list %msg.1% $list] $text]
+	set black(notes:announce:$user) 1
+	notes:add $botnick "" $user "DB" "INBOX" $text "BlackTools" 0
+}
+	blacktools:write_atomic $sf $problems
+}
+
+foreach t [utimers] {
+if {[string match "*blacktools:load_notify*" [lindex $t 1]]} { killutimer [lindex $t 2] }
+}
+utimer 60 [list catch blacktools:load_notify]
+
 #################
 ###########################################################################
 ##   END                                                                 ##

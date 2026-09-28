@@ -1384,6 +1384,8 @@ set black(say.es.autoupdate.40) "\005\[BT\]\005 \001AutoUpdate\001 omitido por e
 set black(say.es.autoupdate.41) "\005\[BT\]\005 El tiempo para \001AutoUpdate\001 se establece en: \002%msg.1%\002 minutos"
 set black(say.es.autoupdate.42) "\005\[BT\]\005 Establecer tiempo para \001AutoUpdate\001 en: \002%msg.1%\002 (%msg.2%minutos)"
 set black(say.es.autoupdate.43) "\005\[BT\]\005 AutoUpdate encontrado nuevo \001update\001 para: BlackTools \002%msg.1%\002 (Última actualización: \001%msg.2%\001)"
+set black(say.es.loader.1) "\005\[BT\]\005 Algunos archivos de BlackTools \002no se pudieron cargar\002 y se omitieron, el resto funciona: %msg.1%. Corr\u00edjalos o actual\u00edcelos y luego haga rehash. Detalles en el registro del bot."
+set black(say.es.loader.2) "\005\[BT\]\005 Todos los archivos de BlackTools \002se cargan correctamente\002 de nuevo. Los problemas de carga anteriores est\u00e1n resueltos."
 set black(say.es.autoupdate.45) "\005\[BT\]\005 Para completar esta actualización es necesario reiniciar el eggdrop usando el \001recomando start\002"
 set black(say.es.autoupdate.46) "\005\[BT\]\005 005 Automatic \002restart\002 en 10 segundos para completar la actualización"
 set black(say.es.autoupdate.47) "\005\[BT\]\005 005 La última actualización (\001% msg.1%\001) fue instalada por otro eggdrop del mismo archivo. Usa \001%char%update start\001 para finalizar la actualización"

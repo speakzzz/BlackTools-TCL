@@ -1402,6 +1402,8 @@ set black(say.fr.autoupdate.40) "\005\[BT\]\005 \001AutoUpdate\001 ignoré pour 
 set black(say.fr.autoupdate.41) "\005\[BT\]\005 Le temps pour \001AutoUpdate\001 est réglé à : \002%msg.1%\002 minutes"
 set black(say.fr.autoupdate.42) "\005\[BT\]\005 Temps réglé pour \001AutoUpdate\001 à : \002%msg.1%\002 (%msg.2% minutes)"
 set black(say.fr.autoupdate.43) "\005\[BT\]\005 AutoUpdate a trouvé une nouvelle \001mise à jour\001 pour : BlackTools \002%msg.1%\002 (Dernière mise à jour : \001%msg.2%\001)."
+set black(say.fr.loader.1) "\005\[BT\]\005 Certains fichiers BlackTools \002n'ont pas pu \u00eatre charg\u00e9s\002 et ont \u00e9t\u00e9 ignor\u00e9s, le reste fonctionne : %msg.1%. Corrigez-les ou mettez-les \u00e0 jour, puis rehash. D\u00e9tails dans le journal du bot."
+set black(say.fr.loader.2) "\005\[BT\]\005 Tous les fichiers BlackTools \002se chargent correctement\002 \u00e0 nouveau. Les probl\u00e8mes de chargement pr\u00e9c\u00e9dents sont r\u00e9solus."
 set black(say.fr.autoupdate.45) "\005\[BT\]\005 Pour terminer cette mise à jour, il est nécessaire de redémarrer l'eggdrop en utilisant la commande \001restart\002."
 set black(say.fr.autoupdate.46) "\005\[BT\]\005 Redémarrage automatique dans 10 secondes pour terminer la mise à jour."
 set black(say.fr.autoupdate.47) "\005\[BT\]\005 La dernière mise à jour (\001%msg.1%\001) a été installée par un autre eggdrop du même archive. Utilisez \001%char%update start\001 pour terminer la mise à jour."
