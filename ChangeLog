@@ -1,4 +1,13 @@
  2026-09-28 speakzzz
+  * Loader: a module, command or protection file that fails to load is
+    now logged (with line number) and skipped instead of killing the
+    bot; a summary of problems is logged after loading. Core files
+    (Core, Binds, Ban, Timers, language) are still required
+  * Loader: fixed module names being misread when loading from the
+    update backup folder (scripts/BT.backup), which broke the special
+    handling of a failed AutoUpdate module during updates
+  * Loader: files now load in a fixed (sorted) order on every system
+ 2026-09-28 speakzzz
   * .tcl wget: HTTPS-only downloads via Tcl's http package (wget no longer
     needed), async so the bot does not block, 1 MB size limit, up to 3
     https redirects, rejects web pages and incomplete Tcl scripts, writes
