@@ -1,4 +1,13 @@
  2026-09-28 speakzzz
+  * New blacktools:write_atomic: files are written to a temp file and
+    renamed into place, so a crash or full disk can never leave them
+    half-written or missing. Original permissions are kept
+  * AutoUpdate now writes eggdrop.conf (twice during an update) and
+    BlackTools.tcl this way instead of overwriting them in place
+  * Editing eggdrop.conf from IRC (config:save) no longer deletes the
+    file before replacing it, and keeps its permissions
+  * .tcl load/unload use the shared helper
+ 2026-09-28 speakzzz
   * Braced all 515 expr calls outside Addons/ (e.g. expr $a + 1 ->
     expr {$a + 1}) and turned 86 simple counters into incr. Braced
     expressions are compiled once instead of re-parsed on every call,

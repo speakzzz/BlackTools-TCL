@@ -370,9 +370,7 @@ proc blacktools:backup_run {hand chan new_version last_modify} {
     set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
     set black(old_config_file) "BlackTools.${timestamp}.tcl"
     regsub $reg $data "source $black(dirname)/$black(old_config_file)" data
-    set file [open $config w]
-    puts $file $data
-    close $file
+    blacktools:write_atomic $config $data
     file rename -force "$black(dirname)/$black(tclname)" "$black(dirname)/$black(old_config_file)"
     utimer 5 [list blacktools:update_start_download $hand $chan $new_version $last_modify]
 }
@@ -507,9 +505,7 @@ if {[string match -nocase "*/$black(old_config_file)" $line]} {
 if {$counter <= $total} {
     blacktools:config_write $sdata $counter $hand $chan $data $total
 } else {
-    set file [open $config w]
-    puts $file [join $data "\n"]
-    close $file
+    blacktools:write_atomic $config [join $data "\n"]
     set userlang [blacktools:update_userlang $hand]
     set end_update [unixtime]
     set dif [expr {$end_update - $black(start_update)}]
@@ -730,9 +726,7 @@ if {$type == 0} {
     close $file
     return $data
 } else {
-    set file [open $bt_file w]
-    puts $file $data
-    close $file
+    blacktools:write_atomic $bt_file $data
     }
 }
 

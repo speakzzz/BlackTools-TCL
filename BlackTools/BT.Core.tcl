@@ -561,6 +561,37 @@ proc away:timer {} {
 	set away_status [setaway "none"]
 }
 
+############################### Atomic write ##################################
+#Fork change (speakzzz, 2026): write a file so it is never half-written or
+#missing: data goes to a temp file beside it, which then replaces the
+#original in one rename. Keeps the original's permissions (eggdrop.conf is
+#often chmod 600). Same output as "puts $file $data".
+
+proc blacktools:write_atomic {path data} {
+	set tmp "$path.bt-tmp"
+	set f [open $tmp w]
+if {[catch {
+if {[file exists $path]} {
+	file attributes $tmp -permissions [file attributes $path -permissions]
+}
+	puts $f $data
+	close $f
+	file rename -force $tmp $path
+} err]} {
+	catch {close $f}
+	file delete -force $tmp
+	error $err
+	}
+}
+
+#Replace path with an already-written temp file, keeping path's permissions.
+proc blacktools:replace_atomic {tmp path} {
+if {[file exists $path]} {
+	catch {file attributes $tmp -permissions [file attributes $path -permissions]}
+}
+	file rename -force $tmp $path
+}
+
 ############################### Config save ##################################
 
 proc config:save {f text_find text_replace} {
@@ -589,8 +620,7 @@ if {[string match -nocase $text_find $line]} {
 	close $file2
 
 if {$found_it == "1"} {
-	file delete $f
-	file rename $file_temp $f
+	blacktools:replace_atomic $file_temp $f
 	
 	} else {
 	file delete $file_temp

@@ -468,16 +468,10 @@ proc tcl:download_fail {name ctx reason} {
 	putlog "\[BT\] tcl download of $name by $hand failed: $reason"
 }
 
-#Write eggdrop.conf atomically: temp file, then rename over the original.
+#Write eggdrop.conf atomically (see blacktools:write_atomic in BT.Core.tcl)
 proc tcl:config_write {lines} {
 	global config
-	set tmp "$config.bt-tmp"
-	set f [open $tmp w]
-	catch {file attributes $tmp -permissions [file attributes $config -permissions]}
-if {[catch {puts $f [join $lines "\n"]; close $f} err]} {
-	catch {close $f}
-	file delete -force $tmp
-	error $err
+	blacktools:write_atomic $config [join $lines "\n"]
 }
 	file rename -force $tmp $config
 }
