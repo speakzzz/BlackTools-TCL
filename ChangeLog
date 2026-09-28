@@ -1,4 +1,8 @@
  2026-09-28 speakzzz
+  * Fixed BT.TCL.tcl failing to load (logged "can't read tmp" on every
+    load): two leftover lines from the atomic-write change ran at load
+    time. The .tcl commands were unaffected
+ 2026-09-28 speakzzz
   * Settings changed from IRC (nick, realname, homechan, cmdchar, etc.)
     are now escaped correctly when written to eggdrop.conf or
     BlackTools.tcl. Values containing " \ $ [ or ] could previously

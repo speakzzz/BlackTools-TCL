@@ -473,8 +473,6 @@ proc tcl:config_write {lines} {
 	global config
 	blacktools:write_atomic $config [join $lines "\n"]
 }
-	file rename -force $tmp $config
-}
 
 ##############
 #########################################################################
