@@ -1,4 +1,11 @@
 ===========================================================================================================
+  FORK NOTICE
+  This is a modified version of BlackTools maintained at https://github.com/speakzzz/BlackTools-TCL
+  Original work Copyright (c) 2008-2022 Daniel Voipan (aka BLaCkShaDoW), licensed under GPLv3.
+  Modifications Copyright (c) 2026 speakzzz, also licensed under GPLv3. See ChangeLog for changes.
+  Please report bugs in this fork at https://github.com/speakzzz/BlackTools-TCL/issues
+  (not to the original author).
+===========================================================================================================
                                 -= BLaCkShaDoW Production Presents =-
                          BlackTools - The Ultimate Channel Control Script
                                      One TCL. One smart Eggdrop

@@ -3,11 +3,15 @@
 #https://wiki.tcl-lang.org/page/github%3A%3Agithub
 #
 #Version 1.1 - added a timer in seconds between files & folders
+#Version 1.2 - branch/ref support, no insecure default TLS registration,
+#              HTTP status checks (BlackTools fork)
 
 # chicken and egg problem we need non-standard packages tls and json ...
 package require tls
 package require http
-::http::register https 443 ::tls::socket
+#Safe default; BlackTools re-registers with full options (SNI, cert
+#verification) via blacktools:update_tls_register before downloading.
+::http::register https 443 [list ::tls::socket -ssl2 0 -ssl3 0 -tls1 0 -tls1.1 0 -tls1.2 1]
 
 namespace eval ::github {
     variable libdir [file normalize [file join [file dirname [info script]] ..]]
@@ -22,8 +26,15 @@ package provide github::github 0.2
 package provide github 0.2
 
 # Tcl package download
-proc ::github::github {cmd owner repo folder} {
+proc ::github::github {cmd owner repo folder {ref ""}} {
     variable libdir
+    variable ref_query ""
+if {$ref ne ""} {
+if {![regexp {^[A-Za-z0-9._/-]+$} $ref]} {
+    return -code error "github: invalid branch/ref name \"$ref\""
+    }
+    set ref_query "?ref=$ref"
+}
     set url https://api.github.com/repos/$owner/$repo/contents/
     download $url $folder
 }
@@ -35,7 +46,15 @@ proc ::github::download {url folder {debug true}} {
     }
     set sfiles ""
     set dfiles ""
-    set data [http::data [http::geturl $url]]
+    variable ref_query
+    set tok [http::geturl "$url$ref_query" -timeout 30000]
+if {[http::status $tok] ne "ok" || [http::ncode $tok] != 200} {
+    set err "[http::status $tok] [http::code $tok]"
+    http::cleanup $tok
+    return -code error "github: failed to list $url ($err)"
+}
+    set data [http::data $tok]
+    http::cleanup $tok
     set d [json::json2dict $data]
     set l [llength $d]
     set files [list]
@@ -45,7 +64,7 @@ for {set i 0} {$i < $l} {incr i 1} {
     set type [dict get $dic type]
 if {$file eq "null" &&  $type eq "dir"} {
     set file [dict get $dic url]
-    set file [regsub {.ref=master} $file ""]
+    set file [regsub {\?ref=.*$} $file ""]
 }
 if {$type eq "file"} {
     lappend sfiles $file

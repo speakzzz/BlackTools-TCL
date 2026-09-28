@@ -41,6 +41,40 @@ if {[catch {package require github} no_github] != 0} {
 }
 
 ###
+#Update source defaults (used if an older BlackTools.tcl config lacks them)
+foreach {bt_var bt_default} {update_owner speakzzz update_repo BlackTools-TCL update_branch master update_verify_cert 1} {
+if {![info exists black($bt_var)]} { set black($bt_var) $bt_default }
+}
+unset -nocomplain bt_var bt_default
+
+###
+proc blacktools:update_rawurl {file} {
+    global black
+    return "https://raw.githubusercontent.com/$black(update_owner)/$black(update_repo)/$black(update_branch)/$file"
+}
+
+###
+#Register HTTPS with modern TLS: no SSLv2/3, TLS 1.0 or 1.1; SNI and certificate
+#verification where the installed tls package supports them.
+proc blacktools:update_tls_register {} {
+    global black
+    set opts [list -ssl2 0 -ssl3 0 -tls1 0 -tls1.1 0 -tls1.2 1]
+    package require http
+    set tlsver [package require tls]
+if {[package vcompare $tlsver 1.7] >= 0} { lappend opts -tls1.3 1 }
+if {[package vcompare $tlsver 1.7.11] >= 0} { lappend opts -autoservername 1 }
+if {$black(update_verify_cert) == "1"} {
+    lappend opts -require 1
+foreach cafile {/etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt /etc/ssl/cert.pem /usr/local/share/certs/ca-root-nss.crt} {
+if {[file readable $cafile]} { lappend opts -cafile $cafile ; break }
+        }
+    } else {
+    lappend opts -require 0
+    }
+    ::http::register https 443 [list ::tls::socket {*}$opts]
+}
+
+###
 proc blacktools:update_check {nick hand host chan type} {
     global black
 if {$black(update_on) == 0} {
@@ -361,7 +395,8 @@ proc blacktools:update_start_download {hand chan new_version last_modify} {
     set black(update_hand) $hand
     set black(update_chan) $chan
     file delete -force "$black(actdir)/BlackTools"
-    ::github::github update tclscripts BlackTools-TCL $black(actdir)
+    blacktools:update_tls_register
+    ::github::github update $black(update_owner) $black(update_repo) $black(actdir) $black(update_branch)
     blacktools:every 1000 {
 if {[file isdirectory $black(actdir)/BlackTools]} {
     set size [llength [glob-r "$black(actdir)/BlackTools"]]
@@ -704,8 +739,8 @@ if {$type == 0} {
 ###
 proc blacktools:update_getconfig {} {
     global black
-    set link "https://raw.githubusercontent.com/tclscripts/BlackTools-TCL/master/BlackTools.tcl"
-    http::register https 443 [list ::tls::socket -tls1 true]
+    set link [blacktools:update_rawurl "BlackTools.tcl"]
+    blacktools:update_tls_register
     set ipq [http::config -useragent "lynx"]
 	set error [catch {set ipq [::http::geturl $link -timeout 10000]} eror]
 	set status [::http::status $ipq]
@@ -721,8 +756,8 @@ if {$status != "ok"} {
 ###
 proc blacktools:update_verify {} {
     global black
-    set link "https://raw.githubusercontent.com/tclscripts/BlackTools-TCL/master/VERSION"
-    http::register https 443 [list ::tls::socket -tls1 true]
+    set link [blacktools:update_rawurl "VERSION"]
+    blacktools:update_tls_register
     set ipq [http::config -useragent "lynx"]
 	set error [catch {set ipq [::http::geturl $link -timeout 10000]} eror]
 	set status [::http::status $ipq]

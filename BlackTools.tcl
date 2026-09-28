@@ -117,6 +117,21 @@ set black(update_note) "1"
 
 set black(update_time_check) "60m"
 
+###
+#Update source (GitHub repository the updater downloads from)
+#Change these only if you maintain your own fork.
+
+set black(update_owner) "speakzzz"
+set black(update_repo) "BlackTools-TCL"
+set black(update_branch) "master"
+
+###
+#Verify the TLS certificate of GitHub when updating?
+# 0 - no (NOT recommended, only if your shell lacks CA certificates)
+# 1 - yes
+
+set black(update_verify_cert) "1"
+
 ###########################################################################
 #----------------------------- AntiBotIdle -------------------------------#
 ###									###
