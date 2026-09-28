@@ -1,3 +1,14 @@
+ 2026-09-28 speakzzz
+  * .tcl wget: HTTPS-only downloads via Tcl's http package (wget no longer
+    needed), async so the bot does not block, 1 MB size limit, up to 3
+    https redirects, rejects web pages and incomplete Tcl scripts, writes
+    via temp file so partial downloads never appear in scripts/
+  * .tcl wget/load/unload/info: script names are validated (no paths,
+    no "..", must end in .tcl); load refuses missing files and BlackTools
+  * .tcl wget: download errors go to the requester by notice instead of
+    raw wget output in the channel; fixed wrong name in "already
+    downloaded" message
+  * eggdrop.conf is now written atomically and keeps its permissions
  2026-09-27 speakzzz  (fork: https://github.com/speakzzz/BlackTools-TCL)
   * AutoUpdate now downloads from this fork; source is configurable via
     black(update_owner), black(update_repo), black(update_branch)
