@@ -222,7 +222,7 @@ foreach name [split $black(next:$chan:list)] {
 if {$name != ""} {
 	set get_hand [nick2hand $name]
 if {![matchattr $get_hand $black(exceptflags) $chan]} { 	
-	set counter [expr $counter + 1]
+	incr counter
 	lappend field_name "\#$counter $name "
 		}
 	}
@@ -249,7 +249,7 @@ if {[llength [split $black(next:$chan:list)]] < 0} {
 	set getlang [string tolower [setting:get $chan lang]]
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set current_nick [lindex [split [concat $black(next:$chan:list)]] 0]
-	set time [return_time $getlang [expr [unixtime] - $black(next:$chan:$current_nick:time)]]
+	set time [return_time $getlang [expr {[unixtime] - $black(next:$chan:$current_nick:time)}]]
 	set text1 [black:color:set "" $black(say.$getlang.next.2)]
 	set reply1 [join $text1]
 	set replace(%nick%) $nick

@@ -87,7 +87,7 @@ if {$type == "2"} {
 	while {$temp_num == 0} {
 	set get [find:num $num $chan "ANUNT"]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
 	set file [open $black(add_file) a]
@@ -188,7 +188,7 @@ if {$channels != ""} {
 proc anunt:time {channels counter} {
 	global black
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$chan != ""} {
 	anunt:show $chan
 } 
@@ -211,8 +211,8 @@ if {[setting:get $chan anunt-showtime] != ""} {
 } else {
 	set return_time [time_return_minute $black(anunttime)]
 }
-	set time [expr [expr [expr $return_time * $black(entry:shown)] * 60] + $unixtime]
-if {[expr $unixtime - $black(lastaction:$chan)] > [expr $time - $unixtime]} {
+	set time [expr {[expr {[expr {$return_time * $black(entry:shown)}] * 60}] + $unixtime}]
+if {[expr {$unixtime - $black(lastaction:$chan)}] > [expr {$time - $unixtime}]} {
 	return
 	}
 } else { return }
@@ -234,7 +234,7 @@ foreach line $data {
 	set read_type [lindex [split $line] 1]
 if {[string match -nocase $enc_chan $chan] && [string match -nocase $read_type "ANUNT"]} {
 	puts $file [lrange [split $line] 3 end]
-	set total_anunt [expr $total_anunt + 1]
+	incr total_anunt
 		}
 	}
 	close $file
@@ -255,7 +255,7 @@ if {$line == ""} {
 	set line [lindex $lines $black(anuntshow:$chan)]
 }
 	set split_line [split $line "~"]
-	set black(anuntshow:$chan) [expr $black(anuntshow:$chan) + 1]
+	incr black(anuntshow:$chan)
 foreach mes $split_line {
 	set mes [string map [array get replace] $mes]
 	set encoded [encoding convertfrom utf-8 $mes]

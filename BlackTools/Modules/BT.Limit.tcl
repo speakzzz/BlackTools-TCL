@@ -59,9 +59,9 @@ on {
 	setting:set $chan +limit ""
 	blacktools:tell $nick $host $hand $chan $chan1 limit.5 none
 if {[regexp {^[0-9]+$} $limt] && ($limt != "0")} {
-	putserv "MODE $chan +l [expr $usersnum + $limt]"
+	putserv "MODE $chan +l [expr {$usersnum + $limt}]"
 } else {
-	putserv "MODE $chan +l [expr $usersnum + $black(limit:default)]"
+	putserv "MODE $chan +l [expr {$usersnum + $black(limit:default)}]"
 	setting:set $chan limit-default $black(limit:default)
 	blacktools:tell $nick $host $hand $chan $chan1 limit.6 $black(limit:default)
 	}
@@ -87,9 +87,9 @@ if {$type == "1"} {
 	return
 }
 if {$lm < 2} { blacktools:tell $nick $host $hand $chan $chan1 limit.9 none
-	set lm [expr $lm + 1]
+	incr lm
 	setting:set $chan limit-default 2
-	putserv "MODE $chan +l [expr $usersnum + $lm]"
+	putserv "MODE $chan +l [expr {$usersnum + $lm}]"
 	blacktools:tell $nick $host $hand $chan $chan1 limit.10 none
 	return
 }
@@ -98,7 +98,7 @@ if {$lm > 500} { blacktools:tell $nick $host $hand $chan $chan1 limit.11 none
 }
 	setting:set $chan limit-default $lm
 	blacktools:tell $nick $host $hand $chan $chan1 limit.12 $lm
-	putserv "MODE $chan +l [expr $usersnum + $lm]"
+	putserv "MODE $chan +l [expr {$usersnum + $lm}]"
 		}
 	}
 }
@@ -121,19 +121,19 @@ if {[botisop $chan]} {
 	set usersnum [llength [chanlist $chan]]
 	set setnum [setting:get $chan limit-default]
 if {$setnum == "0" || $setnum == ""} { set setnum $black(limit:default) }
-	set limitcount [expr $usersnum + $setnum]
+	set limitcount [expr {$usersnum + $setnum}]
 	set chanmode [getchanmode $chan]
 if {[string match "*l*" "$chanmode"]} {
 	set lim [lindex $chanmode 1]
 } else { set lim 0}
 if {$lim != $limitcount} {
-if {$usersnum > $lim} { set dif [expr $usersnum - $lim] } else { set dif [expr $lim - $usersnum] }
+if {$usersnum > $lim} { set dif [expr {$usersnum - $lim}] } else { set dif [expr {$lim - $usersnum}] }
 if {($dif >= $setnum) || ($dif <= $setnum)} {
 	puthelp "MODE $chan +l $limitcount"
 		}
 	}
 }
-		set cc [expr $counter + 1]
+		set cc [expr {$counter + 1}]
 if {[lindex $channels $cc] != ""} {
 	utimer 5 [list limit:act $channels $cc]
 	}

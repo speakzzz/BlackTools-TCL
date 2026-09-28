@@ -125,7 +125,7 @@ if {[isvoice $gagger $chan]} {
 	set getlang [string tolower [setting:get $chan lang]]
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set replace(%chan%) $chan
-	set replace(%time%) [return_time $getlang [expr [expr [unixtime] + [expr $return_time * 60]] - [unixtime]]]
+	set replace(%time%) [return_time $getlang [expr {[expr {[unixtime] + [expr {$return_time * 60}]}] - [unixtime]}]]
 	set replace(%gagger%) $gagger
 	set text1 [black:color:set "" $black(say.$getlang.gag.10)]
 	set text2 [black:color:set "" $black(say.$getlang.gag.11)]
@@ -147,7 +147,7 @@ if {!([validchan $backchan]) || !([onchan $botnick $backchan])} {
 	return
 }
 	set bantime [time_return_minute $return_time]
-	set bantime [expr $bantime * 60]
+	set bantime [expr {$bantime * 60}]
 	set expire [return_time_2 $getlang $bantime]
 if {$reason == ""} { set reason "N/A" }	
 	set replace(%banmask%) $mask

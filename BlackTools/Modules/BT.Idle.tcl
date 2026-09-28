@@ -225,7 +225,7 @@ if {$channels != ""} {
 proc idlewhois {channels counter} {
 global black botnick
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$chan != ""} {
 	black:check:idle $chan
 	utimer 30 [list idlewhois $channels $cc] 
@@ -253,7 +253,7 @@ global black
 	set nick [string tolower [lindex [split $arg] 1]]
 	set handle [nick2hand $nick]
 	set idler [string tolower [lindex [split $arg] 2]]
-	set minutesidle [expr $idler / 60]
+	set minutesidle [expr {$idler / 60}]
 	set chan $::idle_chan
 if {[onchan $nick $chan]} {
 	set idlevoicetime [setting:get $chan idlevoicemax]

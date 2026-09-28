@@ -49,7 +49,7 @@ if {[lsearch -exact [string tolower $black(voiceonmsg:list:$chan)]  [string tolo
 	lappend black(voiceonmsg:list:$chan) $host
 }
 	set current_count $black(voiceonmsg:$host:$chan)
-	set black(voiceonmsg:$host:$chan) [expr $current_count + 1]
+	set black(voiceonmsg:$host:$chan) [expr {$current_count + 1}]
 	
 foreach tmr [utimers] {
 if {[string match -nocase "*voiceonmsg:remove:expire $host $chan*" [join [lindex $tmr 1]]]} {
@@ -160,7 +160,7 @@ if {$channels != ""} {
 proc voiceonmsg:act {channels counter} {
 	global black
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {[info exists black(voiceonmsg:list:$chan)] && $black(voiceonmsg:list:$chan) != ""} {
 foreach nick [chanlist $chan] {
 	set h [getchanhost $nick $chan]

@@ -274,10 +274,10 @@ foreach e $entry {
 	set split_it [wsplit $extra "%MSG%"]
 	set message [concat [lindex $split_it 1]]
 	set extra [concat [lindex $split_it 0]]
-	set output [return_time $getlang [expr [unixtime] - $tm]]
+	set output [return_time $getlang [expr {[unixtime] - $tm}]]
 if {[regexp {[0-9]} $jointime]} {
-	set staytime [expr [unixtime] - $jointime]
-	set staytime [return_time $getlang [expr $tm - $jointime]]
+	set staytime [expr {[unixtime] - $jointime}]
+	set staytime [return_time $getlang [expr {$tm - $jointime}]]
 } else { set staytime 0 }
 	set time [clock format $tm -format %D-%H:%M:%S]
 
@@ -712,14 +712,14 @@ while {$x <= [llength [split $black(seen_list:$chan)]]} {
 if {[info exists black(seen:entry:$entry:$chan)]} {
 	seen:save_remove $entry $chan
 		}
-	set x [expr $x + 1]
+	incr x
 	}
 }
 
 if {[info exists black(seen_list:$chan)]} {
 	unset black(seen_list:$chan)
 }
-	set c [expr $num + 1]
+	set c [expr {$num + 1}]
 if {[lindex $channels $c] != ""} {
 	seen:save_chan $channels $c
 	}
@@ -737,9 +737,9 @@ while {[gets $file line] != -1} {
 if {![regexp {[0-9]} $tm]} {
 	continue
 }
-	set read_days [expr [expr [expr [expr [unixtime] - $tm] / 60]] / 1440]
+	set read_days [expr {[expr {[expr {[expr {[unixtime] - $tm}] / 60}]}] / 1440}]
 if {$read_days >= $black(seen:expire:time)} {
-	set counter [expr $counter + 1]
+	incr counter
 	continue
 		} else {
 		puts $tempwrite $line
@@ -758,7 +758,7 @@ if {$black(seen:searched:$chan) == ""} {
 foreach entry $black(seen:searched:$chan) {
 	set split_entry [split $entry "%"]
 	set time [lindex $split_entry 3]
-	set read_days [expr [expr [expr [expr [unixtime] - $time] / 60]] / 1440]
+	set read_days [expr {[expr {[expr {[expr {[unixtime] - $time}] / 60}]}] / 1440}]
 if {$read_days >= $black(seen:expire:seenreply)} {
 	set search_it [lsearch -all [split $black(seen:searched:$chan)] $entry]
 if {$search_it > -1} {

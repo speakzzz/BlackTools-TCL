@@ -205,7 +205,7 @@ lappend topwordslist($words_count) $read_nick
 	set latestuser ""
 	set latesttime 0
 foreach words [lsort -integer -decreasing [array names topwordslist]] {
-	set counter [expr $counter + 1]
+	incr counter
 foreach user $topwordslist($words) {
 	puts $tempwrite "$user $words $counter"
 	}
@@ -372,7 +372,7 @@ while {[gets $file line] != -1} {
 	set read_chan [lindex [split $line] 0]
 	set enc_chan [encoding convertfrom utf-8 $read_chan]
 if {[string equal -nocase $enc_chan $chan]} {
-	set all_count [expr $all_count + 1]
+	incr all_count
 if {[string equal -nocase $type "user"]} {
 	set nr_words [lindex [split $line] 8]
 } elseif {[string equal -nocase $type "week"]} {
@@ -386,7 +386,7 @@ if {[string equal -nocase $type "user"]} {
 	}
 	close $file
 foreach h [lsort -integer -decreasing [array names activlist]] {
-	set counter [expr $counter + 1]
+	incr counter
 if {[string equal -nocase $activlist($h) $host]} {
 	set place $counter
 	}
@@ -455,12 +455,12 @@ if {[string equal -nocase $hand "ACTION"]} {
 	set words [llength $arg]
 	set chars [string length $arg]
 if {[regexp {[?]} $arg]} {
-	set ques_num [expr $ques_num + 1]
+	incr ques_num
 }
 foreach text $arg {
 	set smile_stat [topwords:smile $text]
 if {$smile_stat != "-1"} {
-	set smile_num [expr $smile_num + 1]
+	incr smile_num
 	}
 }
 if {![info exists black(topwords:$chan:$mask)]} {
@@ -472,7 +472,7 @@ if {![info exists black(topwords:$chan:$mask)]} {
 	set get_actions [lindex [split $black(topwords:$chan:$mask)] 4]
 	set get_smiles [lindex [split $black(topwords:$chan:$mask)] 5]
 	set get_ques [lindex [split $black(topwords:$chan:$mask)] 6]
-	set black(topwords:$chan:$mask) "$nick [expr $get_lines + $lines] [expr $get_words + $words] [expr $get_chars + $chars] [expr $get_actions + $actions] [expr $get_smiles + $smile_num] [expr $get_ques + $ques_num]"	
+	set black(topwords:$chan:$mask) "$nick [expr {$get_lines + $lines}] [expr {$get_words + $words}] [expr {$get_chars + $chars}] [expr {$get_actions + $actions}] [expr {$get_smiles + $smile_num}] [expr {$get_ques + $ques_num}]"	
 		}	
 	} 
 }
@@ -493,7 +493,7 @@ if {$channels != ""} {
 proc topwords:time {channels counter} {
 	global black
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$chan != ""} {
 	topwords:module:save $chan
 } 
@@ -560,7 +560,7 @@ if {[string equal -nocase $enc_chan $chan] && [string equal -nocase $mask $read_
 if {$found_mask == "0"} {
 	puts $tempwrite "$chan $get_nick $mask $curr_lines $curr_lines $curr_lines $curr_words $curr_words $curr_words $curr_chars $curr_chars $curr_chars $curr_actions $curr_actions $curr_actions $curr_smiles $curr_smiles $curr_smiles $curr_ques $curr_ques $curr_ques"
 	} else {
-	puts $tempwrite "$chan $get_nick $mask [expr $curr_lines + [lindex $get_lines 0]] [expr $curr_lines + [lindex $get_lines 1]] [expr $curr_lines + [lindex $get_lines 2]] [expr $curr_words + [lindex $get_words 0]] [expr $curr_words + [lindex $get_words 1]] [expr $curr_words + [lindex $get_words 2]] [expr $curr_chars + [lindex $get_chars 0]] [expr $curr_chars + [lindex $get_chars 1]] [expr $curr_chars + [lindex $get_chars 2]] [expr $curr_actions + [lindex $get_actions 0]] [expr $curr_actions + [lindex $get_actions 1]] [expr $curr_actions + [lindex $get_actions 2]] [expr $curr_smiles + [lindex $get_smiles 0]] [expr $curr_smiles + [lindex $get_smiles 1]] [expr $curr_smiles + [lindex $get_smiles 2]] [expr $curr_ques + [lindex $get_ques 0]] [expr $curr_ques + [lindex $get_ques 1]] [expr $curr_ques + [lindex $get_ques 2]]"	
+	puts $tempwrite "$chan $get_nick $mask [expr {$curr_lines + [lindex $get_lines 0]}] [expr {$curr_lines + [lindex $get_lines 1]}] [expr {$curr_lines + [lindex $get_lines 2]}] [expr {$curr_words + [lindex $get_words 0]}] [expr {$curr_words + [lindex $get_words 1]}] [expr {$curr_words + [lindex $get_words 2]}] [expr {$curr_chars + [lindex $get_chars 0]}] [expr {$curr_chars + [lindex $get_chars 1]}] [expr {$curr_chars + [lindex $get_chars 2]}] [expr {$curr_actions + [lindex $get_actions 0]}] [expr {$curr_actions + [lindex $get_actions 1]}] [expr {$curr_actions + [lindex $get_actions 2]}] [expr {$curr_smiles + [lindex $get_smiles 0]}] [expr {$curr_smiles + [lindex $get_smiles 1]}] [expr {$curr_smiles + [lindex $get_smiles 2]}] [expr {$curr_ques + [lindex $get_ques 0]}] [expr {$curr_ques + [lindex $get_ques 1]}] [expr {$curr_ques + [lindex $get_ques 2]}]"	
 	}
 	close $file
 	close $tempwrite
@@ -574,7 +574,7 @@ if {$place > 0} {
 			}
 		}
 	}
-	set counter [expr $position + 1]
+	set counter [expr {$position + 1}]
 if {[lindex $list $counter] != ""} {
 	topwords:remove_it $files $chan $list $counter
 	}

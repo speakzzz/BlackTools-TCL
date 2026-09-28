@@ -41,14 +41,14 @@ switch [string tolower $cmd] {
 	list {
 	blacktools:tell $nick $host $hand $chan $chan1 timer.1 none
 foreach tmr [timers] {
-	set counter [expr $counter + 1]
+	incr counter
 	set time [lindex $tmr 0]
 	set process [join [lindex $tmr 1]]
 	set pid [lindex $tmr 2]
 	blacktools:tell $nick $host $hand $chan $chan1 timer.2 "$counter $pid $time $process"
 		}
 foreach tmr [utimers] {
-	set counter [expr $counter + 1]
+	incr counter
 	set time [lindex $tmr 0]
 	set process [join [lindex $tmr 1]]
 	set pid [lindex $tmr 2]

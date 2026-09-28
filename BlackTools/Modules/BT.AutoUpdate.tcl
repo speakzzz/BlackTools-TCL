@@ -335,7 +335,7 @@ proc blacktools:update_backup {} {
     set black(update_file_saved) [llength [glob -nocomplain -directory "$black(dirname)/BlackTools/FILES" "*.txt"]]
 if {[file isdirectory "$black(dirname)/BlackTools/FILES/TOPWORDS"]} {
     set black(update_file_topwords) 1
-    set black(update_file_saved) [expr $black(update_file_saved) + [llength [glob -nocomplain -directory "$black(dirname)/BlackTools/FILES/TOPWORDS" "*.txt"]]]
+    set black(update_file_saved) [expr {$black(update_file_saved) + [llength [glob -nocomplain -directory "$black(dirname)/BlackTools/FILES/TOPWORDS" "*.txt"]]}]
 }
     blacktools:update_put "" "" 12 ""
     blacktools:update_put "" "" 13 ""
@@ -383,7 +383,7 @@ proc blacktools:size {dir} {
     set total 0
 foreach f $files {
     set size [file size $f]
-    set total [expr $size + $total]
+    set total [expr {$size + $total}]
     }
     return $total
 }
@@ -447,7 +447,7 @@ if {![file isdirectory "$black(actdir)/BlackTools"]} {
     return
 }
     set end_download [unixtime]
-    set dif [expr $end_download - $black(start_update)]
+    set dif [expr {$end_download - $black(start_update)}]
     blacktools:update_put "" "" 17 [list [return_time $userlang $dif]]
     set newdata [blacktools:update_data 0 ""]
     blacktools:update_put $hand $chan 18 ""
@@ -467,7 +467,7 @@ blacktools:every 1000 {
     set info_files_num [llength [glob -nocomplain -directory "$black(actdir)/BlackTools/FILES" "*.txt"]]
 if {[file isdirectory "$black(actdir)/BlackTools/FILES/TOPWORDS"]} {
     set info_files_topwords [llength [glob -nocomplain -directory "$black(actdir)/BlackTools/FILES/TOPWORDS" "*.txt"]]
-    set info_files_num [expr $info_files_num + $info_files_topwords]
+    set info_files_num [expr {$info_files_num + $info_files_topwords}]
 }
 if {$info_files_num == $black(update_file_saved)} {
     blacktools:update_end $info_files_num
@@ -503,7 +503,7 @@ if {[string match -nocase "*/$black(old_config_file)" $line]} {
 } else {
     lappend data $line
 }
-    set counter [expr $num + 1]
+    set counter [expr {$num + 1}]
 if {$counter <= $total} {
     blacktools:config_write $sdata $counter $hand $chan $data $total
 } else {
@@ -512,7 +512,7 @@ if {$counter <= $total} {
     close $file
     set userlang [blacktools:update_userlang $hand]
     set end_update [unixtime]
-    set dif [expr $end_update - $black(start_update)]
+    set dif [expr {$end_update - $black(start_update)}]
     unset black(update_hand)
     unset black(update_chan)
     blacktools:update_unsetflag

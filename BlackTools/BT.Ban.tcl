@@ -92,7 +92,7 @@ proc blacktools:isgag {host chan} {
 	set bancheck [lsearch -all -inline $black(bans) "GAG * [string tolower $chan] $host *"]
 if {$bancheck != ""} {
 	set expire [lindex [split $bancheck] 5]
-	set dif [expr $expire - [unixtime]]
+	set dif [expr {$expire - [unixtime]}]
 if {$dif > 0} {
 	return 1
 } else {
@@ -109,7 +109,7 @@ proc blacktools:isregex {host chan} {
 	set bancheck [lsearch -all -inline $black(bans) "REGEX * [string tolower $chan] $host *"]
 if {$bancheck != ""} {
 	set expire [lindex [split $bancheck] 5]
-	set dif [expr $expire - [unixtime]]
+	set dif [expr {$expire - [unixtime]}]
 if {$dif > 0} {
 	return 1
 } else {
@@ -135,10 +135,10 @@ if {$bancheck != ""} {
 proc blacktools:addban:gl {nick host hand chan bantime type sticky global reason id} {
 	global black
 	set chan1 $chan
-	set sec_bantime [expr $bantime * 60]
+	set sec_bantime [expr {$bantime * 60}]
 	set unixtime [unixtime]
 if {$bantime != "0"} {
-	set bantime [expr $unixtime + $sec_bantime]
+	set bantime [expr {$unixtime + $sec_bantime}]
 }
 	set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
 	set temp "$black(bans_file).new.$timestamp"
@@ -244,14 +244,14 @@ if {$length_type > 1} {
 	}
 	set hand "$gethand:$gettype"
 }
-	set sec_bantime [expr $bantime * 60]
+	set sec_bantime [expr {$bantime * 60}]
 	set unixtime [unixtime]
 	set accdenied 0
 	set xban 0
 	set getcount [setting:get $chan kickcount]
 	set show_reason $reason
 if {$bantime != "0"} {
-	set bantime [expr $unixtime + $sec_bantime]
+	set bantime [expr {$unixtime + $sec_bantime}]
 }
 if {![string equal -nocase $gethand "BADCHAN"] && ![string equal -nocase $gethand "badident"] && ![string equal -nocase $gethand "badnick"] && ![string equal -nocase $gethand "antibadquitpart"] && ![string equal -nocase $gethand "antichanflood"] && ![string equal -nocase $gethand "antispam"] && ![string equal -nocase $gethand "badhost"] && ![string equal -nocase $gethand "inviteban"] && ![string equal -nocase $gethand "private"] && ![string equal -nocase $gethand "clonescan"] && ![string equal -nocase $gethand "noproxy"]} {
 	set show_reason [blacktools:setreason $chan $reason $gethand $bantime $getcount "0" $id]
@@ -398,7 +398,7 @@ proc blacktools:autounban {} {
 foreach b $black(bans) {
 	set read_time [lindex [split $b] 5]
 if {$read_time == "0"} { continue }
-if {[expr $read_time - [unixtime]] <= 0} {
+if {[expr {$read_time - [unixtime]}] <= 0} {
 	set read_host [lindex [split $b] 3]
 	set real_read_host [string map [list \[ {\[} \] {\]} \\ {\\}] $read_host]
 	set read_type [lindex [split $b] 0]
@@ -757,7 +757,7 @@ if {[ischanban $read_host $chan]} {
 	continue
 }
 	set expire [lindex [split $b] 5]
-	set read_time [return_time $getlang [expr $expire - [unixtime]]]
+	set read_time [return_time $getlang [expr {$expire - [unixtime]}]]
 	set replace(%minute%) $read_time
 	set replace(%gag%) $nick
 	pushmode $chan +b $read_host
@@ -1158,7 +1158,7 @@ if {[ischanban $read_host $chan]} {
 }
 	set num [lindex [split $b] 1]
 	set expire [lindex [split $b] 5]
-	set read_time [return_time $getlang [expr $expire - [unixtime]]]
+	set read_time [return_time $getlang [expr {$expire - [unixtime]}]]
 	set replace(%minute%) $read_time
 	set replace(%gag%) $nick
 if {[isop $nick $chan]} {

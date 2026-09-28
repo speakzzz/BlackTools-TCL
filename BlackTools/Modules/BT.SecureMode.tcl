@@ -129,7 +129,7 @@ if {$channels == ""} {
 	return
 }
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$chan != ""} {
 	securemode:raw $chan
 } else {
@@ -180,7 +180,7 @@ proc end:nameslist {from keyword arguments} {
 proc secure:gethost {names chan counter} {
 	global black
 	set name [lindex [split $names] $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$name != ""} {
 	securemode:gethost:raw $name $chan
 } else {
@@ -260,7 +260,7 @@ if {[lsearch -exact [string tolower $black(secure:$chan:list)]  [string tolower 
 	set replace(%msg.1%) $black(securecode:$nick:$chan)
 	set message "$black(say.$lang.securemode.1)"
 	set len [llength $message] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set message [lindex $message $random]
 	set text [black:color:set "" $message]
 	set reply [join $text]
@@ -273,7 +273,7 @@ if {[lsearch -exact [string tolower $black(secure:$chan:list)]  [string tolower 
 	set replace(%msg.1%) $black(securecode:$nick:$chan)
 	set message "$black(say.$lang.securemode.1)"
 	set len [llength $message] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set message [lindex $message $random]
 	set text [black:color:set "" $message]
 	set reply [join $text]

@@ -30,7 +30,7 @@ if {$channels != ""} {
 proc quote:time {channels counter} {
 	global black
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {$chan != ""} {
 	quoteofday:show $chan
 } 
@@ -50,8 +50,8 @@ if {[setting:get $chan quote-showtime] != ""} {
 } else {
 	set return_time [time_return_minute $black(quote:msgtime)]
 }
-	set time [expr [expr [expr $return_time * $black(entry:shown)] * 60] + $unixtime]
-if {[expr $unixtime - $black(lastaction:$chan)] > [expr $time - $unixtime]} {
+	set time [expr {[expr {[expr {$return_time * $black(entry:shown)}] * 60}] + $unixtime}]
+if {[expr {$unixtime - $black(lastaction:$chan)}] > [expr {$time - $unixtime}]} {
 	return
 	}
 } else { return }
@@ -89,7 +89,7 @@ if {$line == ""} {
 	set black(quoteshow:$chan) 0
 	set line [lindex $lines $black(quoteshow:$chan)]
 }
-	set black(quoteshow:$chan) [expr $black(quoteshow:$chan) + 1]
+	incr black(quoteshow:$chan)
 	set encoded [encoding convertfrom utf-8 $line]
 	set replace(%msg%) $encoded
 	set text [black:color:set "" $black(say.$getlang.quote.16)]
@@ -235,7 +235,7 @@ proc quote:rand {nick host hand chan chan1 type who} {
 	set total [quote:total $chan]
 	set length [llength $total]
 if {$length > 0} {
-	set random [expr int(rand()*$length)] 
+	set random [expr {int(rand()*$length)}] 
     set quote [lindex $total $random]
 	set file [open $black(quote_file) "r"]
 while {[gets $file line] != -1} {
@@ -271,7 +271,7 @@ if {[regexp {^[0-9]} $who]} {
 if {$length > 0} {
 	set found_quote 1
 }
-	set random [expr int(rand()*$length)] 
+	set random [expr {int(rand()*$length)}] 
     set quote [lindex $quote_list $random]
 	set split_quote [split $quote ":"]
 	set quote_num [lindex $split_quote 0]
@@ -353,7 +353,7 @@ while {[gets $file line] != -1} {
 	set read_who [string map [list \[ {\[} \] {\]} \? {\?} \\ {\\}] $read_who]
 if {[string equal -nocase $chan $enc_chan] && [string match -nocase $read_who $who]} { 
 	set found_nick 1
-	set q_count [expr $q_count + 1]
+	incr q_count
 	set num [lindex [split $line] 2]
 	set return "$return $num:$q_count"
 		}
@@ -367,7 +367,7 @@ while {[gets $file line] != -1} {
 	set enc_chan [encoding convertfrom utf-8 $read_chan]
 if {[string equal -nocase $chan $enc_chan] && ([lsearch -exact $readquote $who] > -1)} { 
 	set found_quote 1
-	set q_count [expr $q_count + 1]
+	incr q_count
 	set num [lindex [split $line] 2]
 	set return "$return $num:$q_count"
 		}
@@ -386,7 +386,7 @@ proc quote:add {nick host chan who quote} {
 	while {$temp_num == 0} {
 	set get [find:q:num $num $chan]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
 	set file [open $black(quote_file) a]

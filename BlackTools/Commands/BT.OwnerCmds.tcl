@@ -183,7 +183,7 @@ foreach b [blacktools:banlist $from] {
 	
 	set return [blacktools:ban:exists $read_host $enc_chan]
 if {$return == ""} {
-	set counter [expr $counter + 1]
+	incr counter
 	puts $file "$read_type $num [string tolower $enc_chan] [string tolower $read_host] $read_hand $read_time1 $read_time2 $read_num1 $read_num2 $read_reason"
 	}
 	close $file
@@ -205,7 +205,7 @@ foreach line $data {
 	set enc_chan [encoding convertfrom utf-8 $read_chan]
 	set read_type [lindex [split $line] 1]
 if {[string match -nocase $enc_chan $from] && [string match -nocase $read_type "BADCHAN"]} {
-	set total_counter [expr $total_counter + 1]
+	incr total_counter
 	set bdchan [lindex [split $line] 3]
 	set reason [join [lrange [split $line] 4 end]]
 	set findchan [prot:findbadchan $to $bdchan]
@@ -213,10 +213,10 @@ if {$findchan != "1"} {
 	while {$temp_num == 0} {
 	set get [find:num $num $to "BADCHAN"]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
-	set inc [expr $inc + 1]
+	incr inc
 	set file [open $black(add_file) a]
 	puts $file "$to BADCHAN $num $bdchan $reason"
 	close $file
@@ -232,10 +232,10 @@ userlist {
 	set total_counter 0
 foreach u [userlist] {
 if {[matchattr $u $black(exceptflags) $from]} {
-	set total_counter [expr $total_counter + 1]
+	incr total_counter
 	set cflags [chattr $u | $from]
 if {![matchattr $cflags $to]} {
-	set counter [expr $counter + 1]
+	incr counter
 	chattr $u $cflags $to
 	setuser $u XTRA CHANMODIF($to) $time:cp_from_$from
 			}
@@ -255,7 +255,7 @@ if {[string equal -nocase $flag "+forward"]} {
 }
 	set return [blacktools:flag:exists $to $flag]
 if {$return == "0"} {
-	set counter [expr $counter + 1]
+	incr counter
 	puts $file "$to XTRA $flag"
 	}
 }
@@ -268,13 +268,13 @@ if {[string equal -nocase $s "backchan"]} {
 	set why [join [lrange $split_str 1 end]]
 	set return [blacktools:flag:exists $to $s]
 if {$return == "0"} {
-	set counter [expr $counter + 1]
+	incr counter
 	puts $file "$to XTRA $s [concat $why]"
 	}
 }
 	set gettopic [topic:get $from]
 if {$gettopic != ""} {
-	set counter [expr $counter + 1]
+	incr counter
 	msg:add $gettopic $to "TOPIC"
 }
 	close $file

@@ -1039,7 +1039,7 @@ if {[setting:get $chan jointime] == ""} {
 	set jointime_2 "N/A"
 } else {
 	set jointime [clock format [setting:get $chan jointime] -format %D-%H:%M:%S]
-	set jointime_2 [return_time $getlang [expr [unixtime] - [setting:get $chan jointime]]]
+	set jointime_2 [return_time $getlang [expr {[unixtime] - [setting:get $chan jointime]}]]
 }
 
 	set joincount [setting:get $chan joincount]
@@ -1050,7 +1050,7 @@ if {$joincount == ""} {set joincount 0}
 foreach user [chanlist $chan] {
 	set handle [nick2hand $user]
 if {[matchattr $handle -|OgaAHMNV $chan]} {
-	set nr_user_ac [expr $nr_user_ac + 1]
+	incr nr_user_ac
 	}
 }
 	set file [open $black(seen_file) "r"]
@@ -1361,9 +1361,9 @@ if {[string equal -nocase $read_chan $get_chan] && [string equal -nocase $read_u
 	set read_time [lindex [split $line] 2]
 	
 if {[unixtime] > $read_time} {
-	set read_time [expr [unixtime] - $read_time]
+	set read_time [expr {[unixtime] - $read_time}]
 } else {
-	set read_time [expr $read_time - [unixtime]]
+	set read_time [expr {$read_time - [unixtime]}]
 }
 	set read_time [return_time_2 $getlang $read_time]
 	
@@ -1576,8 +1576,8 @@ if {$suspend_reason == ""} {
 	set suspend_reason $black(say.$getlang.s.3)
 }
 	
-	set get_time [expr [time_return_minute $suspend_time] * 60]
-	set get_time [expr $unixtime + $get_time]
+	set get_time [expr {[time_return_minute $suspend_time] * 60}]
+	set get_time [expr {$unixtime + $get_time}]
 
 if {[matchattr $hand n] && [matchattr $user m]} {
 	chattr $user $gl_flags
@@ -1634,7 +1634,7 @@ proc s:process:add {nick hand chan chan1 user suspend_time bywho reason} {
 	close $file
 	set data [split $database "\n"]
 foreach line $data {
-	set lin [expr $lin + 1]
+	incr lin
 	set get_channel [lindex [split $line] 0]
 	set get_username [lindex [split $line] 1]
 	set get_bywho [lindex [split $line] 3]

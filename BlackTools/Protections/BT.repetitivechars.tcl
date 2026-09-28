@@ -29,17 +29,17 @@ if {$getnum == ""} { set getnum "$black(repetitivechars:num)" }
 	set chars [split $arg ""]
 	set counter 0
 	set current_char ""
-for {set i 0 } { $i < $llength_chars } { set i [expr $i + 1] } {
+for {set i 0 } { $i < $llength_chars } { incr i } {
 	set char [lindex $chars $i]
 if {$current_char == ""} {
 	set current_char $char
-	set counter [expr $counter + 1]
+	incr counter
 } else {
 if {$char != "$current_char"} {
 	set current_char $char
 	set counter 1
 	} else {
-	set counter [expr $counter + 1]
+	incr counter
 		}
 	}
 }

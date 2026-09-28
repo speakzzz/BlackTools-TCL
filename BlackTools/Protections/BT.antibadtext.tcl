@@ -101,7 +101,7 @@ if {$caps($nick:$host) == 0} {
 
 if {[string length $argz] < 20} {return}
 	set capchar [string length $argz]
-if {[expr 100 * $caps($nick:$host) / $capchar] > $black(anticapscount)} {
+if {[expr {100 * $caps($nick:$host) / $capchar}] > $black(anticapscount)} {
 	set found_caps 1
 }
 if {$found_caps == "1"} {

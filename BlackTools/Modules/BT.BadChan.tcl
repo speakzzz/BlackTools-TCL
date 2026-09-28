@@ -354,7 +354,7 @@ if {[string equal -nocase $enc_chan $chan] && ([string equal -nocase $read_type 
 	close $file
 if {$nums != ""} {
 	set sort [blacktools:quicksort [join $nums]]
-	return [expr [lindex $sort end] + 1]
+	return [expr {[lindex $sort end] + 1}]
 } else {
 	return 1
 	}
@@ -604,7 +604,7 @@ if {![info exists badchan(flood:$host:$chan)]} {
 	utimer $timer [list badchan:remove:flood $host $chan]
 if {$badchan(flood:$host:$chan) >= $number} {
 	set badchan(flood:$host:$chan:act) 1
-	utimer [expr $black(badchan:floodprot:time) * 60] [list badchan:expire:flood $host $chan]
+	utimer [expr {$black(badchan:floodprot:time) * 60}] [list badchan:expire:flood $host $chan]
 	return 1
 	} else {
 	return 0

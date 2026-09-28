@@ -121,7 +121,7 @@ switch $type {
 while {$temp_num == 0} {
 	set get [find:num $btnum "-" "AUTOBROADCAST"]
 if {$get == "$btnum"} {
-	set btnum [expr $btnum + 1]
+	incr btnum
 	} else { set temp_num 1 }
 }
 
@@ -260,7 +260,7 @@ if {$line == ""} {
 	set black(broadcast:count) 0
 	set line [lindex $data $black(broadcast:count)]
 }
-	set black(broadcast:count) [expr $black(broadcast:count) +1]
+	incr black(broadcast:count)
 	
 foreach chan [channels] {
 if {[validchan $chan] && [isdynamic $chan] && (![setting:get $chan silent])} {
@@ -278,14 +278,14 @@ proc broadcast:act {channels counter line} {
 	global black
 	set split_line [split $line "~"]
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 	set notshow 0
 if {$chan != ""} {
 if {[info exists black(lastaction:$chan)]} {
 	set unixtime [unixtime]
 	set return_time [time_return_minute $black(bttime)]
-	set time [expr [expr [expr $return_time * $black(entry:shown)] * 60] + $unixtime]
-if {[expr $unixtime - $black(lastaction:$chan)] > [expr $time - $unixtime]} {
+	set time [expr {[expr {[expr {$return_time * $black(entry:shown)}] * 60}] + $unixtime}]
+if {[expr {$unixtime - $black(lastaction:$chan)}] > [expr {$time - $unixtime}]} {
 	set notshow 1
 	}
 } else { set notshow 1 }

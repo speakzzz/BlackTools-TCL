@@ -71,11 +71,11 @@ if {$expire != 0} {
 if {[info exists black(vote_expire)]} {
 if {$expire <= $black(vote_expire)} {
     set black(vote_expire) $expire
-    utimer [expr $expire - [clock seconds]] [list blacktools:vote:expire]
+    utimer [expr {$expire - [clock seconds]}] [list blacktools:vote:expire]
     }
 } else {
     set black(vote_expire) $expire
-    utimer [expr $expire - [clock seconds]] [list blacktools:vote:expire]
+    utimer [expr {$expire - [clock seconds]}] [list blacktools:vote:expire]
         }
     } else {
 if {[info exists black(vote_expire)]} {
@@ -122,7 +122,7 @@ if {[info exists black(vote_expire)]} {
 }
     return
 } else {
-    utimer [expr $read_expire - [clock seconds]] [list blacktools:vote:expire]
+    utimer [expr {$read_expire - [clock seconds]}] [list blacktools:vote:expire]
     set black(vote_expire) $read_expire
     }
 }
@@ -180,7 +180,7 @@ if {$check_time == 1} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.2 none
     return
     }
-    set valid_time [expr $time_seconds - [clock seconds]]
+    set valid_time [expr {$time_seconds - [clock seconds]}]
 if {$valid_time < 0} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.2 none
     return
@@ -204,7 +204,7 @@ if {$voting_exists != -1} {
     return
 }
     set addtime [clock seconds]
-    set id [expr [blacktools:voting_id $chan] + 1]
+    set id [expr {[blacktools:voting_id $chan] + 1}]
     set line "VOTING $id $chan $hand $voting_name [list $option_list] $addtime $time_seconds 1 $type"
     set file [open $black(voting_file) a]
     puts $file $line
@@ -213,7 +213,7 @@ if {$time_seconds == 0} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.5 [list [concat [join $voting_name]] [join $show_list ", "] $id]
             } else {
     blacktools:vote_new_first
-    blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.6 [list [concat [join $voting_name]] [join $show_list ", "] [return_time_2 $userlang [expr $time_seconds - $addtime]] $id]
+    blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.6 [list [concat [join $voting_name]] [join $show_list ", "] [return_time_2 $userlang [expr {$time_seconds - $addtime}]] $id]
         }
     }
 }
@@ -229,7 +229,7 @@ if {$check_time == 1} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.2 none
     return
         }
-    set valid_time [expr $time_seconds - [clock seconds]]
+    set valid_time [expr {$time_seconds - [clock seconds]}]
 if {$valid_time < 0} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.2 none
     return
@@ -246,7 +246,7 @@ if {$status == 0} {
  }
     blacktools:voting_extend $chan $id $time_seconds
     blacktools:vote_new_first
-    blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.40 [list $id [return_time_2 $userlang [expr $time_seconds - [clock seconds]]]]
+    blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.40 [list $id [return_time_2 $userlang [expr {$time_seconds - [clock seconds]}]]]
     }
 }
 
@@ -361,7 +361,7 @@ if {$access == 1} {set access $black(say.$userlang.vote.15)} else {set access $b
 if {$expires == 0} {
     set expire_time "N/A"
 } else {
-    set expire_time [return_time_2 $userlang [expr $expires - [clock seconds]]]
+    set expire_time [return_time_2 $userlang [expr {$expires - [clock seconds]}]]
 }
 if {$status == 0} {
     blacktools:tell_v2 $nick $host $hand $chan $chan1 vote.38 [list $word $voting_name "" $read_status $access $expire_time $handle]
@@ -434,10 +434,10 @@ if {[array size votes] == 0} {
 }
     set sum 0
 foreach v [lsort -decreasing -increasing [array names votes]] {
-    set sum [expr $sum + [llength $votes($v)]]
+    set sum [expr {$sum + [llength $votes($v)]}]
 }
 foreach v [lsort -decreasing -increasing [array names votes]] {
-    lappend output "\002$v\002 [expr [expr [llength $votes($v)] * 100.0 ] / $sum] %"
+    lappend output "\002$v\002 [expr {[expr {[llength $votes($v)] * 100.0}] / $sum}] %"
     }
     return [list $output $sum]
 }
@@ -586,7 +586,7 @@ if {$access == 1} {set access $black(say.$lang.vote.15)} else {set access $black
 if {$expires == 0} {
     set expire_time "N/A"
 } else {
-    set expire_time [return_time_2 $lang [expr $expires - [unixtime]]]
+    set expire_time [return_time_2 $lang [expr {$expires - [unixtime]}]]
 }
     lappend output [list $id $voting_name [join $show_list ", "] $status $access $expire_time $handle]
             }

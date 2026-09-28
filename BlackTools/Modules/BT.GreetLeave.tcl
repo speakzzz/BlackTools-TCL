@@ -76,7 +76,7 @@ if {[info exists black(leavestopped:$chan)]} {
 if {![info exists black(leaveflood:$chan)]} { 
 	set black(leaveflood:$chan) 0 
 }
-	set black(leaveflood:$chan) [expr $black(leaveflood:$chan) + 1]
+	incr black(leaveflood:$chan)
 	utimer $time [list unset black(leaveflood:$chan)]
 
 if {$black(leaveflood:$chan) >= $number} {

@@ -22,7 +22,7 @@ proc ub:link {mask fulldns regexp whois} {
 	set chanban 0
 	set chanlink 0
 foreach chan [link:get] {
-	set chanlink [expr $chanlink + 1]
+	incr chanlink
 foreach b [blacktools:banlist $chan] {
 	set cidr 0
 	set bhost [lindex [split $b] 3]
@@ -44,7 +44,7 @@ if {[string match -nocase $read_rest_ip $read_theip] || [string match -nocase $r
 	}
 }
 if {(([string match -nocase $mask $bhost] || [string match -nocase $fulldns $bhost] || [matchaddr $fulldns $bhost] || [matchaddr $mask $bhost] || ([matchaddr $bhost $fulldns] && $whois == "1") || ([matchaddr $bhost $mask] && $whois == "1")) && $regexp != "REGEX") || ([string equal -nocase $bhost $mask] && $regexp == "REGEX") || ($btype == "REGEX" && ([regexp "$bhost" $mask] || [regexp "$bhost" $fulldns]))} {
-	set chanban [expr $chanban + 1]
+	incr chanban
 if {([setting:get $chan xtools] || [setting:get $chan xonly]) && [onchan $black(chanserv) $chan]} {
 if {$regexp != "REGEX"} {
 	putserv "PRIVMSG $black(chanserv) :unban $chan $bhost"
@@ -165,7 +165,7 @@ if {(([string match -nocase $mask $bhost] || [string match -nocase $fulldns $bho
 	set bywho [lindex [split $b] 4]
 	set match_time [lindex [split $b] 5]
 	set read_tr [lindex [split $b] 7]
-	set total_b [expr $total_b + 1]
+	incr total_b
 	set split_bywho [split $bywho ":"]
 	set level [lindex $split_bywho 1]
 	set check [blacktools:check:levelub $hand $chan $level]
@@ -180,7 +180,7 @@ if {$btime == "0" && [matchattr $hand -|O $chan]} {
 if {([blacktools:sticky $mask $chan] == "1") && [matchattr $hand -|OA $chan]} {
 	continue
 }
-	set rem_b [expr $rem_b + 1]
+	incr rem_b
 
 if {([setting:get $chan xtools] || [setting:get $chan xonly]) && [onchan $black(chanserv) $chan]} {
 if {$regexp != "REGEX"} {
@@ -203,14 +203,14 @@ foreach b [banlist $chan] {
 	set bhost [lindex $b 0]
 	set btime [lindex $b 2]
 if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} {
-	set total_b [expr $total_b + 1]
+	incr total_b
 if {$btime == "0" && [matchattr $hand -|O $chan]} {
 	continue
 }
 if {[isbansticky $bhost] && [matchattr $hand -|OA $chan]} {
 	continue
 }
-	set rem_b [expr $rem_b + 1]
+	incr rem_b
 if {([setting:get $chan xtools] || [setting:get $chan xonly]) && [onchan $black(chanserv) $chan]} {
 	putserv "PRIVMSG $black(chanserv) :unban $chan $bhost"
 } else {
@@ -329,8 +329,8 @@ foreach b [blacktools:banlist:gl] {
 	set num [lindex [split $b] 1]
 	set btime [lindex [split $b] 4]
 if {[string match -nocase $mask $bhost] || [string match -nocase $fulldns $bhost] || [matchaddr $fulldns $bhost] || [matchaddr $mask $bhost] || ([matchaddr $bhost $fulldns] && $whois == "1") || ([matchaddr $bhost $mask] && $whois == "1") || [string equal -nocase $num $mask]} {
-	set total_b [expr $total_b + 1]
-	set rem_b [expr $rem_b + 1]
+	incr total_b
+	incr rem_b
 	set match_time [lindex [split $b] 5]
 	blacktools:delban $bhost $chan "1" "0"
 if {$gl == "1"} {
@@ -343,7 +343,7 @@ foreach b [banlist] {
 	set bhost [lindex $b 0]
 	set btime [lindex $b 2]
 if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} {
-	set total_b [expr $total_b + 1]
+	incr total_b
 if {([setting:get $chan xtools] || [setting:get $chan xonly]) && [onchan $black(chanserv) $chan]} {
 	putserv "PRIVMSG $black(chanserv) :unban $chan $bhost"
 } else {
@@ -400,7 +400,7 @@ if {[string match "*blacktools:autounban*" [join [lindex $tmr 1]]]} {
 proc blacktools:ub:global {bhost channels num} {
 	global black
 	set chan [lindex $channels $num]
-	set incnum [expr $num + 1]
+	set incnum [expr {$num + 1}]
 if {([setting:get $chan xtools] || [setting:get $chan xonly]) && [onchan $black(chanserv) $chan]} {
 	putserv "PRIVMSG $black(chanserv) :unban $chan $bhost"
 } else {
@@ -508,7 +508,7 @@ if {[string match -nocase $read_rest_ip $read_theip] || [string match -nocase $r
 	}
 }
 if {((([string match -nocase $fulldns $real_mask] || [string match -nocase $real_mask $fulldns]) || ([string match -nocase $bhost $real_mask] || [string match -nocase $real_mask $bhost]) || $bhost == $id || $cidr == "1") && $regexp != "REGEX") || ($regexp == "REGEX" && [string equal -nocase $bhost $mask]) || ($btype == "REGEX" && ([regexp "$mask" $bhost] || [regexp "$mask" $fulldns]))} {
-	set gl_bans [expr $gl_bans + 1]
+	incr gl_bans
 	set mask [lindex [split $b] 3]
 	set id [lindex [split $b] 1]
 	set expire [lindex [split $b] 5]
@@ -520,7 +520,7 @@ if {((([string match -nocase $fulldns $real_mask] || [string match -nocase $real
 	set breason [join [encoding convertfrom utf-8 $breason]]
 	set bywho [lindex [split $b] 4]
 if {$expire != "0"} {
-	set expire [return_time_2 $getlang [expr $expire - [unixtime]]]
+	set expire [return_time_2 $getlang [expr {$expire - [unixtime]}]]
 	blacktools:tell_v2 $nick $host $hand $chan $chan1 sb.3 [list $btype $id $mask $bywho $created $expire $breason]
 if {$comment != "-1"} {
 	blacktools:tell $nick $host $hand $chan $chan1 sb.12 $comment
@@ -551,7 +551,7 @@ if {[string match -nocase $read_rest_ip $read_theip] || [string match -nocase $r
 	}
 }
 if {((([string match -nocase $fulldns $real_mask] || [string match -nocase $real_mask $fulldns]) || ([string match -nocase $bhost $real_mask] || [string match -nocase $real_mask $bhost]) || $bhost == $id || $cidr == "1") && $regexp != "REGEX") || ($regexp == "REGEX" && [string equal -nocase $bhost $mask]) || ($btype == "REGEX" && ([regexp "$mask" $bhost] || [regexp "$mask" $fulldns]))} {
-	set local_bans [expr $local_bans + 1]
+	incr local_bans
 	set expire [lindex [split $b] 5]
 	set created [lindex [split $b] 6]
 	set sticky [lindex [split $b] 7]
@@ -572,7 +572,7 @@ if {$type != "" && $type != "bot" && $btype != "GAG"} {
 	set bywho $handle
 }
 if {$expire != "0"} {
-	set expire [return_time_2 $getlang [expr $expire - [unixtime]]]
+	set expire [return_time_2 $getlang [expr {$expire - [unixtime]}]]
 	blacktools:tell_v2 $nick $host $hand $chan $chan1 sb.4 [list $btype $id $mask $bywho $created $expire $breason]
 if {$comment != "-1"} {
 	blacktools:tell $nick $host $hand $chan $chan1 sb.12 $comment
@@ -587,7 +587,7 @@ if {$comment != "-1"} {
 		}
 	}
 }
-if {[expr $local_bans + $gl_bans] > 0} {
+if {[expr {$local_bans + $gl_bans}] > 0} {
 	return
 } else {
 	set gl_bans 0
@@ -596,17 +596,17 @@ if {[expr $local_bans + $gl_bans] > 0} {
 foreach b [banlist $chan] {
 	set mask [lindex $b 0]
 if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} {
-	set local_bans [expr $local_bans + 1]
+	incr local_bans
 	}
 }
 if {$gl == "1"} {
 	foreach b [banlist] {
 	set mask [lindex $b 0]
 if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} {
-	set gl_bans [expr $gl_bans + 1]
+	incr gl_bans
 	}
 }
-if {[expr $local_bans + $gl_bans] == "0"} {
+if {[expr {$local_bans + $gl_bans}] == "0"} {
 if {$entry == "2"} {
 	blacktools:tell $nick $host $hand $chan $chan1 sb.11 $show_bhost
 } else {
@@ -614,7 +614,7 @@ if {$entry == "2"} {
 }
 	return
 }
-if {[expr $local_bans + $gl_bans] > 10} {
+if {[expr {$local_bans + $gl_bans}] > 10} {
 	blacktools:tell $nick $host $hand $chan $chan1 sb.5 "none"
 	return
 	}
@@ -644,7 +644,7 @@ if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} 
 	set bywho [split [lindex $b 5]]
 	set created [clock format $created -format %D-%H:%M:%S]
 if {$expire != "0"} {
-	set expire [return_time_2 $getlang [expr $expire - [unixtime]]]
+	set expire [return_time_2 $getlang [expr {$expire - [unixtime]}]]
 	blacktools:tell $nick $host $hand $chan $chan1 sb.3 "- $mask $bywho $created $expire $breason"
 } else { 
 	set expire "NEVER" 
@@ -665,7 +665,7 @@ if {[string match -nocase $mask $bhost] || [string match -nocase $bhost $mask]} 
 	set bywho [split [lindex $b 5]]
 	set created [clock format $created -format %D-%H:%M:%S]
 if {$expire != "0"} {
-	set expire [return_time_2 $getlang [expr $expire - [unixtime]]]
+	set expire [return_time_2 $getlang [expr {$expire - [unixtime]}]]
 	blacktools:tell $nick $host $hand $chan $chan1 sb.4 "- $mask $bywho $created $expire $breason"
 } else { 
 	set expire "NEVER" 
@@ -878,22 +878,22 @@ if {$getmethod == ""} { set getmethod "0" }
 	if {[string equal -nocase $next "-next"]} {
 if {[info exists black(morebans:$chan:$hand)]} {
 if {$black(morebans:$chan:$hand) >= $black(modul:nr:entries)} {
-for {set i $black(showbans:$chan:$hand)} { $i < [expr $black(showbans:$chan:$hand) + $black(modul:nr:entries)] } { incr i } {
+for {set i $black(showbans:$chan:$hand)} { $i < [expr {$black(showbans:$chan:$hand) + $black(modul:nr:entries)}] } { incr i } {
 	set current_ban [lindex $banlist $i]
 	show:bans $nick $host $hand $chan $chan1 $gl $current_ban $userb
 		}
-	set black(morebans:$chan:$hand) [expr $black(morebans:$chan:$hand) - $black(modul:nr:entries)]
+	set black(morebans:$chan:$hand) [expr {$black(morebans:$chan:$hand) - $black(modul:nr:entries)}]
 	banlist:remain $nick $host $hand $black(morebans:$chan:$hand) $chan $chan1 $getmethod $gl $user $userb $host
-	set black(showbans:$chan:$hand) [expr $black(showbans:$chan:$hand) + $black(modul:nr:entries)]
+	set black(showbans:$chan:$hand) [expr {$black(showbans:$chan:$hand) + $black(modul:nr:entries)}]
 	} else {
 if {$black(morebans:$chan:$hand) < 1} {
 	return
 }
-for {set i $black(showbans:$chan:$hand)} { $i <= [expr $black(showbans:$chan:$hand) +  $black(morebans:$chan:$hand)]} { incr i } {
+for {set i $black(showbans:$chan:$hand)} { $i <= [expr {$black(showbans:$chan:$hand) +  $black(morebans:$chan:$hand)}]} { incr i } {
 	set current_ban [lindex $banlist $i]
 	show:bans $nick $host $hand $chan $chan1 $gl $current_ban $userb
 		}
-	set black(morebans:$chan:$hand) [expr $black(morebans:$chan:$hand) - $black(showbans:$chan:$hand)]
+	set black(morebans:$chan:$hand) [expr {$black(morebans:$chan:$hand) - $black(showbans:$chan:$hand)}]
 	}
 	foreach tmr [utimers] {
 if {[string match -nocase "*banlist:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
@@ -931,12 +931,12 @@ if {$userb == "1" && $handle == ""} {
 	}
 }
 
-	set black(morebans:$chan:$hand) [expr $black(cbanlist:$chan:$hand) - $black(modul:nr:entries)]
+	set black(morebans:$chan:$hand) [expr {$black(cbanlist:$chan:$hand) - $black(modul:nr:entries)}]
 	for {set i 0} { $i < $black(modul:nr:entries) } { incr i } {
 	set current_ban [lindex $banlist $i]
 	show:bans $nick $host $hand $chan $chan1 $gl $current_ban $userb
 	}
-	set black(showbans:$chan:$hand) [expr $black(showbans:$chan:$hand) + $black(modul:nr:entries)]
+	set black(showbans:$chan:$hand) [expr {$black(showbans:$chan:$hand) + $black(modul:nr:entries)}]
 if {$black(morebans:$chan:$hand) > 0} {
 	banlist:remain $nick $host $hand $black(morebans:$chan:$hand) $chan $chan1 $getmethod $gl $user $userb $host
 }
@@ -1078,7 +1078,7 @@ if {$userb == "3"} {
 	set type "EXEMPT"
 }
 if {$expire != "0"} {
-	set expire [return_time_2 $getlang [expr $expire - [unixtime]]]
+	set expire [return_time_2 $getlang [expr {$expire - [unixtime]}]]
 } else {
 	set expire $black(say.$getlang.banlist.13)
 	set never_expire 1
@@ -1174,7 +1174,7 @@ if {$getreason == ""} {
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set getreason $black(say.$getlang.w.5)
 	set len [llength $getreason] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set getreason [lindex $getreason $random]
 }
 
@@ -1183,7 +1183,7 @@ if {[setting:get $chan showhandle]} {
 	} else { set reason "$getreason"
 }
 	set getcount [setting:get $chan kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	blacktools:banner3_stats "w" $chan $hand ""
 if {[setting:get $chan showcount]} {
@@ -1295,7 +1295,7 @@ if {$reason == ""} {
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set reason1 "$black(say.$getlang.k.5)"
 	set len [llength $reason1] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reason1 [lindex $reason1 $random]
  } else { set reason1 "$reason" }
 if {[setting:get $chan showhandle]} {
@@ -1303,7 +1303,7 @@ if {[setting:get $chan showhandle]} {
 	} else { set reason "$reason1" 
 }
 	set getcount [setting:get $chan kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	blacktools:banner3_stats "k" $chan $hand ""
 if {[setting:get $chan showcount]} {

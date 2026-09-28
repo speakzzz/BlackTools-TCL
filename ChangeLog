@@ -1,4 +1,11 @@
  2026-09-28 speakzzz
+  * Braced all 515 expr calls outside Addons/ (e.g. expr $a + 1 ->
+    expr {$a + 1}) and turned 86 simple counters into incr. Braced
+    expressions are compiled once instead of re-parsed on every call,
+    and values from IRC or data files can no longer be evaluated as
+    code inside an expression. No intended behavior change: each
+    conversion was checked by running old and new forms side by side
+ 2026-09-28 speakzzz
   * Loader: a module, command or protection file that fails to load is
     now logged (with line number) and skipped instead of killing the
     bot; a summary of problems is logged after loading. Core files

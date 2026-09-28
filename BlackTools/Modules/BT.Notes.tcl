@@ -43,7 +43,7 @@ while {[gets $file line] != -1} {
 	set handle [lindex [split $line] 4]
 	set readtype [lindex [split $line] 0]
 if {[string equal -nocase $handle $hand] && [string equal -nocase $readtype "LIST"]} {
-	set notes_total [expr $notes_total + 1]
+	incr notes_total
 	set num [lindex [split $line] 2]
 	set readnote [lrange [split $line] 6 end]
 if {[llength [lrange [split $line] 6 end]] > 7	} {
@@ -85,12 +85,12 @@ while {[gets $file line] != -1} {
 	set handle [lindex [split $line] 4]
 	set readtype [lindex [split $line] 0]
 if {[string equal -nocase $handle $hand] && [string equal -nocase $readtype "INBOX"]} {
-	set notes_total [expr $notes_total + 1]
+	incr notes_total
 	set num [lindex [split $line] 2]
 	set readnote [lrange [split $line] 7 end]
 	set readit [lindex [split $line] 3]
 if {$readit == "0"} {
-	set notes_read [expr $notes_read + 1]
+	incr notes_read
 	lappend notes_unread $num
 }
 if {[llength $readnote] > 7	} {
@@ -245,11 +245,11 @@ foreach user $split_usersend {
 if {[onchan $user $chan] && ![validuser $user]} {
 	set user [nick2hand $user]
 }
-	set num_user [expr $num_user + 1]
+	incr num_user
 if {[validuser $user]} {
 	set nonotes [getuser $user XTRA NO_NOTES]
 if {$nonotes == ""} {
-	set sent_user [expr $sent_user + 1]
+	incr sent_user
 	set black(notes:announce:$user) 1
 	set return [notes:add $nick $host $user "DB" "INBOX" $note_send $hand 0]
 	} else {
@@ -279,12 +279,12 @@ while {[gets $file line] != -1} {
 	set handle [lindex [split $line] 4]
 	set readtype [lindex [split $line] 0]
 if {[string equal -nocase $handle $hand] && [string equal -nocase $readtype "INBOX"]} {
-	set notes_total [expr $notes_total + 1]
+	incr notes_total
 	set num [lindex [split $line] 2]
 	set readnote [lrange [split $line] 7 end]
 	set readit [lindex [split $line] 3]
 if {$readit == "0"} {
-	set notes_read [expr $notes_read + 1]
+	incr notes_read
 	lappend notes_unread $num
 		}
 	}
@@ -339,7 +339,7 @@ while {[gets $file line] != -1} {
 	set type [lindex [split $line] 0]
 	set handle [lindex [split $line] 4]
 if {[string equal $handle $hand] && [string equal $type "INBOX"]} {
-	set found_it [expr $found_it + 1]
+	incr found_it
 	continue
 } else {
 	puts $tempwrite $line
@@ -398,7 +398,7 @@ proc notes:add {nick host handle chan type note sender read} {
 	while {$temp_num == 0} {
 	set get [find:note:num $num]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
 	set file [open $black(notes_file) a]
@@ -441,12 +441,12 @@ while {[gets $file line] != -1} {
 	set handle [lindex [split $line] 4]
 	set readtype [lindex [split $line] 0]
 if {[string equal -nocase $handle $hand] && [string equal -nocase $readtype "INBOX"]} {
-	set notes_total [expr $notes_total + 1]
+	incr notes_total
 	set num [lindex [split $line] 2]
 	set readnote [join [lrange [split $line] 7 end]]
 	set readit [lindex [split $line] 3]
 if {$readit == "0"} {
-	set notes_read [expr $notes_read + 1]
+	incr notes_read
 	lappend notes_unread $num
 		}
 	}
@@ -481,12 +481,12 @@ while {[gets $file line] != -1} {
 	set handle [lindex [split $line] 4]
 	set readtype [lindex [split $line] 0]
 if {[string equal -nocase $handle $hand] && [string equal -nocase $readtype "INBOX"]} {
-	set notes_total [expr $notes_total + 1]
+	incr notes_total
 	set num [lindex [split $line] 2]
 	set readnote [lrange [split $line] 7 end]
 	set readit [lindex [split $line] 3]
 if {$readit == "0"} {
-	set notes_read [expr $notes_read + 1]
+	incr notes_read
 	lappend notes_unread $num
 		}
 	}

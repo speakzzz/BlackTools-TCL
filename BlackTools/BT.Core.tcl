@@ -372,8 +372,8 @@ if {![info exists black(antiflood:$host:prot)]} {
 if {![info exists black(antiflood:prot)]} {
 	set black(antiflood:prot) 0
 }
-	set black(antiflood:$host:prot) [expr $black(antiflood:$host:prot) + 1]
-	set black(antiflood:prot) [expr $black(antiflood:prot) + 1]
+	incr black(antiflood:$host:prot)
+	incr black(antiflood:prot)
 	utimer $timer [list msg:flood:unset antiflood:$host:prot]
 	utimer $mass_timer [list msg:flood:unset antiflood:prot]
 if {$black(antiflood:prot) >= $mass_number} {
@@ -414,7 +414,7 @@ if {[string match "*black(antiflood:$host:notc)*" [join [lindex $tmr 1]]]} {
 if {![info exists black(antiflood:$host:notc)]} {
 	set black(antiflood:$host:notc) 0
 }
-	set black(antiflood:$host:notc) [expr $black(antiflood:$host:notc) + 1]
+	incr black(antiflood:$host:notc)
 	utimer $timer [list msg:flood:unset antiflood:$host:notc]
 if {$black(antiflood:$host:notc) >= $number} {
 	newignore "*!$host" $botnick "\002\[BT\]\002 NOTICE FLOOD PROTECTION" $black(notice:flood:notc_time)
@@ -439,13 +439,13 @@ regsub -all {[0-9]} $the_time "" type
 	
 switch [string tolower $type] {
 	d {
-	set minutes [expr $number * 1440]
+	set minutes [expr {$number * 1440}]
 	}
 	m {
 	set minutes "$number"
 	}
 	h {
-	set minutes [expr $number * 60]
+	set minutes [expr {$number * 60}]
 	}
 	default {
 	return -1
@@ -473,11 +473,11 @@ if {![info exists securedtimer_running]} {
 if {![info exists black(vote_expire)]} {
     set expire [blacktools:first_expire]
 if {$expire != 0} {
-	set dif [expr $expire - [clock seconds]]
+	set dif [expr {$expire - [clock seconds]}]
 if {$dif < 0} {
     utimer 1 [list blacktools:vote:expire]
 } else {
-	utimer [expr $expire - [clock seconds]] [list blacktools:vote:expire]
+	utimer [expr {$expire - [clock seconds]}] [list blacktools:vote:expire]
     set black(vote_expire) $expire
 		}
     }
@@ -641,7 +641,7 @@ if {![botisop $chan] && ![setting:get $chan xonly]} {
 	return
 }
 	set getcount [setting:get $chan kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	
 	set xban 0
@@ -704,7 +704,7 @@ if {$checkbantime == "-1"} {
 } else {
 	set bantime [time_return_minute $bantime]
 }
-	set reason_time [expr [unixtime] + [expr $bantime * 60]]
+	set reason_time [expr {[unixtime] + [expr {$bantime * 60}]}]
 if {[string equal -nocase $hand "NEXT"]} {
 	set getreason [setting:get $chan $hand-noidlereason]
 } else {
@@ -744,7 +744,7 @@ if {[setting:get $chan showid]} {
 	set show_reason "$show_reason \[id: $id\]"
 }
 if {[setting:get $chan showtime] && $bantime != "0"} {
-	set show_reason "$show_reason \[bantime: [return_reason_time [expr $reason_time - [unixtime]]]\]"
+	set show_reason "$show_reason \[bantime: [return_reason_time [expr {$reason_time - [unixtime]}]]\]"
 } else {
 	set show_reason "$show_reason"
 }
@@ -802,7 +802,7 @@ if {$getxlevel == ""} {
 }
 	set num [blacktools:ban:find_id]
 	set getcount [setting:get $chan kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	set getcount [setting:get $chan kickcount]
 	
@@ -849,7 +849,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set thereason [blacktools:rem_comment_ban $thereason]
 if {$thereason == ""} { set thereason "N/A" }
 	set bantime [time_return_minute $bantime]
-	set bantime [expr $bantime * 60]
+	set bantime [expr {$bantime * 60}]
 	set expire [return_time_2 $getlang $bantime]
 	set replace(%banmask%) $banmask
 	set replace(%bantime%) $expire
@@ -978,12 +978,12 @@ if {$regex == "REGEX"} {
 }
 	set current_time [unixtime]
 if {$bantime != "0"} {
-	set reason_time [expr $current_time + [expr $bantime * 60]]
+	set reason_time [expr {$current_time + [expr {$bantime * 60}]}]
 } else {
 	set reason_time 0
 }
 	set getcount [setting:get $chan kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	set getcount [setting:get $chan kickcount]
 	blacktools:banner3_stats $rcmd $chan $gethand $type
@@ -1027,7 +1027,7 @@ if {!([validchan $backchan]) || !([onchan $botnick $backchan])} {
 	set show_reason [blacktools:setreason $chan $reason "" 0 $getcount "0" $num]
 if {$reason == ""} { set reason "N/A" }
 	set bantime [time_return_minute $bantime]
-	set bantime [expr $bantime * 60]
+	set bantime [expr {$bantime * 60}]
 	set expire [return_time_2 $getlang $bantime]
 	set black($chan:anounce) 1
 	set replace(%banmask%) $mask
@@ -1062,7 +1062,7 @@ if {$type == "gl"} {
 	set bantype "BANS(GLOBAL)"
 	set counts [getuser $user XTRA BANS(GLOBAL)]
 if {$counts == ""} { set counts 0 }
-	set counts [expr $counts + 1]
+	incr counts
 	setuser $user XTRA BANS(GLOBAL) $counts
 	return
 }	
@@ -1074,7 +1074,7 @@ if {$cmds == ""} {
 	set get_val [lindex $cmds $find_it]
 	set split_val [split $get_val ":"]
 	set getval [lindex $split_val 1]
-	set counter [expr $getval + 1]
+	set counter [expr {$getval + 1}]
 	set cmds [lreplace $cmds $find_it $find_it]
 if {[llength $cmds] > 0} {
 	setuser $user XTRA CMD_STATS($chan) "$cmds $cmd:$counter"
@@ -1091,7 +1091,7 @@ if {$cmds_today == ""} {
 	set get_val [lindex $cmds_today $find_it]
 	set split_val [split $get_val ":"]
 	set getval [lindex $split_val 1]
-	set counter [expr $getval + 1]
+	set counter [expr {$getval + 1}]
 	set cmds_today [lreplace $cmds_today $find_it $find_it]
 if {[llength $cmds_today] > 0} {
 	setuser $user XTRA CMD_STATS_TODAY($chan) "$cmds_today $cmd:$counter"
@@ -1105,7 +1105,7 @@ proc blacktools:global:ban {channels num} {
 	global black
 	set chan [lindex $channels $num]
 	who:chan $chan
-	set incnum [expr $num + 1]
+	set incnum [expr {$num + 1}]
 if {[lindex $channels $incnum] != ""} {
 	utimer 5 [list blacktools:global:ban $channels $incnum]
 	}
@@ -1201,7 +1201,7 @@ if {![info exists black($variable_name:type_count:$host:$chan)]} {
 	set time_split [split $black($variable_name:type_count:$host:$chan) ":"]
 	set get_time [lindex $time_split 0]
 	set get_count [lindex $time_split 1]
-	set get_count [expr $get_count + 1]
+	incr get_count
 	set black($variable_name:type_count:$host:$chan) $time:$get_count
 }
 	set time_split [split $black($variable_name:type_count:$host:$chan) ":"]
@@ -1237,7 +1237,7 @@ if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
 	set getcount [setting:get $c kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
 	set xonly [blacktools:getxonly $c]
@@ -1298,7 +1298,7 @@ if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
 	set getcount [setting:get $c kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
 	set xonly [blacktools:getxonly $c]
@@ -1340,7 +1340,7 @@ if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
 	set getcount [setting:get $c kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
 	set xonly [blacktools:getxonly $c]
@@ -1381,7 +1381,7 @@ if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
 	set getcount [setting:get $c kickcount]
-	set kcount [expr $getcount +1]
+	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
 	set xonly [blacktools:getxonly $c]
@@ -1581,7 +1581,7 @@ if {[info exists black($chan:anounce)]} {
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 if {$reason == ""} { set reason "N/A" }
 	set bantime [time_return_minute $bantime]
-	set bantime [expr $bantime * 60]
+	set bantime [expr {$bantime * 60}]
 	set expire [return_time_2 $getlang $bantime]
 	set replace(%banmask%) $host
 	set replace(%bantime%) $expire
@@ -1697,7 +1697,7 @@ proc user:autoexpire {minute hour day month year} {
 if {$black(user_expire_time) == "0"} {
 	return
 }
-	set max_time [expr 86400 * $black(user_expire_time)]
+	set max_time [expr {86400 * $black(user_expire_time)}]
 foreach user [userlist] {
 if {[matchattr $user mno]} {
 	continue
@@ -1708,9 +1708,9 @@ if {$laston == ""} {
 } else {
 	set laston [lindex $laston 0]
 }
-	set user_time [expr [unixtime] - $laston]
+	set user_time [expr {[unixtime] - $laston}]
 if {$user_time > $max_time} {
-	set counter [expr $counter + 1]
+	incr counter
 	deluser $user
 	notes:remove:ondelete $user
 	alias:remove:ondelete $user
@@ -1832,7 +1832,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 if {$getmethod == ""} { set getmethod $black(default_output) }	
 if {[string equal -nocase "man.showtip" $type]} {
 	set len [llength $black(say.$getlang.$type)] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set gettext [lindex $black(say.$getlang.$type) $random]
 	set text [black:color:set $gethand $gettext]
 } else {
@@ -1943,7 +1943,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 if {$getmethod == ""} { set getmethod $black(default_output) }	
 if {[string equal -nocase "man.showtip" $type]} {
 	set len [llength $black(say.$getlang.$type)] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set gettext [lindex $black(say.$getlang.$type) $random]
 	set text [black:color:set $gethand $gettext]
 } else {
@@ -2114,7 +2114,7 @@ if {[info exists black(notes:announce:$user)]} {
 }
 if {[string equal -nocase $user $read_user]} {
 	set tm [lindex [split $line] 5]
-	set read_days [expr [expr [expr [expr [unixtime] - $tm] / 60]] / 1440]
+	set read_days [expr {[expr {[expr {[expr {[unixtime] - $tm}] / 60}]}] / 1440}]
 	set expiretime [string tolower [getuser $user XTRA NOTE_EXPIRE]]
 if {$expiretime == ""} { set expiretime $black(notes:expiretime) }
 if {$read_days >= $expiretime} {
@@ -2241,10 +2241,10 @@ if {[validuser $user]} {
 
 proc return_time_2 {getlang get_time} {
 	global black
-	set seconds [expr $get_time % 60]
-	set days [expr $get_time/86400]
-	set hours [expr [expr $get_time/3600] % 24];
-	set minutes [expr [expr $get_time / 60] % 60]
+	set seconds [expr {$get_time % 60}]
+	set days [expr {$get_time/86400}]
+	set hours [expr {[expr {$get_time/3600}] % 24}];
+	set minutes [expr {[expr {$get_time / 60}] % 60}]
 
 if {[string length $hours] == "1"} {
 	set hours "0$hours"
@@ -2270,10 +2270,10 @@ proc return_reason_time {get_time} {
 	set d "d"
 	set h "h"
 	set s "s"
-	set days [expr $get_time/86400]
-	set hours [expr [expr $get_time/3600] % 24];
-	set minutes [expr [expr $get_time / 60] % 60]
-	set seconds [expr $get_time % 60]
+	set days [expr {$get_time/86400}]
+	set hours [expr {[expr {$get_time/3600}] % 24}];
+	set minutes [expr {[expr {$get_time / 60}] % 60}]
+	set seconds [expr {$get_time % 60}]
 if {$days == "0"} {
 if {$hours == "0"} {
 if {$seconds > 0} {
@@ -2294,38 +2294,38 @@ return "$days$d:$hours$h"
 proc return_time {getlang get_time} {
 	global black
 if {$get_time >= 31536000} {
-	set yearsfull [expr $get_time/31536000]
-	set years [expr int($yearsfull)]
-	set yearssub [expr 31536000*$years]
-	set totalday [expr $get_time - $yearssub]
+	set yearsfull [expr {$get_time/31536000}]
+	set years [expr {int($yearsfull)}]
+	set yearssub [expr {31536000*$years}]
+	set totalday [expr {$get_time - $yearssub}]
 	}
 if {$get_time < 31536000} {
 	set totalday $get_time
 	set years 0
 	}
 if {$totalday >= 86400} {
-	set daysfull [expr $totalday/86400]
-	set days [expr int($daysfull)]
-	set dayssub [expr 86400*$days]
-	set totalhour [expr $totalday - $dayssub]
+	set daysfull [expr {$totalday/86400}]
+	set days [expr {int($daysfull)}]
+	set dayssub [expr {86400*$days}]
+	set totalhour [expr {$totalday - $dayssub}]
 	}
 if {$totalday < 86400} {
 	set totalhour $totalday
 	set days 0
 	}
 if {$totalhour >= 3600} {
-	set hoursfull [expr $totalhour/3600]
-	set hours [expr int($hoursfull)]
-	set hourssub [expr 3600*$hours]
-	set totalmin [expr $totalhour - $hourssub]
+	set hoursfull [expr {$totalhour/3600}]
+	set hours [expr {int($hoursfull)}]
+	set hourssub [expr {3600*$hours}]
+	set totalmin [expr {$totalhour - $hourssub}]
 	}
 if {$totalhour < 3600} {
 	set totalmin $totalhour
 	set hours 0
 	}
 if {$totalmin >= 60} {
-	set minsfull [expr $totalmin/60]
-	set mins [expr int($minsfull)]
+	set minsfull [expr {$totalmin/60}]
+	set mins [expr {int($minsfull)}]
 	}
 if {$totalmin < 60} {
 	set mins 0
@@ -2513,7 +2513,7 @@ while {[gets $file line] != -1} {
 	set tm [lindex [split $line] 2]
 	set suspend_chan [lindex [split $line] 0]
 	set suspend_user [lindex [split $line] 1]
-if {[expr $tm - [unixtime]] < 0} {
+if {[expr {$tm - [unixtime]}] < 0} {
 	suspend:delete:action $suspend_user $suspend_chan
 	continue
 	} else {
@@ -2611,7 +2611,7 @@ if {$jointime == ""} {
 }
 	set current [setting:get $chan joincount]
 if {$current == ""} { set current 0 }
-	set current [expr $current + 1]
+	incr current
 	setting:set $chan joincount $current
 }
 
@@ -2638,7 +2638,7 @@ if {[info exists black(turnOnFlood:$chan)]} {
 if {![info exists black(countflood:join:$chan)]} { 
 	set black(countflood:join:$chan) 0 
 }
-	set black(countflood:join:$chan) [expr $black(countflood:join:$chan) + 1]
+	incr black(countflood:join:$chan)
 	utimer $time [list remove:flood:join $chan]
 
 if {$black(countflood:join:$chan) >= $number} {
@@ -2677,8 +2677,8 @@ proc maxuptime {min hour day mon year} {
 if {![file exists $black(uptime_file)]} {
 	return
 }
-	set online [expr [unixtime] - ${server-online}]
-	set read_uptime [expr [unixtime] - $uptime]
+	set online [expr {[unixtime] - ${server-online}}]
+	set read_uptime [expr {[unixtime] - $uptime}]
 	set file [open $black(uptime_file) "r"]
 	set data [read -nonewline $file]
 	close $file
@@ -3031,7 +3031,7 @@ if {$getreason == ""} {
 	set getreason $black(say.$getlang.$rcmd.5)
 if {$rcmd == "b"} {
 	set len [llength $getreason] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set getreason [lindex $getreason $random]
 	}
 }
@@ -3134,10 +3134,10 @@ proc check:massban {host chan} {
 foreach user [chanlist $chan] {
 	set gethost "$user![getchanhost $user $chan]"
 if {[string match -nocase $host $gethost]} {
-	set counter [expr $counter + 1]
+	incr counter
 	}
 }
-if {[expr 100 * $counter / $totuser] > $black(chanserv:percent_ban)} {
+if {[expr {100 * $counter / $totuser}] > $black(chanserv:percent_ban)} {
 	return 1
 }
 	return 0
@@ -3188,7 +3188,7 @@ proc blacktools:ban:exempt {mask} {
 proc blacktools:link_ban {chanlink first b nick hand char chan chan1 type return_time cmd reason num} {
 	global black
 	set first_chan [lindex $chanlink $first]
-	set counter [expr $first + 1]
+	set counter [expr {$first + 1}]
 if {$first_chan != ""} {
 	userhost:act $b $nick "$hand" $char $first_chan $chan1 $type $return_time $cmd $reason "2"
 }
@@ -3200,7 +3200,7 @@ if {[lindex $chanlink $counter] != ""} {
 proc blacktools:link_ban2 {chanlink first} {
 	global black
 	set first_chan [lindex $chanlink $first]
-	set counter [expr $first + 1]
+	set counter [expr {$first + 1}]
 if {$first_chan != ""} {
 	who:chan $first_chan
 }
@@ -3371,7 +3371,7 @@ proc blacktools:bl:setreason {chan reason bywho expire kcount gl id} {
 	set cmd [lindex $split_hand 1]
 	set reason [blacktools:rem_comment $reason]
 if {$expire != "0"} {
-	set expire [return_reason_time [expr $expire - [unixtime]]]
+	set expire [return_reason_time [expr {$expire - [unixtime]}]]
 }
 	set show_reason "$reason"
 if {$gl == "0"} {
@@ -3424,7 +3424,7 @@ proc blacktools:setreason {chan reason bywho expire kcount gl id} {
 	set cmd [lindex $split_hand 1]
 	set reason [blacktools:rem_comment $reason]
 if {$expire != "0"} {
-	set expire [return_reason_time [expr $expire - [unixtime]]]
+	set expire [return_reason_time [expr {$expire - [unixtime]}]]
 }
 if {$gl == "0"} {
 if {![string equal -nocase $gethand "BADCHAN"] && ![string equal -nocase $gethand "badident"] && ![string equal -nocase $gethand "badnick"] && ![string equal -nocase $gethand "antibadquitpart"] && ![string equal -nocase $gethand "antichanflood"] && ![string equal -nocase $gethand "badrealname"] && ![string equal -nocase $gethand "antispam"] && ![string equal -nocase $gethand "badhost"] && ![string equal -nocase $gethand "antipub"] && ![string equal -nocase $gethand "antijoinflood"] && ![string equal -nocase $gethand "antinotice"] && ![string equal -nocase $gethand "antictcp"] && ![string equal -nocase $gethand "antirepeat"] && ![string equal -nocase $gethand "antibold"] && ![string equal -nocase $gethand "anticolor"] && ![string equal -nocase $gethand "antiunderline"] && ![string equal -nocase $gethand "antilongtext"] && ![string equal -nocase $gethand "antibadword"] && ![string equal -nocase $gethand "anticaps"] && ![string equal -nocase $gethand "nickflood"] && ![string equal -nocase $gethand "inviteban"] && ![string equal -nocase $gethand "private"] && ![string equal -nocase $gethand "clonescan"] && ![string equal -nocase $gethand "repetitivechars"] && ![string equal -nocase $gethand "noproxy"]} {
@@ -3667,7 +3667,7 @@ if {$getmethod == ""} { set getmethod $black(default_output) }
 if {[string equal -nocase $next "-next"] || [string equal -nocase $vote_next "-next"]} {
 if {[info exists black($modul:more:$chan:$hand)]} {
 if {$black($modul:more:$chan:$hand) >= $maxentries} {
-for {set i $black($modul:show:$chan:$hand)} { $i < [expr $black($modul:show:$chan:$hand) + $maxentries] } { incr i } {
+for {set i $black($modul:show:$chan:$hand)} { $i < [expr {$black($modul:show:$chan:$hand) + $maxentries}] } { incr i } {
 	set current_text [lindex $text $i]
 if {$themodul == "topwords" || $themodul == "topbans"} {
 if {$current_text != ""} {
@@ -3686,18 +3686,18 @@ if {$black($modul:more:$chan:$hand) > 0} {
 } 
 	show:modul:info $nick $host $hand $chan $chan1 $top $modul $remain $opt
 }
-	set black($modul:more:$chan:$hand) [expr $black($modul:more:$chan:$hand) - $maxentries]
+	set black($modul:more:$chan:$hand) [expr {$black($modul:more:$chan:$hand) - $maxentries}]
 if {$host == "prv"} {
 	modul:remain $nick $host $hand $black($modul:more:$chan:$hand) $chan $chan1 $getmethod $modul $gl "1" $opt
 } else {
 	modul:remain $nick $host $hand $black($modul:more:$chan:$hand) $chan $chan1 $getmethod $modul $gl "0" $opt
 }
-	set black($modul:show:$chan:$hand) [expr $black($modul:show:$chan:$hand) + $maxentries]
+	set black($modul:show:$chan:$hand) [expr {$black($modul:show:$chan:$hand) + $maxentries}]
 	} else {
 if {$black($modul:more:$chan:$hand) < 1} {
 	return
 }
-for {set i $black($modul:show:$chan:$hand)} { $i <= [expr $black($modul:show:$chan:$hand) +  $black($modul:more:$chan:$hand)]} { incr i } {
+for {set i $black($modul:show:$chan:$hand)} { $i <= [expr {$black($modul:show:$chan:$hand) +  $black($modul:more:$chan:$hand)}]} { incr i } {
 	set current_text [lindex $text $i]
 if {$themodul == "topwords" || $themodul == "topbans"} {
 if {$current_text != ""} {
@@ -3714,7 +3714,7 @@ if {$themodul == "topwords" || $themodul == "topbans"} {
 
 	show:modul:info $nick $host $hand $chan $chan1 $top $modul $remain $opt
 }
-	set black($modul:more:$chan:$hand) [expr $black($modul:more:$chan:$hand) - $black($modul:show:$chan:$hand)]
+	set black($modul:more:$chan:$hand) [expr {$black($modul:more:$chan:$hand) - $black($modul:show:$chan:$hand)}]
 	}
 	foreach tmr [utimers] {
 if {[string match -nocase "*module:getinfo:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
@@ -3828,7 +3828,7 @@ default {
 	set black($modul:show:$chan:$hand) 0
 if {$black($modul:ltext:$chan:$hand) > $maxentries} {
 
-	set black($modul:more:$chan:$hand) [expr $black($modul:ltext:$chan:$hand) - $maxentries]
+	set black($modul:more:$chan:$hand) [expr {$black($modul:ltext:$chan:$hand) - $maxentries}]
 	for {set i 0} { $i < $maxentries } { incr i } {
 	set current_text [lindex $text $i]
 if {$themodul == "topwords" || $themodul == "topbans"} {
@@ -3849,7 +3849,7 @@ if {$black($modul:more:$chan:$hand) > 0} {
 } 
 	show:modul:info $nick $host $hand $chan $chan1 $top $modul $remain $opt
 }
-	set black($modul:show:$chan:$hand) [expr $black($modul:show:$chan:$hand) + $maxentries]
+	set black($modul:show:$chan:$hand) [expr {$black($modul:show:$chan:$hand) + $maxentries}]
 if {$black($modul:more:$chan:$hand) > 0} {
 if {$host == "prv"} {
 	modul:remain $nick $host $hand $black($modul:more:$chan:$hand) $chan $chan1 $getmethod $modul $gl "1" $opt
@@ -4387,7 +4387,7 @@ if {[string match -nocase "*seen*" $f] || [string match -nocase *othermodule* $f
 } else {
 	set pos 0
 }
-	set inc [expr $num + 1]
+	set inc [expr {$num + 1}]
 	set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
 	set temp "$black(tempdir)/removechan_temp.$timestamp"
 	set file [open $f r]
@@ -4421,7 +4421,7 @@ if {[string match -nocase "*seen*" $f] || [string match -nocase *othermodule* $f
 } else {
 	set pos 0
 }
-	set inc [expr $num + 1]
+	set inc [expr {$num + 1}]
 	set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
 	set temp "$black(tempdir)/removechan_temp.$timestamp"
 	set file [open $f r]
@@ -5042,7 +5042,7 @@ if {$read_num == "$num"} {
 proc blacktools:ban:find_id {} {
 	global black
 	set lastid [blacktools:banlist:lastid]
-	set current [expr $lastid + 1]
+	set current [expr {$lastid + 1}]
 	return $current
 }
 
@@ -5587,7 +5587,7 @@ proc get:abuse:num {} {
 while {$temp_num == 0} {
 	set get [find:note:num $num]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }	
 	return $num
@@ -5869,7 +5869,7 @@ if {$type == "2"} {
 while {$temp_num == 0} {
 	set get [addextra:find:num $chan $line1 $num]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
 if {[regexp {[:]} $except] && [string equal -nocase $line1 "BADWORD"]} {
@@ -6080,17 +6080,17 @@ if {$gettime == ""} {
 	set gettime $black(default:bantime)
 }
 if {$gettime == "0"} {
-	set nextc [expr $num + 1]
+	set nextc [expr {$num + 1}]
 if {[lindex $channels $nextc] != ""} {
 	blacktools:expire:chan $channels $nextc
 	}
 	return
 }
 	set gettime [time_return_minute $gettime]
-	set seconds [expr $gettime * 60]
+	set seconds [expr {$gettime * 60}]
 	set unixtime [unixtime]
 	set banlist [chanbans $chan]
-	set maxtime [expr $unixtime + $seconds]
+	set maxtime [expr {$unixtime + $seconds}]
 foreach ban $banlist {
 if {[blacktools:sticky [lindex $ban 0] $chan] == 1} {
 	continue
@@ -6101,12 +6101,12 @@ if {[isbansticky [lindex $ban 0] $chan]} {
 if {[blacktools:isgag [lindex $ban 0] $chan] == 1} {
 	continue
 }
-	set chanstime [expr $unixtime + [lindex $ban 2]]
+	set chanstime [expr {$unixtime + [lindex $ban 2]}]
 if {$maxtime <= $chanstime} {
 	pushmode $chan -b [lindex $ban 0]
 		}
 	}
-	set nextc [expr $num + 1]
+	set nextc [expr {$num + 1}]
 if {[lindex $channels $nextc] != ""} {
 	blacktools:expire:chan $channels $nextc
 	}
@@ -6121,7 +6121,7 @@ foreach b $black(bans) {
 if {$b != ""} {
 	set expire [lindex [split $b] 5]
 if {$expire != 0} {
-	set dif [expr $expire - [unixtime]]
+	set dif [expr {$expire - [unixtime]}]
 if {$dif > 0 || $dif == 0} {
 if {$lastban == ""} {
 	set lastban $dif
@@ -6169,7 +6169,7 @@ proc blacktools:ub:setlast {expire} {
 	set lastban ""
 if {[info exists black(lastban)]} {
 if {$expire != 0} {
-	set dif [expr $expire - [unixtime]]
+	set dif [expr {$expire - [unixtime]}]
 if {$dif > 0} {
 if {$black(lastban) >= $dif} {
 	set lastban $dif
@@ -6177,7 +6177,7 @@ if {$black(lastban) >= $dif} {
 		}
 	}
 } else {
-	set lastban [expr $expire - [unixtime]]
+	set lastban [expr {$expire - [unixtime]}]
 }
 if {$lastban != ""} {
 if {$lastban < 0} {
@@ -6442,7 +6442,7 @@ if {[isbansticky [lindex $ban 0] $chan]} {
 if {$chanbans != ""} {
 		set length_maxbans [llength [join $chanbans]]
 if {$length_maxbans > $maxbans} {
-	set bans_to_remove [expr [expr $length_maxbans - $maxbans] + $black(fullbanlist_remove)]
+	set bans_to_remove [expr {[expr {$length_maxbans - $maxbans}] + $black(fullbanlist_remove)}]
 } else {
 	set bans_to_remove $black(fullbanlist_remove)
 }
@@ -6461,7 +6461,7 @@ if {[string match "*unset:mode_time:fullbanlist $chan*" [join [lindex $tmr 1]]]}
 	utimer $black(fullbanlist_hold_mode) [list unset:mode_time:fullbanlist $chan]
 }
 	set black(onotice:$chan:fullbanlist) 1
-	set banlist [lrange [join $chanbans] 0 [expr $bans_to_remove - 1]]
+	set banlist [lrange [join $chanbans] 0 [expr {$bans_to_remove - 1}]]
 foreach ban $banlist {
 	pushmode $chan -b $ban
 		}
@@ -6538,7 +6538,7 @@ foreach line $black(badnickwords) {
 foreach line $black(badidentwords) {
 	blacktools:setting:add "BADIDENT" $chan $line
 }
-	set j [expr $num + 1]
+	set j [expr {$num + 1}]
 	setting:set $chan +settingsaved ""
 if {[lindex $channels $j] != ""} {
 	blacktools:settings:save $channels $j
@@ -6552,7 +6552,7 @@ proc blacktools:setting:add {protname chan text} {
 while {$temp_num == 0} {
 	set get [addextra:find:num $chan $protname $num]
 if {$get == "$num"} {
-	set num [expr $num + 1]
+	incr num
 	} else { set temp_num 1 }
 }
 	set findword [prot:findword $chan $protname $text]

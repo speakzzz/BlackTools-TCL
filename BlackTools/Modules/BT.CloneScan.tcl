@@ -63,7 +63,7 @@ if {$channels != ""} {
 proc clonescan:act {channels nick h hand chan1 type counter} {
 	global black
 	set chan [lindex $channels $counter]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 	set found_clones 0
 	set found_mask ""
 	set theclones ""

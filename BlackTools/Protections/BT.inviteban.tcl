@@ -79,7 +79,7 @@ if {[onchan $nick $chan]} {
 	who:chan $chan
 	}
 }
-	set inc [expr $num + 1]
+	set inc [expr {$num + 1}]
 if {[lindex $channels $inc] != ""} {
 	utimer 5 [list inviteban:act $channels $inc $mask $invitechan $nick]
 	}

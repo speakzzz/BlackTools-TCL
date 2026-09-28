@@ -177,7 +177,7 @@ if {[string match -nocase "*BlackTools*" $the_script]} {
 	set tcl_position -1
 	set found_it 0
 foreach line $data {
-	set counter [expr $counter + 1]
+	incr counter
 if {[string match -nocase "*source $black(dirname)/*" $line]} {
 	set the_split [split $line "/"]
 	set script [lindex $the_split 1]
@@ -234,7 +234,7 @@ if {$found_tcl == "0"} {
 	set tempwrite [open $temp w]
 foreach n [lsort -integer -increasing [array names tcllist]] {
 foreach tcl $tcllist($n) {
-	set counter [expr $counter + 1]
+	incr counter
 if {$n == "1"} {
 	puts $tempwrite "$counter \002$tcl\002"
 	} elseif {$n == "2"} {

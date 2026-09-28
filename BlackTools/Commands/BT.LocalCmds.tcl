@@ -902,7 +902,7 @@ if {[regexp {^[0-9]} $reason] && [matchattr $hand nmo|M $chan]} {
 if {$reason == ""} { 
 	set reason "$black(say.$getlang.cycle.1)" 
 	set len [llength $reason] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reason [lindex $reason $random]
 	set text [black:color:set "" $reason]
 	set reply [join $text]
@@ -2682,21 +2682,21 @@ gag-reason {
 
 w-reason {
 	set len [llength $black(say.$getlang.w.5)] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reply [lindex $black(say.$getlang.w.5) $random]
 	set replyinfo $reply
 }
 
 k-reason {
 	set len [llength $black(say.$getlang.k.5)] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reply [lindex $black(say.$getlang.k.5) $random]
 	set replyinfo $reply
 }
 
 b-reason {
 	set len [llength $black(say.$getlang.b.5)] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reply [lindex $black(say.$getlang.b.5) $random]
 	set replyinfo $reply
 }
@@ -2767,7 +2767,7 @@ if {[string equal -nocase $setting "badchan-floodcontrol"]} {
 	set mod [split $setting "-"]
 	set mod [lindex $mod 0]
 if {[info exists black($mod:$chan:timer_start)] && [info exists black($mod:counter:$chan)]} {
-	set remain [expr $black($mod:$chan:timer_start) - $black($mod:counter:$chan)]
+	set remain [expr {$black($mod:$chan:timer_start) - $black($mod:counter:$chan)}]
 	}
 if {$remain == ""} {
 		return -1
@@ -2995,9 +2995,9 @@ if {$stat != ""} {
 	set cmd [lindex $split_stat 0]
 	set num [lindex $split_stat 1]
 if {[string equal -nocase "k" $cmd] || [string equal -nocase "w" $cmd]} {
-	set total_k [expr $total_k + $num]
+	set total_k [expr {$total_k + $num}]
 } else {
-	set total [expr $total + $num]
+	set total [expr {$total + $num}]
 }
 	lappend stats "[black:color "1" $hand $cmd] ([black:color "2" $hand $num])"
 	}
@@ -3051,7 +3051,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 if {$chantopic != ""} {
 	set top "$black(say.$getlang.r.1)" 
 	set len [llength $top] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set top [lindex $top $random]
 	set text [black:color:set "" $top]
 	set reply [join $text]
@@ -3147,7 +3147,7 @@ proc omsg:act {hand chans number msg} {
 	global black
 	set chan [lindex $chans $number]
 	putserv "NOTICE @$chan :\[BT\] ($hand) $msg"
-	set number [expr $number + 1]
+	incr number
 if {[lindex $chans $number] != ""} {
 	utimer 2 [list omsg:act $hand $chans $number $msg]
 	}

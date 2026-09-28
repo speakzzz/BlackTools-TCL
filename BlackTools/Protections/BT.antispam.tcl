@@ -62,7 +62,7 @@ if {[onchan $nick $chan]} {
 	blacktools:banner:2 $nick "ANTISPAM:$found_spam" $chan $chan $host "0" ""
 	who:chan $chan
 }
-	set inc [expr $num + 1]
+	set inc [expr {$num + 1}]
 if {[lindex $channels $inc] != ""} {
 	utimer 5 [list antispam:act:ban $channels $inc $nick $host $found_spam]
 	}
@@ -111,7 +111,7 @@ proc antispam:act {channels counter} {
 	global black
 	set notcycle 0
 	set chan [join [lindex [split $channels] $counter]]
-	set cc [expr $counter + 1]
+	set cc [expr {$counter + 1}]
 if {[info exists black(lastaction:$chan)]} {
 	set total_anunt 0
 	set unixtime [unixtime]
@@ -120,8 +120,8 @@ if {[setting:get $chan antispam-scantime] != ""} {
 } else {
 	set return_time [time_return_minute $black(spamcycle)]
 }
-	set time [expr [expr [expr $return_time * $black(entry:shown)] * 60] + $unixtime]
-if {[expr $unixtime - $black(lastaction:$chan)] > [expr $time - $unixtime]} {
+	set time [expr {[expr {[expr {$return_time * $black(entry:shown)}] * 60}] + $unixtime}]
+if {[expr {$unixtime - $black(lastaction:$chan)}] > [expr {$time - $unixtime}]} {
 	set notcycle 1
 	}
 } else { set notcycle 1 }
@@ -130,7 +130,7 @@ if {$notcycle != "1"} {
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set reason $black(say.$getlang.antispam.11)
 	set len [llength $reason] 
-    set random [expr int(rand()*$len)] 
+    set random [expr {int(rand()*$len)}] 
     set reason [lindex $reason $random]
 	set text [black:color:set "" $reason]
 	set reply [join $text]

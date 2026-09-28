@@ -199,7 +199,7 @@ if {[setting:get $chan badchan-scantime] != ""} {
 if {![info exists black(badchan:counter:$chan)]} {
 	set black(badchan:counter:$chan) 0
 }
-	set black(badchan:counter:$chan) [expr $black(badchan:counter:$chan) + 1]
+	incr black(badchan:counter:$chan)
 if {$black(badchan:counter:$chan) > $black(badchan:$chan:timer_start)} {
 	set black(badchan:counter:$chan) 0
 				} elseif {$black(badchan:$chan:timer_start) < $black(badchan:counter:$chan)} {
@@ -227,7 +227,7 @@ if {[setting:get $chan clonescan-scantime] != ""} {
 if {![info exists black(clonescan:counter:$chan)]} {
 	set black(clonescan:counter:$chan) 0
 }
-	set black(clonescan:counter:$chan) [expr $black(clonescan:counter:$chan) + 1]
+	incr black(clonescan:counter:$chan)
 if {$black(clonescan:counter:$chan) > $black(clonescan:$chan:timer_start)} {
 	set black(clonescan:counter:$chan) 0
 				} elseif {$black(clonescan:$chan:timer_start) < $black(clonescan:counter:$chan)} {
@@ -255,7 +255,7 @@ if {[setting:get $chan antispam-scantime] != ""} {
 if {![info exists black(antispam:counter:$chan)]} {
 	set black(antispam:counter:$chan) 0
 }
-	set black(antispam:counter:$chan) [expr $black(antispam:counter:$chan) + 1]
+	incr black(antispam:counter:$chan)
 if {$black(antispam:counter:$chan) > $black(antispam:$chan:timer_start)} {
 	set black(antispam:counter:$chan) 0
 				} elseif {$black(antispam:$chan:timer_start) < $black(antispam:counter:$chan)} {
@@ -283,7 +283,7 @@ if {[setting:get $chan anunt-showtime] != ""} {
 if {![info exists black(anunt:counter:$chan)]} {
 	set black(anunt:counter:$chan) 0
 }
-	set black(anunt:counter:$chan) [expr $black(anunt:counter:$chan) + 1]
+	incr black(anunt:counter:$chan)
 if {$black(anunt:counter:$chan) > $black(anunt:$chan:timer_start)} {
 	set black(anunt:counter:$chan) 0
 				} elseif {$black(anunt:$chan:timer_start) < $black(anunt:counter:$chan)} {
@@ -311,7 +311,7 @@ if {[setting:get $chan quote-showtime] != ""} {
 if {![info exists black(quote:counter:$chan)]} {
 	set black(quote:counter:$chan) 0
 }
-	set black(quote:counter:$chan) [expr $black(quote:counter:$chan) + 1]
+	incr black(quote:counter:$chan)
 if {$black(quote:counter:$chan) > $black(quote:$chan:timer_start)} {
 	set black(quote:counter:$chan) 0
 				} elseif {$black(quote:$chan:timer_start) < $black(quote:counter:$chan)} {
@@ -340,7 +340,7 @@ if {[setting:get $chan voiceme-showtime] != ""} {
 if {![info exists black(voiceme:counter:$chan)]} {
 	set black(voiceme:counter:$chan) 0
 }
-	set black(voiceme:counter:$chan) [expr $black(voiceme:counter:$chan) + 1]
+	incr black(voiceme:counter:$chan)
 	
 if {$black(voiceme:counter:$chan) > $black(voiceme:$chan:timer_start)} {
 	set black(voiceme:counter:$chan) 0
@@ -400,7 +400,7 @@ if {[setting:get $chan idle-scantime] != ""} {
 if {![info exists black(idle:counter:$chan)]} {
 	set black(idle:counter:$chan) 0
 }
-	set black(idle:counter:$chan) [expr $black(idle:counter:$chan) + 1]
+	incr black(idle:counter:$chan)
 if {$black(idle:counter:$chan) > $black(idle:$chan:timer_start)} {
 	set black(idle:counter:$chan) 0
 				} elseif {$black(idle:$chan:timer_start) < $black(idle:counter:$chan)} {
@@ -421,7 +421,7 @@ if {[info exists black(banmethod_rem:timer_start)]} {
 if {![info exists black(banmethod_rem:counter)]} {
 	set black(banmethod_rem:counter) 0
 }
-	set black(banmethod_rem:counter) [expr $black(banmethod_rem:counter) + 1]
+	incr black(banmethod_rem:counter)
 if {$black(banmethod_rem:counter) > $black(banmethod_rem:timer_start)} {
 	set black(banmethod_rem:counter) 0
 	} elseif {$black(banmethod_rem:timer_start) < $black(banmethod_rem:counter)} {
@@ -446,7 +446,7 @@ if {[info exists black(broadcast:timer_start)]} {
 if {![info exists black(broadcast:counter)]} {
 	set black(broadcast:counter) 0
 }	
-	set black(broadcast:counter) [expr $black(broadcast:counter) + 1]
+	incr black(broadcast:counter)
 if {$black(broadcast:counter) > $black(broadcast:timer_start)} {
 	set black(broadcast:counter) 0
 	} elseif {$black(broadcast:timer_start) < $black(broadcast:counter)} {
@@ -464,7 +464,7 @@ if {![info exists black(away:timer_start)]} {
 if {![info exists black(counter:away)]} {
 	set black(counter:away) 0
 }
-	set black(counter:away) [expr $black(counter:away) + 1]
+	incr black(counter:away)
 if {$black(counter:away) > $black(away:timer_start)} {
 	set black(counter:away) 0
 				} elseif {$black(away:timer_start) < $black(counter:away)} {

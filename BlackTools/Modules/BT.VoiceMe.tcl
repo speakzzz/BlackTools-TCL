@@ -110,8 +110,8 @@ if {[setting:get $chan voiceme-showtime] != ""} {
 } else {
 	set return_time [time_return_minute $black(voiceme:msgtime)]
 }
-	set time [expr [expr [expr $return_time * $black(entry:shown)] * 60] + $unixtime]
-if {[expr $unixtime - $black(lastaction:$chan)] > [expr $time - $unixtime]} {
+	set time [expr {[expr {[expr {$return_time * $black(entry:shown)}] * 60}] + $unixtime}]
+if {[expr {$unixtime - $black(lastaction:$chan)}] > [expr {$time - $unixtime}]} {
 	continue
 	}
 } else { continue }
