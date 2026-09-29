@@ -216,7 +216,7 @@ set black(default_colors) "bold underline none underline"
 ###									###
 #Default away (you can change'it online ofcourse.)
 
-set black(default_away) "BlackTools 2.5.5 - The Next Generation TCL - www.TCLScripts.Net"
+set black(default_away) "BlackTools 2.6.0 - The Next Generation TCL - www.TCLScripts.Net"
 
 ###########################################################################
 #------------------------- Default BanTime -------------------------------#
@@ -1795,7 +1795,7 @@ set black(exempt:default_time) "0"
 
 set black(name) "BlackToolS"
 set black(author) "BLaCkShaDoW"
-set black(vers) "2.5.5"
+set black(vers) "2.6.0"
 set black(site) "wWw.TclScriptS.NeT"
 
 	bind evnt - init-server loginpublic

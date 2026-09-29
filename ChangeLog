@@ -1,4 +1,8 @@
  2026-09-28 speakzzz
+  * Version 2.6.0: first release of this fork
+    (https://github.com/speakzzz/BlackTools-TCL). Includes all fork
+    changes listed below since the original 2.5.5
+ 2026-09-28 speakzzz
   * Boss owners are warned by note when the bot can't save its data
     (user file folder, channel file folder or BlackTools FILES folder
     missing, not writable or full), and told again once it's fixed.
