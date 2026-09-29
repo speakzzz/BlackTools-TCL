@@ -1404,6 +1404,8 @@ set black(say.fr.autoupdate.42) "\005\[BT\]\005 Temps réglé pour \001AutoUpdat
 set black(say.fr.autoupdate.43) "\005\[BT\]\005 AutoUpdate a trouvé une nouvelle \001mise à jour\001 pour : BlackTools \002%msg.1%\002 (Dernière mise à jour : \001%msg.2%\001)."
 set black(say.fr.loader.1) "\005\[BT\]\005 Certains fichiers BlackTools \002n'ont pas pu \u00eatre charg\u00e9s\002 et ont \u00e9t\u00e9 ignor\u00e9s, le reste fonctionne : %msg.1%. Corrigez-les ou mettez-les \u00e0 jour, puis rehash. D\u00e9tails dans le journal du bot."
 set black(say.fr.loader.2) "\005\[BT\]\005 Tous les fichiers BlackTools \002se chargent correctement\002 \u00e0 nouveau. Les probl\u00e8mes de chargement pr\u00e9c\u00e9dents sont r\u00e9solus."
+set black(say.fr.loader.3) "\005\[BT\]\005 Attention : le bot \002ne peut pas enregistrer ses donn\u00e9es\002 : %msg.1%. Les modifications des utilisateurs, canaux ou param\u00e8tres peuvent \u00eatre perdues au red\u00e9marrage du bot. V\u00e9rifiez que ces dossiers existent et sont accessibles en \u00e9criture."
+set black(say.fr.loader.4) "\005\[BT\]\005 Le bot peut \u00e0 nouveau \002enregistrer ses donn\u00e9es\002. Le probl\u00e8me d'enregistrement pr\u00e9c\u00e9dent est r\u00e9solu."
 set black(say.fr.autoupdate.45) "\005\[BT\]\005 Pour terminer cette mise à jour, il est nécessaire de redémarrer l'eggdrop en utilisant la commande \001restart\002."
 set black(say.fr.autoupdate.46) "\005\[BT\]\005 Redémarrage automatique dans 10 secondes pour terminer la mise à jour."
 set black(say.fr.autoupdate.47) "\005\[BT\]\005 La dernière mise à jour (\001%msg.1%\001) a été installée par un autre eggdrop du même archive. Utilisez \001%char%update start\001 pour terminer la mise à jour."

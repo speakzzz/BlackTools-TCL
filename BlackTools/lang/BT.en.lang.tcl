@@ -1383,6 +1383,8 @@ set black(say.en.autoupdate.42) "\005\[BT\]\005 Set time for \001AutoUpdate\001 
 set black(say.en.autoupdate.43) "\005\[BT\]\005 AutoUpdate found new \001update\001 for: BlackTools \002%msg.1%\002 (Last Update: \001%msg.2%\001)."
 set black(say.en.loader.1) "\005\[BT\]\005 Some BlackTools files \002failed to load\002 and were skipped, the rest is running: %msg.1%. Fix or update them, then rehash. Details are in the bot log."
 set black(say.en.loader.2) "\005\[BT\]\005 All BlackTools files \002load fine\002 again. The earlier load problems are resolved."
+set black(say.en.loader.3) "\005\[BT\]\005 Warning: the bot \002can't save its data\002: %msg.1%. Changes to users, channels or settings can be lost when the bot restarts. Make sure these folders exist and are writable."
+set black(say.en.loader.4) "\005\[BT\]\005 The bot can \002save its data\002 again. The earlier storage problem is resolved."
 set black(say.en.autoupdate.45) "\005\[BT\]\005 In order to complete this update it's necessary to restart the eggdrop by using the \001restart\002 command."
 set black(say.en.autoupdate.46) "\005\[BT\]\005 Automatic \002restart\002 in 10 seconds to complete the update."
 set black(say.en.autoupdate.47) "\005\[BT\]\005 Latest update (\001%msg.1%\001) was installed by another eggdrop from the same archive. Use \001%char%update start\001 to finish update."

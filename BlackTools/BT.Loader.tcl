@@ -107,18 +107,81 @@ foreach e $black(load_errors) { lappend failed "[lindex $e 1] ([lindex $e 0])" }
 	putlog "\[BT\] Loaded with [llength $black(load_errors)] problem(s): [join $failed ", "]. The rest of BlackTools is running; fix or update the files above and .rehash."
 }
 
-#Fork change (speakzzz, 2026): tell boss owners by note when files were
-#skipped, and again once everything loads fine. Runs a minute after loading
-#because on startup eggdrop reads its user list after the scripts. Only
-#sends when the set of problems changes, so rehashing doesn't repeat notes.
+#Fork change (speakzzz, 2026): owner notifications.
+#Boss owners get a note when files were skipped at load or when the bot
+#can't save its data, and another once the problem is gone. Checks run a
+#minute after loading, because on startup eggdrop reads its user list after
+#the scripts; the storage check also runs every hour. A problem is only
+#marked as reported once an owner was actually reached, otherwise it is
+#retried every 5 minutes (e.g. a new bot started with -m has no owners yet).
 
-proc blacktools:load_state_file {} {
-	global black
-	return "$black(dirname)/BlackTools/FILES/load_state.txt"
+#Run cmd in secs seconds, replacing any pending run of the same cmd.
+proc blacktools:schedule {secs cmd} {
+foreach t [utimers] {
+if {[lindex $t 1] eq [list catch $cmd]} { killutimer [lindex $t 2] }
+}
+	utimer $secs [list catch $cmd]
 }
 
-proc blacktools:load_notify {} {
+#Send lang message key (with %msg.1% = list) to every boss owner as a note.
+#If the note can't be stored, owners who are online get a notice instead.
+#Returns how many owners were handled (reached, or have notes turned off);
+#0 means nobody got it and the caller should try again later.
+proc blacktools:owner_notify {key list} {
 	global black botnick
+	set handled 0
+foreach user [userlist n] {
+if {[getuser $user XTRA NO_NOTES] ne ""} { incr handled ; continue }
+	set lang [string tolower [getuser $user XTRA OUTPUT_LANG]]
+if {$lang eq ""} { set lang [string tolower $black(default_lang)] }
+if {![info exists black(say.$lang.$key)]} { set lang "en" }
+if {![info exists black(say.$lang.$key)]} { continue }
+	set text [black:color:set $botnick $black(say.$lang.$key)]
+	set text [string map [list %msg.1% $list] $text]
+if {[info procs notes:add] ne "" && ![catch {notes:add $botnick "" $user "DB" "INBOX" $text "BlackTools" 0}]} {
+	set black(notes:announce:$user) 1
+	incr handled
+	continue
+}
+	set unick [hand2nick $user]
+if {$unick ne ""} {
+	putserv "NOTICE $unick :$text"
+	incr handled
+	}
+}
+	return $handled
+}
+
+#The last reported problem list. Memory is always current while the bot runs
+#(even if the state file couldn't be written); the file covers restarts.
+proc blacktools:state_get {name} {
+	global black
+if {[info exists black(state:$name)]} { return $black(state:$name) }
+	set sf "$black(dirname)/BlackTools/FILES/$name.txt"
+if {[file readable $sf] && ![catch {set fh [open $sf r]; set v [string trim [read $fh]]; close $fh}]} {
+	return $v
+}
+	return ""
+}
+
+proc blacktools:state_set {name value} {
+	global black
+	set black(state:$name) $value
+	catch {blacktools:write_atomic "$black(dirname)/BlackTools/FILES/$name.txt" $value}
+}
+
+#Returns 1 (and remembers it) the first time a problem list is seen, so each
+#warning is logged once rather than on every retry or hourly check.
+proc blacktools:first_time {name problems} {
+	global black
+if {[info exists black(logged:$name)] && $black(logged:$name) eq $problems} { return 0 }
+	set black(logged:$name) $problems
+	return 1
+}
+
+#Tell owners about files skipped at load (loader.1) or that all load again (loader.2)
+proc blacktools:load_notify {} {
+	global black
 	set problems [list]
 	set items [list]
 foreach e $black(load_errors) {
@@ -127,37 +190,83 @@ foreach e $black(load_errors) {
 	lappend items "$name ($kind): [string range $reason 0 80]"
 }
 	set problems [lsort $problems]
-	set previous ""
-	set sf [blacktools:load_state_file]
-if {[file exists $sf]} {
-	catch {set fh [open $sf r]; set previous [string trim [read $fh]]; close $fh}
-}
+	set previous [blacktools:state_get load_state]
 if {$problems eq $previous} { return }
-if {$problems eq "" && $previous eq ""} { return }
-if {[info procs notes:add] eq ""} {
-	putlog "\[BT\] Can't notify owners about load problems: the Notes module is not loaded."
+	set key [expr {$problems eq "" ? "loader.2" : "loader.1"}]
+if {[blacktools:owner_notify $key [string range [join $items "; "] 0 350]] == 0} {
+if {[blacktools:first_time load_wait $problems]} {
+	putlog "\[BT\] No boss owner could be told about load problems yet, trying again every 5 minutes."
+}
+	blacktools:schedule 300 blacktools:load_notify
 	return
 }
-	set key [expr {$problems eq "" ? "loader.2" : "loader.1"}]
-	set list [string range [join $items "; "] 0 350]
-foreach user [userlist n] {
-if {[getuser $user XTRA NO_NOTES] ne ""} { continue }
-	set lang [string tolower [getuser $user XTRA OUTPUT_LANG]]
-if {$lang eq ""} { set lang [string tolower $black(default_lang)] }
-if {![info exists black(say.$lang.$key)]} { set lang "en" }
-if {![info exists black(say.$lang.$key)]} { continue }
-	set text [black:color:set $botnick $black(say.$lang.$key)]
-	set text [string map [list %msg.1% $list] $text]
-	set black(notes:announce:$user) 1
-	notes:add $botnick "" $user "DB" "INBOX" $text "BlackTools" 0
-}
-	blacktools:write_atomic $sf $problems
+	blacktools:state_set load_state $problems
 }
 
-foreach t [utimers] {
-if {[string match "*blacktools:load_notify*" [lindex $t 1]]} { killutimer [lindex $t 2] }
+#Folders the bot must be able to write to: {label path} pairs
+proc blacktools:storage_dirs {} {
+	global black userfile chanfile
+	set dirs [list]
+if {[info exists userfile] && $userfile ne ""} { lappend dirs "user file" [file dirname $userfile] }
+if {[info exists chanfile] && $chanfile ne ""} { lappend dirs "channel file" [file dirname $chanfile] }
+	lappend dirs "BlackTools data" "$black(dirname)/BlackTools/FILES"
+	return $dirs
 }
-utimer 60 [list catch blacktools:load_notify]
+
+#A real test write: catches a missing folder, wrong permissions and a full disk.
+#Returns "" if the folder is fine, otherwise the reason.
+proc blacktools:storage_test {dir} {
+if {![file isdirectory $dir]} { return "folder does not exist" }
+	set t [file join $dir ".bt-write-test"]
+if {[catch {set f [open $t w]; puts $f "BlackTools write test"; close $f; file delete $t} err]} {
+	catch {close $f}
+	catch {file delete $t}
+	return "can't write there ([lindex [split $err \n] 0])"
+}
+	return ""
+}
+
+#Tell owners the bot can't save its data (loader.3), or that it can again (loader.4)
+proc blacktools:storage_check {} {
+	set labels [dict create]
+foreach {label dir} [blacktools:storage_dirs] { dict lappend labels $dir $label }
+	set problems [list]
+	set items [list]
+dict for {dir what} $labels {
+	set err [blacktools:storage_test $dir]
+if {$err ne ""} {
+	lappend problems $dir
+	lappend items "folder $dir ([join $what ", "]): $err"
+	}
+}
+	set problems [lsort $problems]
+	set previous [blacktools:state_get storage_state]
+if {$problems eq $previous} { return }
+if {[blacktools:first_time storage $problems]} {
+if {$problems ne ""} {
+	putlog "\[BT\] WARNING: the bot can't save data: [join $items "; "]"
+} else {
+	putlog "\[BT\] Storage OK again: the bot can save its data."
+	}
+}
+	set key [expr {$problems eq "" ? "loader.4" : "loader.3"}]
+if {[blacktools:owner_notify $key [string range [join $items "; "] 0 350]] == 0} {
+if {[blacktools:first_time storage_wait $problems]} {
+	putlog "\[BT\] No boss owner could be told about the storage problem yet, trying again every 5 minutes."
+}
+	blacktools:schedule 300 blacktools:storage_check
+	return
+}
+	blacktools:state_set storage_state $problems
+}
+
+proc blacktools:storage_hourly {min hour day month year} {
+	catch blacktools:storage_check
+}
+
+bind time - "05 * * * *" blacktools:storage_hourly
+blacktools:schedule 60 blacktools:load_notify
+blacktools:schedule 70 blacktools:storage_check
 
 #################
 ###########################################################################

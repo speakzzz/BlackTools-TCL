@@ -1,4 +1,14 @@
  2026-09-28 speakzzz
+  * Boss owners are warned by note when the bot can't save its data
+    (user file folder, channel file folder or BlackTools FILES folder
+    missing, not writable or full), and told again once it's fixed.
+    Checked a minute after loading and every hour, using a real test
+    write. New lang strings loader.3 and loader.4 (EN, RO, FR, ES)
+  * Load/storage problems are only marked as reported once an owner
+    was reached; otherwise they are retried every 5 minutes. Before,
+    a bot started with -m (no owners yet) never sent the note
+  * If a note can't be stored, owners who are online get a notice
+ 2026-09-28 speakzzz
   * Boss owners now get a note when module, command or protection
     files fail to load and are skipped, and another once everything
     loads fine again. Notes are sent a minute after loading, only when
