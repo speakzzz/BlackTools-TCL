@@ -1,4 +1,13 @@
  2026-10-18 speakzzz
+  * Version 3.1.1
+  * repetitivechars now checks every run of identical characters in a
+    message, not only the last one: "nooooooooo really" or
+    "!!!!!!!!!! spam" used to get through. Whitespace ends a run and
+    never counts, so indented or aligned text can't trigger it
+  * repetitivechars: a per-channel limit that isn't a number of at
+    least 2 now falls back to the default; before, a limit of 1 made
+    every message count as a violation
+ 2026-10-18 speakzzz
   * Version 3.1.0: brings in the working changes from the original
     author's BlackTools 3.0 branch (2024-2025):
     - Idle: new +b option (idleban) bans regular users who idle longer

@@ -24,27 +24,27 @@ if {[isbotnick $nick]} { return  }
 	set bl_protect [blacktools:protect $nick $chan]
 if {$bl_protect == "1"} { return }
 	set getnum [setting:get $chan repetitivechars-char]
-if {$getnum == ""} { set getnum "$black(repetitivechars:num)" }
-	set llength_chars [string length $arg]
-	set chars [split $arg ""]
+if {![string is integer -strict $getnum] || $getnum < 2} { set getnum $black(repetitivechars:num) }
+#Fork change (speakzzz, 2026): check every run of identical characters in the
+#message, not only the last one (before, "nooooooooo really" got through).
+#Whitespace never counts and ends a run, so indented or aligned text is safe.
 	set counter 0
 	set current_char ""
-for {set i 0 } { $i < $llength_chars } { incr i } {
-	set char [lindex $chars $i]
-if {$current_char == ""} {
-	set current_char $char
+foreach char [split $arg ""] {
+if {[string is space $char]} {
+	set current_char ""
+	set counter 0
+	continue
+}
+if {$char eq $current_char} {
 	incr counter
 } else {
-if {$char != "$current_char"} {
 	set current_char $char
 	set counter 1
-	} else {
-	incr counter
-		}
-	}
 }
 if {$counter >= $getnum} {
 	blacktools:banner:1 $nick "repetitivechars" $chan $host [get:banmethod "repetitivechars" $chan] [link:chan:get $chan]
-		return 1
+	return 1
 	}
+}
 }
