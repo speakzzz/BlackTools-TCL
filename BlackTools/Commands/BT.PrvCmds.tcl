@@ -187,7 +187,9 @@ if {$mychan_use == "1"} {
 
 
 link {
-if {[matchattr $hand nmo]} {
+#Fork change (speakzzz, 2026): owner/master only, as in the channel and the
+#other command forms; a global op could link channels by private message.
+if {[matchattr $hand nm]} {
 	set type 2
 	set channels [join [lrange [split $arg] 1 end]]
 	set what [lindex [split $arg] 1]
@@ -979,7 +981,8 @@ if {$mychan_use == "1"} {
 }
 
 clonescan {
-if {[matchattr $hand nmo|MA $chan]} {
+#Fork change (speakzzz, 2026): channel ops can scan, as in the channel.
+if {[matchattr $hand nmo|MAO $chan]} {
 	set why [lindex [split $arg] 2]
 	set type 2
 	set chan1 "$chan"

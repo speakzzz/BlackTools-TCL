@@ -1,4 +1,11 @@
  2026-10-18 speakzzz
+  * Version 3.1.7
+  * link by private message now needs owner or master, as in the
+    channel and the other command forms; a global op could link
+    channels by private message
+  * clonescan by private message now works for channel ops, as it
+    does in the channel
+ 2026-10-18 speakzzz
   * Version 3.1.6
   * inviteban: the inviter's host comes from the INVITE itself instead
     of a USERHOST request. The next USERHOST reply used to be taken as
