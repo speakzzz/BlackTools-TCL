@@ -1,3 +1,19 @@
+ 2026-10-18 speakzzz
+  * Version 3.1.0: brings in the working changes from the original
+    author's BlackTools 3.0 branch (2024-2025):
+    - Idle: new +b option (idleban) bans regular users who idle longer
+      than idlebanmax; settings idlebanmax, idleban:banmask and
+      idleban:bantime in BlackTools.tcl
+    - Alias: one alias can run several commands separated by |
+    - New channel flag disablepubcmds turns off public (!) commands
+    - Seen: no longer reveals that someone was seen in a private or
+      secret channel
+    - Notes: read, delete and delete-all no longer depend on the
+      capitalization of the handle
+  * Not taken from 3.0 because they are broken there: the rewritten
+    repetitivechars and antichanflood protections (they error on every
+    message and stop the protections after them), the BT.Timers.tcl
+    duplication, and the curl/tar updater
  2026-09-28 speakzzz
   * Version 2.6.0: first release of this fork
     (https://github.com/speakzzz/BlackTools-TCL). Includes all fork

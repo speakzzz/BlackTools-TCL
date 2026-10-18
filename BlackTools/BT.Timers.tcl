@@ -74,7 +74,7 @@ if {[setting:get $chan anunt-showtime] != ""} {
 #end
 
 #idle
-if {[setting:get $chan idleop] || [setting:get $chan idlevoice] || [setting:get $chan idlehalfop]} {
+if {[setting:get $chan idleop] || [setting:get $chan idlevoice] || [setting:get $chan idlehalfop] || [setting:get $chan idleban]} {
 if {![info exists black(idle:$chan:timer_start)]} {
 if {[setting:get $chan idle-scantime] != ""} {
 	set time [setting:get $chan idle-scantime]
@@ -380,7 +380,7 @@ if {[setting:get $chan topwords]} {
 
 #idle
 if {[info exists black(idle:$chan:timer_start)]} {
-	set options {idleop idlevoice idlehalfop}
+	set options {idleop idlevoice idlehalfop idleban}
 	set idle_activ 0
 foreach option $options {
 	if {[setting:get $chan $option]} {

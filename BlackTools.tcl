@@ -32,7 +32,7 @@
 #                                                                         #
 #                      - #TCL-HELP @ UNDERNET -     	                  #
 #                                                                         #
-#			      Copyright 2008 - 2021 @ WwW.TCLScripts.NET  #
+#			      Copyright 2008 - 2024 @ WwW.TCLScripts.NET  #
 #                                                                         #
 ###########################################################################
 #                                                                         #
@@ -176,7 +176,7 @@ set black(cmdchar) "! . ` \^"
 ###########################################################################
 #-------------------------- Default Language -----------------------------#
 ###									###
-#Default language of the script ( RO / EN / ES / FR)
+#Default language of the script ( RO / EN / ES / FR )
 
 set black(default_lang) "EN"
 
@@ -216,7 +216,7 @@ set black(default_colors) "bold underline none underline"
 ###									###
 #Default away (you can change'it online ofcourse.)
 
-set black(default_away) "BlackTools 2.6.0 - The Next Generation TCL - www.TCLScripts.Net"
+set black(default_away) "BlackTools 3.1.0 - The Next Generation TCL - www.TCLScripts.Net"
 
 ###########################################################################
 #------------------------- Default BanTime -------------------------------#
@@ -1485,17 +1485,35 @@ set black(leaveflood) "4:5"
 
 set black(idleinterval) "45m"
 
-#Op max idle
+#IdleOp Maximum idle
 
 set black(idleopmax) "60"
 
-#Voice idle Max
+#IdleVoice Maximum Idle
 
 set black(idlevoicemax) "30"
 
-#HalfOP idle Max
+#IdleHalfOp Maximum Idle
 
 set black(idlehalfopmax) "30"
+
+#IdleBan Maximum Idle
+
+set black(idlebanmax) "30"
+
+#IdleBan default banmask
+
+#1 - *!*@host
+#2 - *!user@host
+#3 - nick!user@host
+#4 - nick!*@*
+#5 - *!user@*
+
+set black(idleban:banmask) "1"
+
+#IdleBan ban-time (<x>m (minutes), <x>h (hours), <x>d (days)
+
+set black(idleban:bantime) "10m"
 
 ########################################################################
 #--------------------------------- Gag --------------------------------#
@@ -1795,7 +1813,7 @@ set black(exempt:default_time) "0"
 
 set black(name) "BlackToolS"
 set black(author) "BLaCkShaDoW"
-set black(vers) "2.6.0"
+set black(vers) "3.1.0"
 set black(site) "wWw.TclScriptS.NeT"
 
 	bind evnt - init-server loginpublic

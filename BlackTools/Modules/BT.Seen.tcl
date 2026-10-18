@@ -14,6 +14,17 @@
 ##					                               					   ##
 #########################################################################
 
+#Should a sighting in entry_chan be hidden from a !seen asked in chan?
+#Yes for private (+p) and secret (+s) channels, and for channels the bot no
+#longer knows (their modes can't be checked). Only the mode letters are
+#checked, so a channel key containing "s" or "p" doesn't count.
+proc seen:hidden_chan {entry_chan chan} {
+if {[string equal -nocase $entry_chan $chan]} { return 0 }
+if {[catch {getchanmode $entry_chan} chanmode]} { return 1 }
+	set chanmodes [lindex [split $chanmode] 0]
+	return [expr {[string first "p" $chanmodes] >= 0 || [string first "s" $chanmodes] >= 0}]
+}
+
 proc seen:process {nick host hand chan chan1 what type gl} {
 global black botnick
 	set cmd_status [btcmd:status $chan $hand "seen" 0]
@@ -136,6 +147,7 @@ if {$line != ""} {
 	set readhost [lindex [split $line] 3]
 	set chanentry [lindex [split $line] 1]
 	set time [lindex [split $line] 4]
+if {[seen:hidden_chan $chanentry $chan]} { continue }
 if {[info exists entry]} {
 if {[lsearch -exact [string tolower "$i%$userentry%$readhost%$time"] [string tolower $entry]] == "-1"} {
 	lappend entry "$i%$userentry%$readhost%$time"
@@ -177,6 +189,7 @@ if {[llength $find_other] > 99} {
 
 foreach k $find_other {
 	set line [lindex $data $k]
+if {[seen:hidden_chan [lindex [split $line] 1] $chan]} { continue }
 	set userentry [lindex [split $line] 2]
 	set time [lindex [split $line] 4]
 	set readhost [string map {"~" ""} [lindex [split $line] 3]]
