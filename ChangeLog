@@ -1,4 +1,19 @@
  2026-10-18 speakzzz
+  * Version 3.1.2
+  * anticaps: capitals are counted as a share of the letters instead of
+    the whole message, so spacing letters out ("H E L L O") or padding
+    with punctuation ("HELLO!!!!!!") no longer dilutes shouting below
+    the limit. Emoticons (":D", ":-P", "XD") and nicks of people on the
+    channel are left out; messages need 20+ characters and 10+ letters
+  * antirepeat: messages are compared ignoring capitalization,
+    formatting codes and extra spaces, so "buy now", "BUY NOW" and
+    "buy  now" count as the same message. Fixed a repeated message
+    containing * or ? cancelling the timers of other messages
+  * anticolor also catches hex colors and reverse text. When
+    anticolor:specific_colors is set, a hit now stops the protections
+    after it, as all other hits do, instead of letting them punish the
+    same message again
+ 2026-10-18 speakzzz
   * Version 3.1.1
   * repetitivechars now checks every run of identical characters in a
     message, not only the last one: "nooooooooo really" or

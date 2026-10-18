@@ -25,32 +25,35 @@ if {[matchattr $handle $black(exceptflags) $chan]} { return }
 if {[isbotnick $nick]} { return }
 	set bl_protect [blacktools:protect $nick $chan]
 if {$bl_protect == "1"} { return }
+#Fork change (speakzzz, 2026): anticolor also catches hex colors (\004) and
+#reverse (\026), and every hit returns 1 so the protections after this one
+#don't punish the same message again.
 switch $type {
 anticolor {
-	set textfind "\003" 
+	set codes [list "\003" "\004" "\026"]
 }
-
 antibold  {
-	set textfind "\002"
+	set codes [list "\002"]
 }
-
 antiunderline {
-	set textfind "\037"
-	}	
+	set codes [list "\037"]
+	}
 }
 if {$type == "anticolor" && $black(anticolor:specific_colors) != ""} {
 	foreach c $black(anticolor:specific_colors) {
-if {[string match "*$c*" $arg]} {
-	blacktools:banner:1 $nick [string toupper "$type"] $chan $host [get:banmethod $type $chan] [link:chan:get $chan]	
-	break
-		}		
+if {[string first $c $arg] >= 0} {
+	blacktools:banner:1 $nick [string toupper "$type"] $chan $host [get:banmethod $type $chan] [link:chan:get $chan]
+	return 1
+		}
 	}
 	return
 }
-if {[string match "*$textfind*" $arg]} {
-	blacktools:banner:1 $nick [string toupper "$type"] $chan $host [get:banmethod $type $chan] [link:chan:get $chan]	
-	return 1	
-	}	
+foreach code $codes {
+if {[string first $code $arg] >= 0} {
+	blacktools:banner:1 $nick [string toupper "$type"] $chan $host [get:banmethod $type $chan] [link:chan:get $chan]
+	return 1
+	}
+}
 }
 
 proc anticolor:protect {nick host hand chan arg} {
@@ -75,33 +78,30 @@ proc anticaps:protect {nick host hand chan arg} {
 global black botnick
 	set handle [nick2hand $nick]
 	set found_caps 0
-	set argz [split $arg]
 if {![validchan $chan]} { return }
 if {![botisop $chan] && ![setting:get $chan xonly]} { return }
 if {[matchattr $handle $black(exceptflags) $chan]} { return }
 	set bl_protect [blacktools:protect $nick $chan]
 if {$bl_protect == "1"} { return }
 if {[isbotnick $nick]} { return }
-	set caps($nick:$host) 0
+#Fork change (speakzzz, 2026): capitals are counted as a share of the
+#letters, not of the whole message, so spaces and punctuation can't dilute
+#shouting ("H E L L O", "HELLO!!!!!!"). Nicks of people on the channel and
+#emoticons (":D", ":-P", "XD") are left out. Messages need 20+ characters
+#and 10+ letters.
+	set words [list]
 foreach a [split $arg] {
-if {[onchan $a $chan]} {
-	set search [lsearch -exact $argz $a]
-	set argz [lreplace $argz $search $search]
-	}
+if {$a eq "" || [onchan $a $chan]} { continue }
+if {[regexp {[[:punct:]]} $a] && [regexp {^[^A-Za-z]*[A-Za-z]?[^A-Za-z]*$} $a]} { continue }
+if {[regexp -nocase {^x[dp]+$} $a]} { continue }
+	lappend words $a
 }
-foreach word [split $argz {}] {
-if [string match \[A-Z\] $word] {
-	incr caps($nick:$host)
-	}
-}
-
-if {$caps($nick:$host) == 0} {
-  return
-}
-
-if {[string length $argz] < 20} {return}
-	set capchar [string length $argz]
-if {[expr {100 * $caps($nick:$host) / $capchar}] > $black(anticapscount)} {
+	set text [join $words " "]
+if {[string length $text] < 20} { return }
+	set letters [regexp -all {[A-Za-z]} $text]
+	set capitals [regexp -all {[A-Z]} $text]
+if {$letters < 10 || $capitals == 0} { return }
+if {100 * $capitals / $letters > $black(anticapscount)} {
 	set found_caps 1
 }
 if {$found_caps == "1"} {
