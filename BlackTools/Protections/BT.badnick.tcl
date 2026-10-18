@@ -47,7 +47,7 @@ if {[link:status $chan] == "1"} {
 	return
 			}
 	foreach tmr [utimers] {
-if {[string match "*badnick:check:again $nick $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "badnick:check:again $nick $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -119,7 +119,7 @@ if {[link:status $chan] == "1"} {
 	return
 				}
 foreach tmr [utimers] {
-if {[string match "*badnick:check:again $newnick $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "badnick:check:again $newnick $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

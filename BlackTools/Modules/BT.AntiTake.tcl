@@ -14,12 +14,15 @@
 ##					                               ##
 #########################################################################
 
+#Fork change (speakzzz, 2026): "is this the bot?" uses isbotnick, an exact
+#comparison; string match treated nicks like [s]aga or sag[a] as the bot,
+#so their deops and ops were never reverted.
 proc dontdeoppublic {nick host hand chan args} {
 global black botnick
 	set dnick [lindex $args 1]
 	set handle [nick2hand $nick]
 if {[setting:get $chan dontdeop] } {
-if {[string match -nocase $nick $botnick]} {
+if {[isbotnick $nick]} {
 	return
 }
 if {![matchattr $handle $black(exceptflags) $chan]} {
@@ -39,10 +42,10 @@ global black botnick
 	set onick [lindex $args 1]
 	set handle [nick2hand $nick]
 if {[setting:get $chan dontop]} {
-if {[string match -nocase $nick $botnick]} { 
+if {[isbotnick $nick]} { 
 	return
 }
-if {[string match -nocase $onick $botnick]} {
+if {[isbotnick $onick]} {
 	return
 }
 if {![matchattr $handle $black(exceptflags) $chan]} {

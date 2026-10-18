@@ -32,7 +32,7 @@ if {![info exists black(nick:$host:$chan:flood)]} {
 	set black(nick:$host:$chan:flood) 0 
 }
 foreach tmr [utimers] {
-if {[string match "*nickflood:unset $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "nickflood:unset $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -49,7 +49,7 @@ if {$black(nick:$host:$chan:flood) >= $number} {
 proc nickflood:unset {host chan} {
 	global black
 foreach tmr [utimers] {
-if {[string match "*nickflood:unset $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "nickflood:unset $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

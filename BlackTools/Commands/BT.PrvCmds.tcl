@@ -345,7 +345,7 @@ if {$code == ""} {
 	set black(voicemecode:$chan) [string toupper [bot:setcode]]
 	blacktools:tell $nick $input $hand $chan $chan1 voiceme.5 $black(voicemecode:$chan)
 foreach tmr [utimers] {
-if {[string match "*unset black(voicemecode:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "unset black(voicemecode:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}	
 		}
@@ -415,7 +415,7 @@ if {$code == ""} {
 	set black(botcode:$chan) [string toupper [bot:setcode]]
 	blacktools:tell $nick $input $hand $chan $chan1 bot.6 $black(botcode:$chan)
 foreach tmr [utimers] {
-if {[string match "*unset black(botcode:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "unset black(botcode:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}	
 		}

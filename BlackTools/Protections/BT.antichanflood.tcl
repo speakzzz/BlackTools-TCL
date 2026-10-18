@@ -31,7 +31,7 @@ if {![info exists black(repeat:$host:$chan:flood)]} {
 	set black(repeat:$host:$chan:flood) 0 
 }
 foreach tmr [utimers] {
-if {[string match "*chanflood:unset $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "chanflood:unset $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

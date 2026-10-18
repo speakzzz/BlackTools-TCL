@@ -1,4 +1,14 @@
  2026-10-18 speakzzz
+  * Version 3.1.4
+  * AntiTake (dontdeop / dontop): "is this the bot?" is now an exact
+    nick comparison (isbotnick). Nicks like [s]aga, sag[a] or sag\a
+    were treated as the bot, so their deops and ops were never reverted
+  * Timer lookups built from a nick, host, channel or handle now escape
+    [ ] * ? and \ (new blacktools:glob_escape). For users or channels
+    with brackets, the old timer wasn't found, so it kept running and
+    could reset flood counters early (channel flood, join flood, nick
+    flood, BadChan, badnick, VoiceOnMsg, Seen, command flood, and more)
+ 2026-10-18 speakzzz
   * Version 3.1.3
   * Word lists (antipub, antibadword, antispam, badquitpart, badrealname,
     badnick, badident, badhost): each pattern is now matched against

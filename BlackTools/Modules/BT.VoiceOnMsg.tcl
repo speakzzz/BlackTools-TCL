@@ -52,7 +52,7 @@ if {[lsearch -exact [string tolower $black(voiceonmsg:list:$chan)]  [string tolo
 	set black(voiceonmsg:$host:$chan) [expr {$current_count + 1}]
 	
 foreach tmr [utimers] {
-if {[string match -nocase "*voiceonmsg:remove:expire $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "voiceonmsg:remove:expire $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}	
 		}
@@ -75,10 +75,10 @@ if {[setting:get $chan xonly] && [onchan $black(chanserv) $chan]} {
 proc voiceonmsg:remove {host chan} {
 	global black
 	foreach tmr [utimers] {
-if {[string match "*voiceonmsg:remove:expire $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "voiceonmsg:remove:expire $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
-if {[string match "*voiceonmsg:remove $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "voiceonmsg:remove $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}
@@ -97,7 +97,7 @@ if {[lsearch -exact [string tolower $black(voiceonmsg:list:$chan)] [string tolow
 proc voiceonmsg:remove:expire {host chan} {
 	global black
 	foreach tmr [utimers] {
-if {[string match "*voiceonmsg:remove:expire $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "voiceonmsg:remove:expire $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}

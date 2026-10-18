@@ -844,7 +844,7 @@ proc blacktools:join:ban {nick host hand chan} {
 	global black
 if {[isbotnick $nick]} {
 foreach tmr [utimers] {
-if {[string match "*who:chan $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "who:chan $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}	
 		}

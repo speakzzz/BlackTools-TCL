@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792348530"
+set black(current_modif) "1792349025"
 
 ############################### Information files ############################
 
@@ -356,7 +356,7 @@ if {[matchattr $hand n]} {
 	return
 }
 	foreach tmr [utimers] {
-if {[string match "*black(antiflood:$host:prot)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(antiflood:$host:prot)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -407,7 +407,7 @@ if {![isbotnick $dest]} {
 	return
 }	
 foreach tmr [utimers] {
-if {[string match "*black(antiflood:$host:notc)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(antiflood:$host:notc)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -560,6 +560,15 @@ putserv "AWAY :$away"
 proc away:timer {} {
 	global black
 	set away_status [setaway "none"]
+}
+
+############################### Glob escape ##################################
+#Fork change (speakzzz, 2026): escape glob characters (* ? [ ] \) in text that
+#goes into a string match pattern. Nicks, hosts, channels and handles may
+#contain [ and ], which made timer lookups like "*nickflood:unset $host*"
+#miss their own timers, so an old timer could reset a flood counter early.
+proc blacktools:glob_escape {text} {
+	return [string map [list "\\" "\\\\" "*" "\\*" "?" "\\?" "\[" "\\\[" "\]" "\\\]"] $text]
 }
 
 ############################### Atomic write ##################################
@@ -2672,7 +2681,7 @@ if {$joinflood == ""} {set joinflood $black(joinflood:protect)}
 	set time [scan $joinflood %*\[^:\]:%s]
 	
 	foreach tmr [utimers] {
-if {[string match "*black(countflood:join:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(countflood:join:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -3763,7 +3772,7 @@ if {$themodul == "topwords" || $themodul == "topbans"} {
 	set black($modul:more:$chan:$hand) [expr {$black($modul:more:$chan:$hand) - $black($modul:show:$chan:$hand)}]
 	}
 	foreach tmr [utimers] {
-if {[string match -nocase "*module:getinfo:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "module:getinfo:unset:more $chan $hand"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}
@@ -3904,7 +3913,7 @@ if {$host == "prv"} {
 	}
 }
 	foreach tmr [utimers] {
-if {[string match -nocase "*module:getinfo:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "module:getinfo:unset:more $chan $hand"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}
@@ -6511,7 +6520,7 @@ if {![info exists black(onotice:$chan:fullbanlist)]} {
 	set text [black:color:set $botnick $black(say.$getlang.gl.fullbans)]
 	putserv "NOTICE @$chan :[string map [array get replace] $text]"
 foreach tmr [utimers] {
-if {[string match "*unset:mode_time:fullbanlist $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "unset:mode_time:fullbanlist $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}
 		}
@@ -6524,7 +6533,7 @@ foreach ban $banlist {
 	pushmode $chan -b $ban
 		}
 	foreach tmr [utimers] {
-if {[string match "*unset:flag:fullbanlist $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "unset:flag:fullbanlist $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 			}
 		}

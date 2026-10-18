@@ -57,7 +57,7 @@ if {$getset == ""} { set getset $black(joinflood:protect) }
 	
 if {![info exists black(floodjoin:on:$chan)]} {
 foreach tmr [utimers] {
-if {[string match "*joinflood:unset $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "joinflood:unset $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -83,7 +83,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 			}
 		}
 foreach tmr [utimers] {
-if {[string match "*joinflood:unset:host $chan $host*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "joinflood:unset:host $chan $host"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

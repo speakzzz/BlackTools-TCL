@@ -593,7 +593,7 @@ if {[info exists badchan(flood:$host:$chan:act)]} {
 	return 1
 }
 foreach tmr [utimers] {
-if {[string match "*badchan:remove:flood $host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "badchan:remove:flood $host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
@@ -689,7 +689,7 @@ proc badchan:nickchange {nick host hand chan newnick} {
 	set found_time 0
 	set current_time ""
 foreach tmr [utimers] {
-if {[string match -nocase "*badchan:check:again $nick $chan*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "badchan:check:again $nick $chan"]*" [join [lindex $tmr 1]]]} {
 	set current_time [get:timer:time $nick $chan]
 	set found_time 1
 killutimer [lindex $tmr 2]
@@ -705,7 +705,7 @@ proc get:timer:time {nick chan} {
 	global black
 	set time_left 0
 foreach tmr [utimers] {
-if {[string match -nocase "*badchan:check:again $nick $chan*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "badchan:check:again $nick $chan"]*" [join [lindex $tmr 1]]]} {
 	set time_left [lindex $tmr 0]
 	}
 }

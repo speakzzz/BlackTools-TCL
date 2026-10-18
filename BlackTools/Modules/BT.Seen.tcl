@@ -73,7 +73,7 @@ if {$what == ""} {
 
 if {![matchattr $hand nmo]} {
 foreach tmr [utimers] {
-if {[string match "*remove:seenflood:host $the_host $chan*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "remove:seenflood:host $the_host $chan"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

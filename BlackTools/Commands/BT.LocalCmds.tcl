@@ -42,7 +42,7 @@ if {$black(floodreport:$host1:$chan) >= "$number"} {
 }
 
 foreach tmr [utimers] {
-if {[string match "*black(floodreport:$host1:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(floodreport:$host1:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

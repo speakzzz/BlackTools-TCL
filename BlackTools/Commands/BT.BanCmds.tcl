@@ -896,7 +896,7 @@ for {set i $black(showbans:$chan:$hand)} { $i <= [expr {$black(showbans:$chan:$h
 	set black(morebans:$chan:$hand) [expr {$black(morebans:$chan:$hand) - $black(showbans:$chan:$hand)}]
 	}
 	foreach tmr [utimers] {
-if {[string match -nocase "*banlist:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "banlist:unset:more $chan $hand"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}
@@ -941,7 +941,7 @@ if {$black(morebans:$chan:$hand) > 0} {
 	banlist:remain $nick $host $hand $black(morebans:$chan:$hand) $chan $chan1 $getmethod $gl $user $userb $host
 }
 	foreach tmr [utimers] {
-if {[string match -nocase "*banlist:unset:more $chan $hand*" [join [lindex $tmr 1]]]} {
+if {[string match -nocase "*[blacktools:glob_escape "banlist:unset:more $chan $hand"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 		}
 	}

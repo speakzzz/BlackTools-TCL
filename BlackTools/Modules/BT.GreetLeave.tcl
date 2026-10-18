@@ -65,7 +65,7 @@ if {[setting:get $chan leave]} {
 if {[isbotnick $nick]} { return }
 	set getleave ""
 foreach tmr [utimers] {
-if {[string match "*black(leaveflood:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(leaveflood:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }

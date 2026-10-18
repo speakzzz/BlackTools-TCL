@@ -26,7 +26,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set timer [scan $black(antiflood:cmd) %*\[^:\]:%s]
 if {[info exists black(flood:activ:$host)]} {
 foreach tmr [utimers] {
-if {[string match "*black(flood:activ:$host)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(flood:activ:$host)"]*" [join [lindex $tmr 1]]]} {
 	set time [lindex $tmr 0]
 	}
 }
@@ -34,7 +34,7 @@ if {[string match "*black(flood:activ:$host)*" [join [lindex $tmr 1]]]} {
 	return
 }
 	foreach tmr [utimers] {
-if {[string match "*black(floodcmd:$host:$chan)*" [join [lindex $tmr 1]]]} {
+if {[string match "*[blacktools:glob_escape "black(floodcmd:$host:$chan)"]*" [join [lindex $tmr 1]]]} {
 	killutimer [lindex $tmr 2]
 	}
 }
