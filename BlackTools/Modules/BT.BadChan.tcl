@@ -149,7 +149,7 @@ foreach defchan $black(badcchannels) {
 	set encoded [encoding convertfrom utf-8 $defchan]
 foreach c $text {
 	set ch [string trimleft $c ":@+"]
-	set ch [check:except $ch $chan $black(badcchannels) $black(exceptchannels) "BADCHAN"]
+	set ch [join [check:except $ch $chan $black(badcchannels) $black(exceptchannels) "BADCHAN"]]
 if {[string match -nocase $encoded $ch]} {
 	set badchan(channels:$banmask:$chan) $ch
 	set badchan($banmask:$chan) $black(say.$getlang.badchan.5)

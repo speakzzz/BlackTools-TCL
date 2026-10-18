@@ -1,4 +1,20 @@
  2026-10-18 speakzzz
+  * Version 3.1.3
+  * Word lists (antipub, antibadword, antispam, badquitpart, badrealname,
+    badnick, badident, badhost): each pattern is now matched against
+    every word as well as the whole text, so "*.com" catches
+    "join spam.com now", not only messages ending in ".com". Trailing
+    punctuation is ignored ("spam.com,")
+  * Exceptions in BlackTools.tcl (antipubexcept, except_badwords, etc.)
+    now work with wildcards: "*youtube.com*" really allows YouTube links,
+    which used to get people banned
+  * antibadword: a bad word's own action method (e.g. "*pula*:3") no
+    longer carries over to the bad words listed after it; with the
+    default list every bad word got an immediate ban (method 3) instead
+    of kick -> ban (method 6)
+  * BadChan: the default bad channel list in BlackTools.tcl
+    (badcchannels) never matched anything; it now works
+ 2026-10-18 speakzzz
   * Version 3.1.2
   * anticaps: capitals are counted as a share of the letters instead of
     the whole message, so spacing letters out ("H E L L O") or padding

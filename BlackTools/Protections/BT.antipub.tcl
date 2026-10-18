@@ -34,19 +34,32 @@ if {$check_word != ""} {
 	}
 }
 
+#Fork change (speakzzz, 2026): exceptions from BlackTools.tcl are matched with
+#wildcards ("*youtube.com*"), like the per-channel + exceptions below; before,
+#they were compared as exact text, so wildcard entries never matched.
+#The text's words are recovered properly when it arrives as a Tcl list.
+proc blacktools:words {text} {
+if {[string is list $text]} { return $text }
+	return [split $text]
+}
+
+proc blacktools:word_matches {pattern word} {
+if {[string equal -nocase $pattern $word] || [string match -nocase $pattern $word]} { return 1 }
+	set trimmed [string trimright $word ".,;:!?)\]\}\"'"]
+	return [expr {$trimmed ne $word && $trimmed ne "" && [string match -nocase $pattern $trimmed]}]
+}
+
 proc check:except {text chan type except prot} {
 	global black
-	set text [split $text]
-	set counter_word 0
-	set counter_except 0
-	set found_it 0
-	
+	set words [list]
+foreach word [blacktools:words $text] {
+	set excepted 0
 foreach ex $except {
-	set position [lsearch -exact [string tolower $text] [string tolower $ex]]
-if {$position > -1} {
-	set text [lreplace $text $position $position]
-	}	
+if {[blacktools:word_matches $ex $word]} { set excepted 1; break }
+	}
+if {!$excepted} { lappend words $word }
 }
+	set text $words
 	set file [open $black(add_file) r]
 	set size [file size $black(add_file)]
 	set data [split [read $file $size] \n]

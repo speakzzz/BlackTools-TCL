@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792348033"
+set black(current_modif) "1792348530"
 
 ############################### Information files ############################
 
@@ -5092,13 +5092,20 @@ proc blacktools:ban:find_id {} {
 	return $current
 }
 
+#Fork change (speakzzz, 2026): a pattern is matched against each word (also
+#without trailing punctuation) as well as the whole text, so "*.com" catches
+#"join spam.com now", not only messages ending in ".com". Multi-word
+#patterns still match the whole text. A bad word's own action method
+#("*word*:3") no longer carries over to bad words listed after it.
 proc check:file:word {chan text type} {
 	global black
 	set found_word ""
 	set get_pers ""
-	set split_w ""
+	set words [blacktools:words $text]
+	set joined [join $words " "]
 	set file [open $black(add_file) "r"]
 while {[gets $file line] != -1} {
+	set split_w ""
 	set c [lindex [split $line] 0]
 	set t [lindex [split $line] 1]
 	set w [join [lrange [split $line] 3 end]]
@@ -5108,11 +5115,16 @@ if {[regexp {[:]} $w]} {
 	set w [join [lindex $split_w 0]]
 	}
 }
-if {[string match -nocase $c $chan] && [string match -nocase $w $text] && [string match -nocase $t $type]} { 
+if {![string match -nocase $c $chan] || ![string match -nocase $t $type]} { continue }
+	set hit [expr {[string match -nocase $w $text] || [string match -nocase $w $joined]}]
+if {!$hit} {
+foreach word $words {
+if {[blacktools:word_matches $w $word]} { set hit 1; break }
+		}
+	}
+if {$hit} {
 	set found_word $w
-if {$split_w != ""} {
 	set get_pers [lindex $split_w 1]
-			}
 		}
 	}
 	close $file
