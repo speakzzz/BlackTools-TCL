@@ -112,7 +112,9 @@ if {[lsearch $chanmodes $mod] < 0} {
 	lappend putmode $mod
 	}
 }
-	return $putmode	
+#Fork change (speakzzz, 2026): return "mr", not the list "m r"; "MODE #chan +m r"
+#only set +m, because servers read the "r" as a stray parameter.
+	return [join $putmode ""]
 }
 	
 ##############

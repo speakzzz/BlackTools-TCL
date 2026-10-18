@@ -1,4 +1,18 @@
  2026-10-18 speakzzz
+  * Version 3.1.6
+  * inviteban: the inviter's host comes from the INVITE itself instead
+    of a USERHOST request. The next USERHOST reply used to be taken as
+    the answer, so a reply meant for another feature (secure mode, !ub,
+    !sb, ...) could get an unrelated user banned. In an invite flood
+    only the first inviter was handled, with the last invite's channel
+    in the reason. Also removed the stray ":" in the reason
+  * clonescan: the bot itself and exempt users are no longer counted
+    (a shell running several bots got its own host banned), and users
+    of a web chat gateway (webchat_hosts) are grouped by ident, so one
+    gateway's users aren't all banned as clones of each other
+  * antijoinflood: the channel lock sets "+mr" instead of "+m r", which
+    only set +m; the unlock removes both modes again
+ 2026-10-18 speakzzz
   * Version 3.1.5
   * noproxy: the proxy lookup now runs in the background. It used to
     make two blocking requests to ip-api.com per join, freezing the

@@ -76,8 +76,17 @@ if {[setting:get $chan clonescan-maxclone] == "0" || [setting:get $chan clonesca
 	set maxclone $black(maxclone)
 } else { set maxclone [setting:get $chan clonescan-maxclone] }
 if {$maxclone < "2"} { return }
+#Fork change (speakzzz, 2026): the bot itself and exempt users are not
+#counted (a shell running several bots used to get its own host banned),
+#and users of a web chat gateway (black(webchat_hosts)) are grouped by
+#ident instead of by the gateway's shared host, which used to ban every
+#user of that gateway at once.
+	array set cmask [list]
 foreach user [chanlist $chan] {
-	set host [string tolower [lindex [split [getchanhost $user $chan] @] 1]]
+if {[isbotnick $user]} { continue }
+if {[matchattr [nick2hand $user $chan] $black(exceptflags) $chan]} { continue }
+	set uhost [getchanhost $user $chan]
+	set host [string tolower [lindex [split $uhost @] 1]]
 	set findword [prot:findword $chan "CLONESCAN-EXCEPT" $host]
 if {$findword == "1"} {
 	continue
@@ -85,9 +94,16 @@ if {$findword == "1"} {
 if {[string match "*undernet.org*" $host]} {
 	continue
 }
-
-	set replace(%host%) $host
-	lappend clones($host) $user
+if {[check:webchat $uhost]} {
+	set ident [string tolower [string trimleft [lindex [split $uhost @] 0] "~"]]
+	set key "$ident@$host"
+	set cmask($key) "*!*$ident@*"
+} else {
+	set key $host
+	set cmask($key) "*!*@$host"
+}
+	set replace(%host%) $key
+	lappend clones($key) $user
 }
 foreach clone [array names clones] {
 	set userlist [join $clones($clone)]
@@ -110,7 +126,7 @@ if {$type == "1"} {
 	set message [string map [array get replace] $text]
 	putserv "NOTICE @$chan :$message"
 foreach m $found_mask {
-	set mask "*!*@$m"
+	set mask $cmask($m)
 	blacktools:banner:2 $nick "CLONESCAN" $chan $chan1 $mask "0" ""
 }
 	who:chan $chan

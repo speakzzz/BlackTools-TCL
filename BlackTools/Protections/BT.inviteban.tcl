@@ -14,56 +14,37 @@
 ##					                               ##
 #########################################################################
 
+#Fork change (speakzzz, 2026): the inviter's host is taken from the INVITE
+#itself (nick!user@host). Before, the bot asked the server with USERHOST and
+#took the next USERHOST reply as the answer, but other features (secure mode,
+#!ub, !sb, ...) ask too, so an unrelated user could be banned as the inviter.
+#In an invite flood only the first inviter was handled, with the last invite's
+#channel in the reason, because the channel was kept in one global variable.
 proc inviteban:protect {from type arg} {
 	global black
-	set invitechan [lindex [split $arg] 1]
-	set ::invitechan $invitechan
-if {[string match -nocase "*!*" $from]} {
-	set split_from [split $from "!"]
-	set from_nick [lindex [split $split_from] 0]
-if {[string equal -nocase $from_nick $black(chanserv)]} {
-	return
+	set invitechan [string trimleft [lindex [split $arg] 1] ":"]
+if {![string match "*!*@*" $from]} { return 0 }
+	set nick [lindex [split $from "!"] 0]
+	set mask [join [lrange [split $from "!"] 1 end] "!"]
+if {[string equal -nocase $nick $black(chanserv)] || [isbotnick $nick]} { return 0 }
+	set channels ""
+foreach chan [channels] {
+	set bl_protect [blacktools:protect $nick $chan]
+if {$bl_protect == "1"} { continue }
+if {[matchattr [nick2hand $nick $chan] $black(exceptflags) $chan]} { continue }
+	lappend channels $chan
 }
-	putserv "USERHOST :$from_nick"
-	bind RAW - 302 inviteban:gethost
-	return
+if {$channels != ""} {
+	inviteban:act $channels 0 $mask $invitechan $nick
 }
-if {[string equal -nocase $from $black(chanserv)]} {
-	return
-}
-	putserv "USERHOST :$from"
-	bind RAW - 302 inviteban:gethost
+	return 0
 }
 
+#No longer used; kept so a USERHOST bind left over from before an update
+#removes itself instead of causing an error.
 proc inviteban:gethost {from keyword arguments} {
-	global black
-	set invitechan $::invitechan
-	set hostname [lindex [split $arguments] 1]
-	set channels ""
-if {[regexp {\+} $hostname]} {
-	set split_host [split $hostname "+"]
-} else {
-	set split_host [split $hostname "-"]
-}
-	set mask [lindex $split_host 1]
-	set getnick [string map {
-			"=" ""
-			":" ""
-			} [lindex $split_host 0]]
-if {$getnick != ""} {
-foreach chan [channels] {
-	set bl_protect [blacktools:protect $getnick $chan]
-if {$bl_protect == "1"} { continue }
-if {[matchattr [nick2hand $getnick] $black(exceptflags) $chan]} {
-	continue
-}
-	lappend channels $chan
-		}
-	}
-if {$channels != ""} {
-	inviteban:act $channels 0 $mask $invitechan $getnick
-}
 	check:if:bind "inviteban:gethost" "302"
+	return 0
 }
 
 proc inviteban:act {channels num mask invitechan nick} {
