@@ -216,7 +216,7 @@ set black(default_colors) "bold underline none underline"
 ###									###
 #Default away (you can change'it online ofcourse.)
 
-set black(default_away) "BlackTools 3.1.4 - The Next Generation TCL - www.TCLScripts.Net"
+set black(default_away) "BlackTools 3.1.5 - The Next Generation TCL - www.TCLScripts.Net"
 
 ###########################################################################
 #------------------------- Default BanTime -------------------------------#
@@ -1277,6 +1277,14 @@ set black(noproxy:excepts) {
 	"undernet.org"
 }
 
+#How long to remember a host's proxy lookup result (minutes)
+
+set black(noproxy:cachetime) "360"
+
+#Maximum proxy lookups per minute (ip-api.com's free service allows 45)
+
+set black(noproxy:rate) "40"
+
 #Default banmask
 
 #1 - *!*@host
@@ -1813,7 +1821,7 @@ set black(exempt:default_time) "0"
 
 set black(name) "BlackToolS"
 set black(author) "BLaCkShaDoW"
-set black(vers) "3.1.4"
+set black(vers) "3.1.5"
 set black(site) "wWw.TclScriptS.NeT"
 
 	bind evnt - init-server loginpublic

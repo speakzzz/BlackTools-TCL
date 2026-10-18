@@ -1,4 +1,17 @@
  2026-10-18 speakzzz
+  * Version 3.1.5
+  * noproxy: the proxy lookup now runs in the background. It used to
+    make two blocking requests to ip-api.com per join, freezing the
+    whole bot for up to 13 seconds each time (no kicks, bans or replies,
+    and a join flood could freeze it for minutes), and gave a Tcl error
+    on every join while ip-api.com was unreachable
+  * noproxy: one lookup per host, results remembered for
+    noproxy:cachetime minutes (default 360), at most noproxy:rate
+    lookups a minute (default 40; the free service allows 45). Users
+    who joined while a lookup was pending are handled when it returns,
+    if they are still on the channel. Lookup problems are logged at
+    most once every 10 minutes
+ 2026-10-18 speakzzz
   * Version 3.1.4
   * AntiTake (dontdeop / dontop): "is this the bot?" is now an exact
     nick comparison (isbotnick). Nicks like [s]aga, sag[a] or sag\a
