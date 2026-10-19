@@ -48,6 +48,15 @@ if {![info exists black($bt_var)]} { set black($bt_var) $bt_default }
 unset -nocomplain bt_var bt_default
 
 ###
+#Fork change (speakzzz, 2026): the ChangeLog of the repository updates come
+#from, so "Update finished" links to the changes that were just installed
+#(it used to link to the original project, which doesn't have them).
+proc blacktools:update_changelog_url {} {
+    global black
+    return "https://github.com/$black(update_owner)/$black(update_repo)/blob/$black(update_branch)/ChangeLog"
+}
+
+###
 proc blacktools:update_rawurl {file} {
     global black
     return "https://raw.githubusercontent.com/$black(update_owner)/$black(update_repo)/$black(update_branch)/$file"
@@ -512,7 +521,7 @@ if {$counter <= $total} {
     unset black(update_hand)
     unset black(update_chan)
     blacktools:update_unsetflag
-    blacktools:update_put $hand $chan 24 [list [return_time $userlang $dif]]
+    blacktools:update_put $hand $chan 24 [list [return_time $userlang $dif] [blacktools:update_changelog_url]]
     blacktools:update_put $hand $chan 25 [list $black(backup_dir) $black(log_file)]
     blacktools:update_put $hand $chan 26 ""
     unset black(update_file_saved)

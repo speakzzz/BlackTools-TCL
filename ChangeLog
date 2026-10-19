@@ -1,4 +1,10 @@
  2026-10-19 speakzzz
+  * Version 3.1.14
+  * "Update finished" linked to the ChangeLog of the original project,
+    which doesn't have this fork's changes. The link is now built from
+    update_owner, update_repo and update_branch, so it opens the
+    ChangeLog of the repository the update came from (EN, RO, FR, ES).
+ 2026-10-19 speakzzz
   * Version 3.1.13
   * 11 bot settings changed with !set were only saved to BlackTools.tcl,
     so the bot kept using the old value until the next rehash while
