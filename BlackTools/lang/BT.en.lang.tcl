@@ -1022,6 +1022,7 @@ set black(say.en.del.2) "\005\[BT\]\005 Unable to delete the user \001%msg.1%\00
 
 set black(say.en.addhost.1) "\005\[BT\]\005 Hostmask \001%msg.2%\001 already exists in \002%msg.1%\002's database."
 set black(say.en.addhost.2) "\005\[BT\]\005 Added hostmask \001%msg.2%\001 for user \002%msg.1%\002."
+set black(say.en.addhost.3) "\005\[BT\]\005 Hostmask \001%msg.1%\001 is \002too broad\002: it would match lots of people, and they would all get this user's access. Use a more specific mask, like \002*!*@your.host.net\002."
 
 ################################### DelHost ########################################
 

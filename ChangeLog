@@ -1,4 +1,14 @@
  2026-10-18 speakzzz
+  * Version 3.1.8
+  * addhost and myset addhost refuse host masks that would match lots of
+    people, such as *!*@*, *!*@*.net or nick!*@*. Everyone matching a
+    user's mask is recognized as that user and gets their access, so a
+    single typo could give every visitor owner or master access.
+    A mask is refused when its ident part is only wildcards and its host
+    part has fewer than two labels without wildcards; normal masks like
+    *!*@*.example.net, *!*@1.2.3.* and *!ident@* still work
+  * New lang string addhost.3 (EN, RO, FR, ES)
+ 2026-10-18 speakzzz
   * Version 3.1.7
   * link by private message now needs owner or master, as in the
     channel and the other command forms; a global op could link

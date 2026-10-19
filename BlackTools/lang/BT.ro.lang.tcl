@@ -1023,6 +1023,7 @@ set black(say.ro.del.2) "\005\[BT\]\005 Nu poti sterge user-ul \001%msg.1%\001 d
 
 set black(say.ro.addhost.1) "\005\[BT\]\005 Hostul \001%msg.2%\001 exista deja in baza de date a lui \002%msg.1%\002."
 set black(say.ro.addhost.2) "\005\[BT\]\005 Am adaugat host-ul: \001%msg.2%\001 la user-ul: \002%msg.1%\002"
+set black(say.ro.addhost.3) "\005\[BT\]\005 Hostmask-ul \001%msg.1%\001 este \002prea general\002: s-ar potrivi cu foarte multi useri, care ar primi toti accesul acestui user. Foloseste un mask mai specific, de exemplu \002*!*@host.tau.net\002."
 
 ################################### DelHost ########################################
 

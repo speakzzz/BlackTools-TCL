@@ -1065,6 +1065,11 @@ switch $type {
 	}
 	return
 }
+#Fork change (speakzzz, 2026): refuse masks that would match lots of people
+if {[blacktools:mask_too_broad $typez]} {
+	blacktools:tell $nick $host $hand $chan $chan1 addhost.3 $typez
+	return
+}
 if {![string equal -nocase $typez "-telnet!*@*"]} {
 foreach u [userlist] {
 	set h [getuser $u hosts]

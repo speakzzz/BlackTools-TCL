@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792361899"
+set black(current_modif) "1792373302"
 
 ############################### Information files ############################
 
@@ -560,6 +560,32 @@ putserv "AWAY :$away"
 proc away:timer {} {
 	global black
 	set away_status [setaway "none"]
+}
+
+############################### Host mask check ##############################
+#Fork change (speakzzz, 2026): is a user host mask so broad that it would
+#match lots of people (like *!*@*, *!*@*.net or nick!*@*)? Such a mask makes
+#everyone who matches it be recognized as that user, with that user's access.
+#Too broad = the ident part is only wildcards AND the host part has fewer than
+#two labels without wildcards. Allowed, for example: *!*@*.example.net,
+#*!*@1.2.3.*, *!*@1.2.3.4, *!john@* (used for web chat users), -telnet!*@*.
+proc blacktools:mask_too_broad {mask} {
+if {[string match -nocase "-telnet!*" $mask]} { return 0 }
+	set rest [lindex [split $mask "!"] end]
+if {[string first "@" $rest] >= 0} {
+	set ident [string range $rest 0 [expr {[string last "@" $rest] - 1}]]
+	set host [string range $rest [expr {[string last "@" $rest] + 1}] end]
+} else {
+	set ident "*"
+	set host $rest
+}
+if {![regexp {^[*?~]*$} $ident]} { return 0 }
+if {![regexp {[*?]} $host]} { return [expr {$host eq ""}] }
+	set literal 0
+foreach label [split $host "."] {
+if {$label ne "" && ![regexp {[*?]} $label]} { incr literal }
+}
+	return [expr {$literal < 2}]
 }
 
 ############################### Glob escape ##################################

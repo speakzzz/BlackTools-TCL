@@ -588,6 +588,11 @@ if {$get_status_access == "1"} {
 	blacktools:tell $nick $host $hand $chan $chan1 gl.nomodif none
 	return
 }
+#Fork change (speakzzz, 2026): refuse masks that would match lots of people
+if {[blacktools:mask_too_broad $hosts]} {
+	blacktools:tell $nick $host $hand $chan $chan1 addhost.3 $hosts
+	return
+}
 
 if {![string equal -nocase $hosts "-telnet!*@*"]} {
 foreach u [userlist] {

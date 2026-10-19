@@ -1036,6 +1036,7 @@ set black(say.fr.del.2) "\005\[BT\]\005 Impossible de supprimer l'utilisateur \0
 
 set black(say.fr.addhost.1) "\005\[BT\]\005 Le masque hôte \001%msg.2%\001 existe déjà dans la base de données de \002%msg.1%\002."
 set black(say.fr.addhost.2) "\005\[BT\]\005 Masque hôte \001%msg.2%\001 ajouté pour l'utilisateur \002%msg.1%\002."
+set black(say.fr.addhost.3) "\005\[BT\]\005 Le masque \001%msg.1%\001 est \002trop large\002 : il correspondrait \u00e0 beaucoup de monde, qui obtiendrait l'acc\u00e8s de cet utilisateur. Utilisez un masque plus pr\u00e9cis, par exemple \002*!*@votre.hote.net\002."
 
 ################################### DelHost ########################################
 

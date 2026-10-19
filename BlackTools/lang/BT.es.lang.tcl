@@ -1025,6 +1025,7 @@ set black(say.es.del.2) "\005\[BT\]\005 No se puede eliminar el usuario \001%msg
 
 set black(say.es.addhost.1) "\005\[BT\]\005 Hostmask \001%msg.2%\001 ya existe en la base de datos de \002%msg.1%\002."
 set black(say.es.addhost.2) "\005\[BT\]\005 Se agregó hostmask \001%msg.2%\001 para el usuario \002%msg.1%\002."
+set black(say.es.addhost.3) "\005\[BT\]\005 La m\u00e1scara \001%msg.1%\001 es \002demasiado amplia\002: coincidir\u00eda con muchas personas, que obtendr\u00edan el acceso de este usuario. Use una m\u00e1scara m\u00e1s espec\u00edfica, por ejemplo \002*!*@su.host.net\002."
 
 ################################### DelHost ########################################
 
