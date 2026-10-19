@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792373302"
+set black(current_modif) "1792375579"
 
 ############################### Information files ############################
 
@@ -955,16 +955,21 @@ global black botnick
 	set validhost 0
 	set found_handle 0
 	set finduser [finduser $mask]
+#Fork change (speakzzz, 2026): a refused ban now says why, instead of
+#silently doing nothing (b.15: it matches the bot, b.16: a protected user).
 if {$finduser != "*"} {
 if {[matchattr $finduser $black(exceptflags) $chan]} {
+	blacktools:tell $nick $prv $hand $chan $chan1 b.16 "$mask $finduser"
 	return
 	}
 }
+	set refused_by ""
 foreach user [chanlist $chan] {
 if {[string equal -nocase $user $botnick]} {
 	set uhost "$user![getchanhost $user $chan]"
 if {[string match -nocase $mask $uhost]} {
 	set found_handle 1
+	set refused_by $botnick
 	break
 	}	
 }
@@ -974,14 +979,20 @@ if {[string match -nocase $mask $uhost]} {
 if {$handle != "*"} {
 if {[matchattr $handle $black(exceptflags) $chan]} {
 	set found_handle 1
+	set refused_by $handle
 	break
 			}
 		}
 	}
 }
 
-if {$found_handle == "1"} { 
-return 
+if {$found_handle == "1"} {
+if {[string equal -nocase $refused_by $botnick]} {
+	blacktools:tell $nick $prv $hand $chan $chan1 b.15 $mask
+} else {
+	blacktools:tell $nick $prv $hand $chan $chan1 b.16 "$mask $refused_by"
+}
+return
 }
 
 if {([string match -nocase "*!*" $mask] && [string match -nocase "*@*" $mask]) || $regex == "REGEX"} {

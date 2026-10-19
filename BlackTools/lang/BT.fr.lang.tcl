@@ -741,6 +741,8 @@ set black(say.fr.b.11) "\005\[BT\]\005 \002%msg.1%\002 n'est PAS une expression 
 set black(say.fr.b.12) "\005\[BT\]\005 Ajout d'un ban \[LOCAL\] REGEX à \002%chan%\002 avec \[ID: \001%msg.1%\001\]"
 set black(say.fr.b.13) "\005\[BT\]\005 Ajout d'un ban \[GLOBAL\] REGEX avec \[ID: \001%msg.1%\001\]"
 set black(say.fr.b.14) "\005\[BT\]\005 Ajout d'un ban \[LOCAL\] à \002%chan%\002 avec \[ID: \001%msg.1%\001\] \[XONLY\]"
+set black(say.fr.b.15) "\005\[BT\]\005 Ban \001%msg.1%\001 refus\u00e9 : il me viserait \002moi-m\u00eame\002."
+set black(say.fr.b.16) "\005\[BT\]\005 Ban \001%msg.1%\001 refus\u00e9 : il viserait l'utilisateur prot\u00e9g\u00e9 \002%msg.2%\002."
 
 ################################## n #####################################
 

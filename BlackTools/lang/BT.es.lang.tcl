@@ -741,6 +741,8 @@ set black(say.es.b.11) "\005\[BT\]\005 \002%msg.1%\002 NO es una expresión regu
 set black(say.es.b.12) "\005\[BT\]\005 Agregado ban \[LOCAL\] REGEX para \002%chan%\002 con \[ID: \001%msg.1%\001\]"
 set black(say.es.b.13) "\005\[BT\]\005 Agregado ban \[GLOBAL\] REGEX con \[ID: \001%msg.1%\001\]"
 set black(say.es.b.14) "\005\[BT\]\005 Agregado ban \[LOCAL\] para \002%chan%\002 con \[ID: \001%msg.1%\001\] \[XONLY\]"
+set black(say.es.b.15) "\005\[BT\]\005 Ban \001%msg.1%\001 rechazado: me afectar\u00eda a \002m\u00ed\002."
+set black(say.es.b.16) "\005\[BT\]\005 Ban \001%msg.1%\001 rechazado: afectar\u00eda al usuario protegido \002%msg.2%\002."
 
 ################################## n #####################################
 

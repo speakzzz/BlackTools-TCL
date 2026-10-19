@@ -738,6 +738,8 @@ set black(say.en.b.11) "\005\[BT\]\005 \002%msg.1%\002 is NOT a valid regex expr
 set black(say.en.b.12) "\005\[BT\]\005 Added a \[LOCAL\] REGEX ban to \002%chan%\002 with \[ID: \001%msg.1%\001\]"
 set black(say.en.b.13) "\005\[BT\]\005 Added a \[GLOBAL\] REGEX ban with \[ID: \001%msg.1%\001\]"
 set black(say.en.b.14) "\005\[BT\]\005 Added a \[LOCAL\] ban to \002%chan%\002 with \[ID: \001%msg.1%\001\] \[XONLY\]"
+set black(say.en.b.15) "\005\[BT\]\005 Ban \001%msg.1%\001 refused: it would match \002me\002."
+set black(say.en.b.16) "\005\[BT\]\005 Ban \001%msg.1%\001 refused: it would match the protected user \002%msg.2%\002."
 
 ################################## n #####################################
 

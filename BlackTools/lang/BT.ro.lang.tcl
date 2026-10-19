@@ -739,6 +739,8 @@ set black(say.ro.b.11) "\005\[BT\]\005 \002%msg.1%\002 nu este o expresie de tip
 set black(say.ro.b.12) "\005\[BT\]\005 Ai adaugat un \[BAN LOCAL\] de tip REGEX pe \002%chan%\002 avand \[ID: \001%msg.1%\001\]"
 set black(say.ro.b.13) "\005\[BT\]\005 Ai adaugat un ban \[GLOBAL\] de tip REGEX avand \[ID: \001%msg.1%\001\]"
 set black(say.ro.b.14) "\005\[BT\]\005 Ai adaugat un \[BAN LOCAL\] pe \002%chan%\002 avand \[ID: \001%msg.1%\001\] \[XONLY\]" 
+set black(say.ro.b.15) "\005\[BT\]\005 Ban-ul \001%msg.1%\001 a fost refuzat: s-ar potrivi cu \002mine\002."
+set black(say.ro.b.16) "\005\[BT\]\005 Ban-ul \001%msg.1%\001 a fost refuzat: s-ar potrivi cu userul protejat \002%msg.2%\002."
 
 ################################## n #####################################
 

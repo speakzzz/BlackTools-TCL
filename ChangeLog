@@ -1,4 +1,9 @@
  2026-10-18 speakzzz
+  * Version 3.1.9
+  * A refused ban now says why instead of doing nothing silently: the
+    mask would match the bot itself (b.15), or a protected user, who
+    is named (b.16). New lang strings in EN, RO, FR, ES
+ 2026-10-18 speakzzz
   * Version 3.1.8
   * addhost and myset addhost refuse host masks that would match lots of
     people, such as *!*@*, *!*@*.net or nick!*@*. Everyone matching a
