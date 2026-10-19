@@ -1858,16 +1858,28 @@ if {$why == "1"} { blacktools:tell $nick $host $hand $chan $chan1 set.5 $flags
 if {[matchattr $hand nm]} {
 	set check_eggcmd [egg:setting_check $flags]
 if {$check_eggcmd == "1"} {
+#Fork change (speakzzz, 2026): the X password is only accepted by private
+#message and is never repeated in a reply. "Already set to" isn't used for
+#it either, so a reply can't confirm whether a guess was right.
+	set shown $type
+if {[string equal -nocase $flags "userpass"]} {
+if {$type1 != "2"} {
+	blacktools:tell $nick $host $hand $chan $chan1 set.15 none
+	return
+}
+	set shown "********"
+}
 	set return [egg:process $nick $host $hand $chan $chan1 $flags $type]
+if {$return == "2" && [string equal -nocase $flags "userpass"]} { set return 1 }
 if {$return == "0"} {
-	blacktools:tell $nick $host $hand $chan $chan1 set.2 "$flags $type"
+	blacktools:tell $nick $host $hand $chan $chan1 set.2 "$flags $shown"
 	} elseif {$return == "1"} {
-	blacktools:tell $nick $host $hand $chan $chan1 set.1 "$flags $type"
+	blacktools:tell $nick $host $hand $chan $chan1 set.1 "$flags $shown"
 	return
 	} elseif {$return == "3"} {
 	return
 	} else {
-	blacktools:tell $nick $host $hand $chan $chan1 set.9 "$flags $type"
+	blacktools:tell $nick $host $hand $chan $chan1 set.9 "$flags $shown"
 	return
 		}
 	return	

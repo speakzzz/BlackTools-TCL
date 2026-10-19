@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792407242"
+set black(current_modif) "1792409926"
 
 ############################### Information files ############################
 
@@ -269,7 +269,7 @@ set black(extra_flag) {
 	accessonly voiceme onlyonmode securemode strictsecured nextshortcmd inviteban quoteofday chanlink noproxy vote votegreet disablepubcmds
 }
 
-set black(validcmds) "alias exempt login anunt link note q enable disable securemode cp troll badhost antispam badrealname badquitpart badident badnick badword unset greet leave topic vr dr n id spam bw mb black bl b stick ub sb banlist r man auto antipub private tcl h ignore idle version stats chat seen limit bt badchan us s info channels userlist chuser delhost addhost del delacc add unsuspend suspend delchan addchan die jump save restart rehash update nick msg omsg set mode cycle broadcast act say v ho o uptime status t k w ungag gag show clonescan topwords myset timer i badword next helped noidle skip vote"
+set black(validcmds) "alias exempt login anunt link note q enable disable securemode cp troll badhost antispam badrealname badquitpart badident badnick badword unset greet leave topic vr dr n id spam bw mb black bl b stick ub sb banlist r man auto antipub private tcl h ignore idle version stats chat seen limit bt badchan us s info channels userlist chuser delhost addhost del delacc add unsuspend suspend delchan addchan die jump save restart rehash update nick msg omsg set mode cycle broadcast act say v ho o uptime status t k w ungag gag show clonescan topwords myset timer i badword next helped noidle skip vote history"
 
 ########################## BackChan ############################
 
@@ -1963,10 +1963,43 @@ if {[onchan $botnick $chan1]} {
 	}
 }
 
+#Fork change (speakzzz, 2026): the %msg% and %msg.N% placeholders of a
+#reply, built from its arguments (shared with the History module).
+proc blacktools:msg_map {arg} {
+	set replace(%msg%) [join [lrange [split $arg] 0 end]]
+	set replace(%msg.set%) [join [lrange [split $arg] 1 end]]
+	set replace(%msg.1%) [lindex [split $arg] 0]
+	set replace(%msg.2%) [lindex [split $arg] 1]
+	set replace(%msg.3%) [lindex [split $arg] 2]
+	set replace(%msg.4%) [lindex [split $arg] 3]
+	set replace(%msg.5%) [lrange [split $arg] 4 end]
+	set replace(%msg.6%) [join  [lrange [split $arg] 3 end]]
+	set replace(%msg.7%) [lrange [split $arg] 2 end]
+	set replace(%msg.8%) [join [lrange [split $arg] 1 end]]
+	set replace(%msg.9%) [join [lrange [split $arg] 3 end]]
+	set replace(%msg.10%) [join [lrange [split $arg] 4 end]]
+	set replace(%msg.11%) [join [lrange [split $arg] 5 end]]
+	set replace(%msg.12%) [lindex [split $arg] 4]
+	set replace(%msg.13%) [lindex [split $arg] 5]
+	set replace(%msg.14%) [join [lrange [split $arg] 6 end]]
+	set replace(%msg.15%) [lindex [split $arg] 6]
+	set replace(%msg.16%) [join [lrange [split $arg] 7 end]]
+	set replace(%msg.17%) [lindex [split $arg] 7]
+	set replace(%msg.18%) [join [lrange [split $arg] 2 end]]
+	set replace(%msg.19%) [lindex [split $arg] 8]
+	set replace(%msg.20%) [join [lrange [split $arg] 8 end]]
+	set replace(%msg.21%) [lindex [split $arg] 9]
+	return [array get replace]
+}
+
 proc blacktools:tell {nick host hand chan chan1 type arg} {
 global black botnick lastbind
 	set split_hand [split $hand ":"]
 	set gethand [lindex $split_hand 0]
+#Fork change (speakzzz, 2026): record user and setting changes for !history
+if {[info exists black(history:keys)] && [lsearch -exact $black(history:keys) $type] > -1} {
+	catch {blacktools:history:add $nick $gethand $chan $type $arg}
+}
 	set replace(%botnick%) $botnick
 	set split_lastbind [split $lastbind ""]
 	set charbind [lindex $split_lastbind 0]
@@ -1999,29 +2032,7 @@ if {$getchar != ""} {
 	set replace(%char%) $charbind
 	set replace(%firstchar%) $firstchar
 	set replace(%chan%) $chan
-	set replace(%msg%) [join [lrange [split $arg] 0 end]]
-	set replace(%msg.set%) [join [lrange [split $arg] 1 end]]
-	set replace(%msg.1%) [lindex [split $arg] 0]
-	set replace(%msg.2%) [lindex [split $arg] 1]
-	set replace(%msg.3%) [lindex [split $arg] 2]
-	set replace(%msg.4%) [lindex [split $arg] 3]
-	set replace(%msg.5%) [lrange [split $arg] 4 end]
-	set replace(%msg.6%) [join  [lrange [split $arg] 3 end]]
-	set replace(%msg.7%) [lrange [split $arg] 2 end]
-	set replace(%msg.8%) [join [lrange [split $arg] 1 end]]
-	set replace(%msg.9%) [join [lrange [split $arg] 3 end]]
-	set replace(%msg.10%) [join [lrange [split $arg] 4 end]]
-	set replace(%msg.11%) [join [lrange [split $arg] 5 end]]
-	set replace(%msg.12%) [lindex [split $arg] 4]
-	set replace(%msg.13%) [lindex [split $arg] 5]
-	set replace(%msg.14%) [join [lrange [split $arg] 6 end]]
-	set replace(%msg.15%) [lindex [split $arg] 6]
-	set replace(%msg.16%) [join [lrange [split $arg] 7 end]]
-	set replace(%msg.17%) [lindex [split $arg] 7]
-	set replace(%msg.18%) [join [lrange [split $arg] 2 end]]
-	set replace(%msg.19%) [lindex [split $arg] 8]
-	set replace(%msg.20%) [join [lrange [split $arg] 8 end]]
-	set replace(%msg.21%) [lindex [split $arg] 9]
+	array set replace [blacktools:msg_map $arg]
 	
 	set replace(%bind%) $lastbind
 if {[validuser $gethand]} {

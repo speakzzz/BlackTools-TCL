@@ -1,4 +1,20 @@
  2026-10-19 speakzzz
+  * Version 3.1.12
+  * Security: the X password is no longer shown. !set userpass is only
+    accepted by private message (in a channel everyone would see it), the
+    reply shows ******** instead of the password, and "is already set to"
+    is never used for it, so a reply can't confirm a guess. !h egg always
+    shows ******** (it used to show one * per character), or N/A while
+    the password is still the xpassword placeholder.
+  * New !history [#chan] [number] (MANAGER and up) and !history global
+    [number] (BOSS OWNER, OWNER, MASTER): who changed users and settings,
+    and when, newest first, 10 by default, up to 30. Recorded: users
+    added, deleted or renamed, access given or removed, hostmasks,
+    suspensions, automode, channel and bot settings, commands enabled or
+    disabled, channels added or removed. Each entry is shown in the
+    reader's language. New setting black(history:max) (default 1000).
+    New Modules/BT.History.tcl, !man history, listed under !h add.
+ 2026-10-19 speakzzz
   * Version 3.1.11
   * Security: !timer start is BOSS OWNER only. A timer runs its text as a
     Tcl command (the same as !tcl), so an OWNER could run anything and

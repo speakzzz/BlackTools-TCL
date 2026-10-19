@@ -1773,6 +1773,13 @@ set black(say.es.man.2227) "\[MAN\] Configuraciones opcionales: \002vote-mask\00
 set black(say.es.man.2228) "\[MAN\] \002%char%vote \002\[#chan\]\002 \002list \[ID\]\002 (lista de votación, si se especifica una ID \[admin+ only\], se enumerarán los votos para la votación especificada por ID)"
 set black(say.es.man.2229) "\[MAN\] \002%char%vote \002\[#chan\]\002 <ID> <letter> (la letra de opción del ID de votación)"
 
+#History
+
+set black(say.es.man.history.1) "\[MAN\] \002History\002 muestra quién cambió usuarios y configuraciones, y cuándo: usuarios agregados, eliminados o renombrados, cambios de acceso, hostmasks, suspensiones, automode, configuraciones del canal y comandos activados o desactivados. Los más recientes primero."
+set black(say.es.man.history.2) "\[MAN\] SINTAXIS DE USO:"
+set black(say.es.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[número\] ; \002%botnick% history\002 \[#canal\] \[número\] ; \002(PRIVMSG) history\002 <#canal> \[número\]"
+set black(say.es.man.history.4) "\[MAN\] \002%char%history global\002 \[número\] muestra los cambios que no son de un solo canal (solo BOSS OWNER, OWNER y MASTER). Muestra 10 entradas por defecto, hasta 30."
+
 #Mask
 
 set black(say.es.man.2230) "\[MAN\] Máscaras disponibles:"

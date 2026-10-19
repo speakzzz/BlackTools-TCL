@@ -2594,6 +2594,16 @@ if {[matchattr $hand n]} {
 	blacktools:tell $nick $host $hand $chan $chan1 man.showtip none
 	}	
 }
+history {
+if {[matchattr $hand nmo|M $chan]} {
+	blacktools:tell $nick $host $hand $chan $chan1 man.history.1 none
+	blacktools:tell $nick $host $hand $chan $chan1 man.history.2 none
+	blacktools:tell $nick $host $hand $chan $chan1 man.history.3 none
+	blacktools:tell $nick $host $hand $chan $chan1 man.history.4 none
+	blacktools:tell $nick $host $hand $chan $chan1 man.showtip none
+	}
+}
+
 vote {
 if {[matchattr $hand nmo|M $chan]} {
 	blacktools:tell $nick $host $hand $chan $chan1 man.2221 none

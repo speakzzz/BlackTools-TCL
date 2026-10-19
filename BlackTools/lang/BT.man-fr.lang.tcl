@@ -1784,6 +1784,13 @@ set black(say.fr.man.2227) "\[MAN\] Paramètres optionnels : \002vote-mask\002 (
 set black(say.fr.man.2228) "\[MAN\] \002%char%vote \002\[#chan\]\002 \002list \[ID\]\002 (liste des votes, si un ID est spécifié \[admin+ seulement\], il listera les votes pour le vote spécifié par ID)"
 set black(say.fr.man.2229) "\[MAN\] \002%char%vote \002\[#chan\]\002 <ID> <lettre> (la lettre d'option de l'ID de vote)"
 
+#History
+
+set black(say.fr.man.history.1) "\[MAN\] \002History\002 montre qui a modifié les utilisateurs et les réglages, et quand : utilisateurs ajoutés, supprimés ou renommés, changements d'accès, masques d'hôte, suspensions, automode, réglages du canal et commandes activées ou désactivées. Les plus récentes d'abord."
+set black(say.fr.man.history.2) "\[MAN\] SYNTAXE D'UTILISATION :"
+set black(say.fr.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[nombre\] ; \002%botnick% history\002 \[#canal\] \[nombre\] ; \002(PRIVMSG) history\002 <#canal> \[nombre\]"
+set black(say.fr.man.history.4) "\[MAN\] \002%char%history global\002 \[nombre\] montre les modifications qui ne concernent pas un seul canal (BOSS OWNER, OWNER et MASTER uniquement). 10 entrées par défaut, 30 au maximum."
+
 #Mask
 
 set black(say.fr.man.2230) "\[MAN\] Masques disponibles :"

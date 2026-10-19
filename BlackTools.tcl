@@ -216,7 +216,7 @@ set black(default_colors) "bold underline none underline"
 ###									###
 #Default away (you can change'it online ofcourse.)
 
-set black(default_away) "BlackTools 3.1.11 - The Next Generation TCL - www.TCLScripts.Net"
+set black(default_away) "BlackTools 3.1.12 - The Next Generation TCL - www.TCLScripts.Net"
 
 ###########################################################################
 #------------------------- Default BanTime -------------------------------#
@@ -1817,11 +1817,19 @@ set black(report:flood) "2:60"
 
 set black(exempt:default_time) "0"
 
+########################################################################
+#------------------------------ history -------------------------------#
+
+#How many changes !history keeps (all channels together). The oldest are
+#dropped once there are 10% more than this. 0 = keep everything.
+
+set black(history:max) "1000"
+
 ############################# The End ##################################
 
 set black(name) "BlackToolS"
 set black(author) "BLaCkShaDoW"
-set black(vers) "3.1.11"
+set black(vers) "3.1.12"
 set black(site) "wWw.TclScriptS.NeT"
 
 	bind evnt - init-server loginpublic

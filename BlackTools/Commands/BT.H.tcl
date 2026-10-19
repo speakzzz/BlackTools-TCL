@@ -1143,13 +1143,13 @@ foreach cmd [color:filter $split_cmds] {
 	}
 	userpass {
 	set get_info [config:getinfo $tcl_config "set black(password) \"*\""]
-if {$get_info == ""} { set get_info "N/A" }
-	set getc [string length $get_info]
-	set password ""
-	for {set i 0} { $i < $getc } { incr i} {
-	lappend password "*"
-	}
-	set get_info [join $password ""]
+#Fork change (speakzzz, 2026): always eight stars, so the length of the
+#X password isn't shown either.
+if {$get_info == "" || $get_info == "xpassword"} {
+	set get_info "N/A"
+} else {
+	set get_info "********"
+}
 	lappend eggcmds [black:color 2 $hand $cmd]\[$get_info\]
 	}
 	chanserv {

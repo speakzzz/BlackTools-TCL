@@ -39,6 +39,12 @@ if {[validchan $mychan] && [matchattr $hand nmo|OVMA $mychan] && ![string equal 
 }
 
 switch [string tolower $cmd] {
+history {
+if {[matchattr $hand nmo] || ([validchan $chan] && [matchattr $hand -|M $chan])} {
+	history:process $nick $input $hand $chan $chan1 [join [lrange [split $arg] 1 end]] 2
+	}
+}
+
 vote {
 	set type 2
 	set word [lindex [split $arg] 2]

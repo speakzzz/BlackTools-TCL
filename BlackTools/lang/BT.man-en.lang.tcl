@@ -1786,6 +1786,13 @@ set black(say.en.man.2227) "\[MAN\] Optional settings: \002vote-mask\002 (see \0
 set black(say.en.man.2228) "\[MAN\] \002%char%vote \002\[#chan\]\002 \002list \[ID\]\002 (voting list, if an ID is specified \[admin+ only\], it will list the votes for the voting specified by ID)"
 set black(say.en.man.2229) "\[MAN\] \002%char%vote \002\[#chan\]\002 <ID> <letter> (the option letter from the voting ID)"
 
+#History
+
+set black(say.en.man.history.1) "\[MAN\] \002History\002 shows who changed users and settings, and when: users added, removed or renamed, access changes, hostmasks, suspensions, automode, channel settings and commands enabled or disabled. Newest first."
+set black(say.en.man.history.2) "\[MAN\] USAGE SYNTAX:"
+set black(say.en.man.history.3) "\[MAN\] \002%char%history\002 \[#chan\] \[number\] ; \002%botnick% history\002 \[#chan\] \[number\] ; \002(PRIVMSG) history\002 <#chan> \[number\]"
+set black(say.en.man.history.4) "\[MAN\] \002%char%history global\002 \[number\] shows changes not tied to one channel (BOSS OWNER, OWNER and MASTER only). Shows 10 entries by default, up to 30."
+
 #Mask
 
 set black(say.en.man.2230) "\[MAN\] Available masks:"

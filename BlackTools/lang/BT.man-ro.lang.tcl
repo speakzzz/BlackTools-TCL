@@ -1785,6 +1785,13 @@ set black(say.ro.man.2227) "\[MAN\] Setari optionale: \002vote-mask\002 (vezi \0
 set black(say.ro.man.2228) "\[MAN\] \002%char%vote \002\[#canal\] list\002 \[ID\]\002 (listare votari, daca se specifica ID \[doar admin+\]], se vor lista voturile exprimate pentru acel proces de votare)"
 set black(say.ro.man.2229) "\[MAN\] \002%char%vote \002\[#canal\] <ID> <litera> (litera corespunzatoare optiunii pentru ID votare)"
 
+#History
+
+set black(say.ro.man.history.1) "\[MAN\] \002History\002 arata cine a modificat useri si setari, si cand: useri adaugati, stersi sau redenumiti, schimbari de acces, hostmask-uri, suspendari, automode, setari de canal si comenzi activate sau dezactivate. Cele mai noi primele."
+set black(say.ro.man.history.2) "\[MAN\] SINTAXA FOLOSIRE:"
+set black(say.ro.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[numar\] ; \002%botnick% history\002 \[#canal\] \[numar\] ; \002(PRIVMSG) history\002 <#canal> \[numar\]"
+set black(say.ro.man.history.4) "\[MAN\] \002%char%history global\002 \[numar\] arata modificarile care nu tin de un canal (doar BOSS OWNER, OWNER si MASTER). Arata 10 inregistrari implicit, maxim 30."
+
 #Mask
 
 set black(say.ro.man.2230) "\[MAN\] Aveti la dispozitie urmatoarele metode de mask-uri:"

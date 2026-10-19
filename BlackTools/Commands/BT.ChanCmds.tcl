@@ -31,6 +31,12 @@ if {$return == "0"} {
 		return
 }
 switch [string tolower $cmd] {
+history {
+if {[matchattr $hand nmo] || ([validchan $chan] && [matchattr $hand -|M $chan])} {
+	history:process $nick $char $hand $chan $chan1 [join [lrange [split $arg] 1 end]] 0
+	}
+}
+
 vote {
 	set type 0
 	set word [lindex [split $arg] 1]
