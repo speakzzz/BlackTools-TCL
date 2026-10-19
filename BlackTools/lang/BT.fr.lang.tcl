@@ -922,6 +922,7 @@ set black(say.fr.set.7) "\005\[BT\]\005 ÉCHEC : Impossible de définir \001%msg
 set black(say.fr.set.8) "\005\[BT\]\005 Défini \001%msg.1%\001 \004%msg.set%\004 pour \002%chan%\002"
 set black(say.fr.set.9) "\005\[BT\]\005 \001%msg.1%\001 est déjà défini sur \002%msg.set%\002"
 set black(say.fr.set.14) "\005\[BT\]\005 Paramètre invalide."
+set black(say.fr.egg.5) "\005\[BT\]\005 ÉCHEC : La langue \002%msg.8%\002 n'existe pas. Disponibles : \002%msg.1%\002"
 
 #################################### unSet #################################
 
@@ -941,6 +942,7 @@ set black(say.fr.timer.5) "\005\[BT\]\005 Le minuteur avec le pid \002%msg.1%\00
 set black(say.fr.timer.6) "\005\[BT\]\005 Il n'y a pas de minuteur correspondant au pid \002%msg.1%\002"
 set black(say.fr.timer.7) "\005\[BT\]\005 Minuteur démarré avec le pid \002%msg.1%"
 set black(say.fr.timer.8) "\005\[BT\]\005 Il y a déjà un minuteur démarré pour ce processus."
+set black(say.fr.timer.9) "\005\[BT\]\005 Seul le \002BOSS OWNER\002 peut démarrer des minuteurs, car un minuteur exécute une commande Tcl."
 
 #################################### Ignore ################################
 

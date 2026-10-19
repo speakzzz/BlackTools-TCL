@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792381302"
+set black(current_modif) "1792407242"
 
 ############################### Information files ############################
 
@@ -5721,18 +5721,6 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 			}
 		}
 	}
-}
-
-################### CTCP VERSION REPLY ######################
-
-proc ctcpvers {nickname hostname handle dest key arg} {
-global black
-if {![info exists ::versnick]} {return}
-	set text [split $arg]
-	set chan $::verschan
-	set chan1 $chan
-	set nick $::versnick
-	blacktools:tell $nick "" [nick2hand $nick] $chan $chan1 vers.3 "$nickname $text"
 }
 
 ######################## AutoVoice ########################

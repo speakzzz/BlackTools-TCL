@@ -96,7 +96,15 @@ if {$found_pid == "1"} {
 	blacktools:tell $nick $host $hand $chan $chan1 timer.6 $pid
 		}
 	}
-start {		
+start {
+#Fork change (speakzzz, 2026): a timer runs its text as a Tcl command, the
+#same as !tcl, so only the BOSS OWNER may start one. Before this an OWNER
+#could run any command (and so make himself BOSS or reach the shell).
+#Listing and killing timers stay as they were.
+if {![matchattr $hand n]} {
+	blacktools:tell $nick $host $hand $chan $chan1 timer.9 none
+	return
+}
 	set return_time [time_return_minute $pid]
 	set found_timer 0
 if {$timer_args == "" || $return_time == "-1"} {

@@ -907,6 +907,7 @@ set black(say.ro.set.7) "\005\[BT\]\005 Nu am putut seta \002%msg.1%\001 \004%ms
 set black(say.ro.set.8) "\005\[BT\]\005 Am setat \001%msg.1%\001 \004%msg.set%\004 pentru \002%chan%\002."
 set black(say.ro.set.9) "\005\[BT\]\005 Este deja setat \001%msg.1%\001 \004%msg.set%\004"
 set black(say.ro.set.14) "\005\[BT\]\005 Setare invalida."
+set black(say.ro.egg.5) "\005\[BT\]\005 EROARE: Nu exista limba \002%msg.8%\002. Disponibile: \002%msg.1%\002"
 
 #################################### unSet #################################
 
@@ -926,6 +927,7 @@ set black(say.ro.timer.5) "\005\[BT\]\005 Timer-ul avand pid-ul \002%msg.1%\002 
 set black(say.ro.timer.6) "\005\[BT\]\005 Nu exista timer-ul cu pid-ul \002%msg.1%\002"
 set black(say.ro.timer.7) "\005\[BT\]\005 Am pornit timer cu pid \002%msg.1%\002"
 set black(say.ro.timer.8) "\005\[BT\]\005 Un timer ce are acelasi proces este deja pornit."
+set black(say.ro.timer.9) "\005\[BT\]\005 Doar \002BOSS OWNER\002 poate porni timere, deoarece un timer executa o comanda Tcl."
 
 #################################### Ignore ################################
 

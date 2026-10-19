@@ -1,3 +1,21 @@
+ 2026-10-19 speakzzz
+  * Version 3.1.11
+  * Security: !timer start is BOSS OWNER only. A timer runs its text as a
+    Tcl command (the same as !tcl), so an OWNER could run anything and
+    make himself BOSS or reach the shell. !timer list and kill unchanged
+  * langcheck.tcl also reads the scripts and lists messages the code asks
+    for that English doesn't have (the command stops there in every
+    language). Fixed what it found:
+    - !man lang stopped after its first line and never listed the
+      languages (man.487_2, now man.487_1, which also lists FR now)
+    - !man ho never showed the mass halfop line (man.884_5, now man.884_1)
+    - !ho - did nothing while X was on the channel (it tried to send a
+      message that never existed); it now skips X and carries on
+    - !set defaultlang with an unknown language stopped with an error;
+      it now says which languages are available (egg.5)
+    - removed code that could never run: a CTCP VERSION reply handler,
+      two !show entries for the old GuestNick feature, and a second
+      backchan check that the first one already covers
  2026-10-18 speakzzz
   * Version 3.1.10
   * New tools/langcheck.tcl: a translation checker run from the shell

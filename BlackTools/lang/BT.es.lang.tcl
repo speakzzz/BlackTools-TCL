@@ -906,6 +906,7 @@ set black(say.es.set.7) "\005\[BT\]\005 ERROR: No se puede establecer \001%msg.1
 set black(say.es.set.8) "\005\[BT\]\005 Set \001%msg.1%\001 \004%msg.set%\004 para \002%chan%\002"
 set black(say.es.set.9) "\005\[BT\]\005 \001%msg.1%\001 ya está configurado en \002%msg.set%\002"
 set black(say.es.set.14) "\005\[BT\]\005 Configuración inválida."
+set black(say.es.egg.5) "\005\[BT\]\005 FALLÓ: No existe el idioma \002%msg.8%\002. Disponibles: \002%msg.1%\002"
 
 #################################### unSet #################################
 
@@ -925,6 +926,7 @@ set black(say.es.timer.5) "\005\[BT\]\005 El temporizador con pid \002%msg.1%\00
 set black(say.es.timer.6) "\005\[BT\]\005 No hay tal temporizador que coincida con pid \002%msg.1%\002"
 set black(say.es.timer.7) "\005\[BT\]\005 El temporizador comenzó con pid \002%msg.1%"
 set black(say.es.timer.8) "\005\[BT\]\005 Ya hay un inicio de temporizador de ese proceso."
+set black(say.es.timer.9) "\005\[BT\]\005 Solo el \002BOSS OWNER\002 puede iniciar temporizadores, porque un temporizador ejecuta un comando Tcl."
 
 #################################### Ignore ################################
 

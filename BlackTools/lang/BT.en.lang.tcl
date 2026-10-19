@@ -907,6 +907,7 @@ set black(say.en.set.7) "\005\[BT\]\005 FAILED: Unable to set \001%msg.1%\001 \0
 set black(say.en.set.8) "\005\[BT\]\005 Set \001%msg.1%\001 \004%msg.set%\004 for \002%chan%\002"
 set black(say.en.set.9) "\005\[BT\]\005 \001%msg.1%\001 is already set to \002%msg.set%\002"
 set black(say.en.set.14) "\005\[BT\]\005 Invalid setting."
+set black(say.en.egg.5) "\005\[BT\]\005 FAILED: There is no language \002%msg.8%\002. Available: \002%msg.1%\002"
 
 #################################### unSet #################################
 
@@ -926,6 +927,7 @@ set black(say.en.timer.5) "\005\[BT\]\005 Timer with pid \002%msg.1%\002 was kil
 set black(say.en.timer.6) "\005\[BT\]\005 There is no such timer matching pid \002%msg.1%\002"
 set black(say.en.timer.7) "\005\[BT\]\005 Timer started with pid \002%msg.1%"
 set black(say.en.timer.8) "\005\[BT\]\005 There is already a timer started of that process."
+set black(say.en.timer.9) "\005\[BT\]\005 Only the \002BOSS OWNER\002 can start timers, because a timer runs a Tcl command."
 
 #################################### Ignore ################################
 

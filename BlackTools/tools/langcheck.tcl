@@ -11,6 +11,9 @@
 #   - messages set twice in the same file (only the last one is used)
 #   - translations that leave out a %placeholder% the English text uses, or
 #     use one the bot doesn't fill in for that message
+# and it reads the scripts themselves to list:
+#   - messages the code asks for that English doesn't have at all (the
+#     command stops at that point in every language)
 #
 # It only reads the files; nothing is changed and the bot doesn't need to run.
 #
@@ -144,6 +147,7 @@ foreach path [lsort [glob -nocomplain -directory $langdir BT.*.lang.tcl]] {
 
 set status 0
 set total_missing 0
+set all_eng [dict create]
 
 foreach kind {messages manual} {
 	if {![dict exists $files $kind en]} {
@@ -161,7 +165,7 @@ foreach kind {messages manual} {
 	set enbad {}
 	dict for {k v} $ref {
 		lassign [split_key $k] l rest
-		if {$l eq "en"} { dict set eng $rest $v } else { lappend enbad $k }
+		if {$l eq "en"} { dict set eng $rest $v; dict set all_eng $rest 1 } else { lappend enbad $k }
 	}
 	# Problems in the English file itself
 	set enpath [dict get $files $kind en]
@@ -261,6 +265,65 @@ foreach kind {messages manual} {
 				puts "     say.$l.$rest: [join $why {; }]"
 			}
 		}
+	}
+}
+
+# Messages the scripts ask for. Only names written out in the code are
+# checked; names built at run time (such as $type.2) can't be.
+proc code_keys {base} {
+	set used [dict create]
+	set word {"(?:[^"\\]|\\.)*"|\[[^\]]*\]|\S+}
+	set files {}
+	foreach dir [list $base {*}[glob -nocomplain -types d -directory $base *]] {
+		if {[file tail $dir] eq "lang"} continue
+		lappend files {*}[glob -nocomplain -directory $dir *.tcl]
+	}
+	foreach f [lsort $files] {
+		set fh [open $f r]
+		fconfigure $fh -encoding binary
+		set n 0
+		while {[gets $fh line] >= 0} {
+			incr n
+			set found {}
+			# blacktools:tell nick host hand chan chan1 KEY arg  (also tell_v2, tell:h)
+			# blacktools:tell:cmd nick host hand chan chan1 prv KEY reply
+			# blacktools:tell:dcc KEY arg
+			foreach {cmd pos} {blacktools:tell 5 blacktools:tell_v2 5 blacktools:tell:h 5 blacktools:tell:cmd 6 blacktools:tell:dcc 0} {
+				set at [string first "$cmd " $line]
+				while {$at >= 0} {
+					set rest [string range $line [expr {$at + [string length $cmd] + 1}] end]
+					set words [regexp -all -inline -- $word $rest]
+					if {[llength $words] > $pos} { lappend found [lindex $words $pos] }
+					set at [string first "$cmd " $line [expr {$at + 1}]]
+				}
+			}
+			# $black(say.$getlang.KEY) used directly
+			foreach {- k} [regexp -all -inline {black\(say\.\$[A-Za-z_]+\.([A-Za-z0-9_.]+)\)} $line] {
+				lappend found $k
+			}
+			foreach k $found {
+				# only literal names like seen.41 or man.487_1
+				if {![regexp {^[A-Za-z_]+[A-Za-z0-9_]*\.[A-Za-z0-9_.]+$} $k]} continue
+				dict lappend used $k "[file tail $f]:$n"
+			}
+		}
+		close $fh
+	}
+	return $used
+}
+
+if {$status != 2} {
+	set nocode {}
+	dict for {k where} [code_keys $base] {
+		if {![dict exists $all_eng $k]} { lappend nocode [list $k $where] }
+	}
+	if {[llength $nocode]} {
+		puts "== Used by the scripts but missing from English ([llength $nocode]):"
+		foreach x [lsort -dictionary -index 0 $nocode] {
+			lassign $x k where
+			puts "     $k   ([join [lsort -unique $where] {, }])"
+		}
+		incr total_missing [llength $nocode]
 	}
 }
 

@@ -633,10 +633,10 @@ if {[string equal -nocase $arg "-"]} {
 	foreach hopnick [chanlist $chan] {
 if {![ishalfop $hopnick $chan]} { continue }
 if {[isbotnick $hopnick]} { continue }
-if {[onchan $black(chanserv) $chan] && ![setting:get $chan xonly]} {
-	blacktools:tell $nick $host $hand $chan $chan1 massdeop.429 $black(chanserv)
-	return
-		}
+#Fork change (speakzzz, 2026): this used to stop with a message that was
+#never written (massdeop.429), so "ho -" did nothing while X was on the
+#channel. X is never a halfop; just make sure it is left alone.
+if {[string equal -nocase $hopnick $black(chanserv)]} { continue }
 if {$xban == "0"} {
 	pushmode $chan -h $hopnick	
 		} else { return }
@@ -1864,6 +1864,8 @@ if {$return == "0"} {
 	} elseif {$return == "1"} {
 	blacktools:tell $nick $host $hand $chan $chan1 set.1 "$flags $type"
 	return
+	} elseif {$return == "3"} {
+	return
 	} else {
 	blacktools:tell $nick $host $hand $chan $chan1 set.9 "$flags $type"
 	return
@@ -2113,12 +2115,6 @@ if {[string equal -nocase $flags_2 "banmask"] || [string equal -nocase $flags "b
 if {$why == "1"} { blacktools:tell $nick $host $hand $chan $chan1 set.7 "$flags $type"
 	return
 } else {
-if {[string equal -nocase $flags "backchan"]} {
-if {![validchan $type]} {
-	blacktools:tell $nick $host $hand $chan $chan1 set.12 $type
-	return
-	}	
-}
 	channel set $chan $flags $type ; blacktools:tell $nick $host $hand $chan $chan1 set.8 "$flags $type" 
 		}
 	}
@@ -2728,12 +2724,6 @@ clonescan-maxclone {
 
 clonescan-action {
 	set replyinfo "message"
-				}
-guestnick-message {
-	set replyinfo $black(say.$getlang.guestnick.10)
-				}
-guestnick-msgmethod {
-	set replyinfo $black(guestnick:msgmethod)
 				}
 voiceonmsg-idletime {
 	set replyinfo $black(voiceonmsg:idletime)

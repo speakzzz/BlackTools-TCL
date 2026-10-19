@@ -199,17 +199,20 @@ if {[config:same $return $result]} {
 	return 2
 }
 	set found_lang 0
-	set get_lang_files [glob -directory "$black(dirname)/BlackTools/lang" "*lang.tcl"]
+	set available {}
+	set get_lang_files [glob -directory "$black(dirname)/BlackTools/lang" "BT.??.lang.tcl"]
 foreach lang $get_lang_files {
-	set split_lang [split $lang "."]
-	set the_lang [lindex $split_lang 1]
+	set the_lang [lindex [split [file tail $lang] "."] 1]
+	lappend available [string toupper $the_lang]
 if {[string equal -nocase $result $the_lang]} {
 	set found_lang 1
 	}
 }
+#Fork change (speakzzz, 2026): say which languages exist instead of
+#stopping with an error (the egg.5 message never existed).
 if {$found_lang == 0} {
-	blacktools:tell $unick $host $hand $chan $chan1 egg.5 "defaultlang $result"
-	return
+	blacktools:tell $unick $host $hand $chan $chan1 egg.5 "[join [lsort $available] ,] $result"
+	return 3
 }
 	set error [config:save $tcl_config "set black(default_lang) \"*\"" "set black(default_lang) \"[config:quote $result]\""]
 if {$error == "0"} {

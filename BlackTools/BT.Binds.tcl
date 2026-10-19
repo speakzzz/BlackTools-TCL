@@ -81,7 +81,6 @@ bind join - * auto:join
 bind join - * private:module
 bind join - * reason:details:module
 bind join - * troll:show
-bind ctcr - VERSION ctcpvers
 bind mode - *+o* dontoppublic
 bind mode - *-o* dontdeoppublic
 
