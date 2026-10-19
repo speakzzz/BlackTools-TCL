@@ -1,4 +1,16 @@
  2026-10-19 speakzzz
+  * Version 3.1.13
+  * 11 bot settings changed with !set were only saved to BlackTools.tcl,
+    so the bot kept using the old value until the next rehash while
+    replying "Set". They now take effect at once: userlogin, userpass,
+    chanserv, hostchanserv, homechan, floodmenuprot, userfloodmsgprot,
+    massfloodmsgprot, massfloodsilencetime, floodnotcprot, pagelimit.
+    After setting the X login, !login uses the new details right away.
+  * Since those values are used at once, a wrong format is refused
+    (set.16) and nothing is saved: the flood settings need
+    <number>:<seconds> such as 3:5, massfloodsilencetime and pagelimit
+    a whole number above 0.
+ 2026-10-19 speakzzz
   * Version 3.1.12
   * Security: the X password is no longer shown. !set userpass is only
     accepted by private message (in a channel everyone would see it), the

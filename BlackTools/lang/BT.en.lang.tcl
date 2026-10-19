@@ -908,6 +908,7 @@ set black(say.en.set.8) "\005\[BT\]\005 Set \001%msg.1%\001 \004%msg.set%\004 fo
 set black(say.en.set.9) "\005\[BT\]\005 \001%msg.1%\001 is already set to \002%msg.set%\002"
 set black(say.en.set.14) "\005\[BT\]\005 Invalid setting."
 set black(say.en.set.15) "\005\[BT\]\005 FAILED: For safety, the X password can only be set by private message: \002/msg %botnick% set userpass <password>\002. If you typed it here, change it on X as well."
+set black(say.en.set.16) "\005\[BT\]\005 FAILED: \001%msg.1%\001 needs a value like \002%msg.8%\002. Nothing was changed."
 set black(say.en.history.1) "\005\[BT\]\005 Latest \002%msg.1%\002 change(s) on \002%chan%\002, newest first:"
 set black(say.en.history.2) "%msg.1% %msg.2% \002%msg.3%\002: %msg.9%"
 set black(say.en.history.3) "\005\[BT\]\005 Nothing recorded on \002%chan%\002 yet."

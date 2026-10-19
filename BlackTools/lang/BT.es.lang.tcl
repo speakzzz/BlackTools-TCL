@@ -907,6 +907,7 @@ set black(say.es.set.8) "\005\[BT\]\005 Set \001%msg.1%\001 \004%msg.set%\004 pa
 set black(say.es.set.9) "\005\[BT\]\005 \001%msg.1%\001 ya está configurado en \002%msg.set%\002"
 set black(say.es.set.14) "\005\[BT\]\005 Configuración inválida."
 set black(say.es.set.15) "\005\[BT\]\005 FALLÓ: Por seguridad, la contraseña de X solo se puede establecer por mensaje privado: \002/msg %botnick% set userpass <contraseña>\002. Si la escribiste aquí, cámbiala también en X."
+set black(say.es.set.16) "\005\[BT\]\005 FALLÓ: \001%msg.1%\001 necesita un valor como \002%msg.8%\002. No se cambió nada."
 set black(say.es.history.1) "\005\[BT\]\005 Últimos \002%msg.1%\002 cambios en \002%chan%\002, los más recientes primero:"
 set black(say.es.history.2) "%msg.1% %msg.2% \002%msg.3%\002: %msg.9%"
 set black(say.es.history.3) "\005\[BT\]\005 Todavía no hay nada registrado en \002%chan%\002."

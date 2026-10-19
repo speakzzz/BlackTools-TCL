@@ -908,6 +908,7 @@ set black(say.ro.set.8) "\005\[BT\]\005 Am setat \001%msg.1%\001 \004%msg.set%\0
 set black(say.ro.set.9) "\005\[BT\]\005 Este deja setat \001%msg.1%\001 \004%msg.set%\004"
 set black(say.ro.set.14) "\005\[BT\]\005 Setare invalida."
 set black(say.ro.set.15) "\005\[BT\]\005 EROARE: Din motive de siguranta, parola X se poate seta doar prin mesaj privat: \002/msg %botnick% set userpass <parola>\002. Daca ai scris-o aici, schimb-o si pe X."
+set black(say.ro.set.16) "\005\[BT\]\005 EROARE: \001%msg.1%\001 are nevoie de o valoare de forma \002%msg.8%\002. Nu s-a modificat nimic."
 set black(say.ro.history.1) "\005\[BT\]\005 Ultimele \002%msg.1%\002 modificari pe \002%chan%\002, cele mai noi primele:"
 set black(say.ro.history.2) "%msg.1% %msg.2% \002%msg.3%\002: %msg.9%"
 set black(say.ro.history.3) "\005\[BT\]\005 Nu s-a inregistrat nimic pe \002%chan%\002 deocamdata."

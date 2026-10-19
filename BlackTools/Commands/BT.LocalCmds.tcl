@@ -1878,6 +1878,9 @@ if {$return == "0"} {
 	return
 	} elseif {$return == "3"} {
 	return
+	} elseif {$return == "4"} {
+	blacktools:tell $nick $host $hand $chan $chan1 set.16 "$flags [egg:format $flags]"
+	return
 	} else {
 	blacktools:tell $nick $host $hand $chan $chan1 set.9 "$flags $shown"
 	return

@@ -22,9 +22,41 @@ if {[lsearch -exact [string tolower $settings] [string tolower $setting]] < 0} {
 	} else { return 1 }
 }
 
+#Fork change (speakzzz, 2026): these settings used to be saved to
+#BlackTools.tcl only, so the bot kept the old value until the next rehash
+#while replying "Set". egg:apply also updates the value in use, exactly as
+#a rehash would read it back from the file.
+proc egg:apply {var value} {
+	global black
+	set black($var) [regsub -all {[\x00-\x1f\x7f]} $value ""]
+}
+
+#The format a setting needs, or "" if it takes any text. Since a value is
+#used straight away, a typo must not reach the flood protection.
+proc egg:format {setting} {
+switch -- [string tolower $setting] {
+	floodmenuprot - userfloodmsgprot - massfloodmsgprot - floodnotcprot { return "3:5" }
+	massfloodsilencetime { return "60" }
+	pagelimit { return "5" }
+	}
+	return ""
+}
+
+proc egg:valid {setting value} {
+	set example [egg:format $setting]
+if {$example == ""} { return 1 }
+if {[string match "*:*" $example]} {
+	return [regexp {^[1-9][0-9]*:[1-9][0-9]*$} $value]
+}
+	return [regexp {^[1-9][0-9]*$} $value]
+}
+
 proc egg:process {unick host hand chan chan1 setting result} {
 	global black config nick botnick
 	set tcl_config $black(tclconfig)
+if {![egg:valid $setting $result]} {
+	return 4
+}
 	
 switch [string tolower $setting] {
 
@@ -64,6 +96,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply homechan $result
 	return 1
 }
 
@@ -76,6 +109,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply chanserv $result
 	return 1
 }
 
@@ -88,6 +122,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply hostchanserv $result
 	return 1
 }
 
@@ -100,6 +135,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply username $result
 	return 1
 }
 
@@ -112,6 +148,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply password $result
 	return 1
 }
 
@@ -276,6 +313,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply antiflood:cmd $result
 	return 1
 }
 
@@ -288,6 +326,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply msg:flood $result
 	return 1
 }
 
@@ -300,6 +339,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply mass:msg:flood $result
 	return 1
 }
 
@@ -312,6 +352,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply mass:msg:silence_time $result
 	return 1
 }
 
@@ -324,6 +365,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply notice:flood $result
 	return 1
 }
 
@@ -336,6 +378,7 @@ if {[config:same $return $result]} {
 if {$error == "0"} {
 	return 0
 	}
+	egg:apply modul:nr:entries $result
 	return 1
 }
 

@@ -923,6 +923,7 @@ set black(say.fr.set.8) "\005\[BT\]\005 Défini \001%msg.1%\001 \004%msg.set%\00
 set black(say.fr.set.9) "\005\[BT\]\005 \001%msg.1%\001 est déjà défini sur \002%msg.set%\002"
 set black(say.fr.set.14) "\005\[BT\]\005 Paramètre invalide."
 set black(say.fr.set.15) "\005\[BT\]\005 ÉCHEC : Par sécurité, le mot de passe X ne peut être défini que par message privé : \002/msg %botnick% set userpass <mot de passe>\002. Si vous l'avez tapé ici, changez-le aussi sur X."
+set black(say.fr.set.16) "\005\[BT\]\005 ÉCHEC : \001%msg.1%\001 attend une valeur comme \002%msg.8%\002. Rien n'a été modifié."
 set black(say.fr.history.1) "\005\[BT\]\005 Les \002%msg.1%\002 dernières modifications sur \002%chan%\002, les plus récentes d'abord :"
 set black(say.fr.history.2) "%msg.1% %msg.2% \002%msg.3%\002 : %msg.9%"
 set black(say.fr.history.3) "\005\[BT\]\005 Rien n'a encore été enregistré sur \002%chan%\002."
