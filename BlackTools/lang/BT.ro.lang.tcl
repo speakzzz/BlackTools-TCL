@@ -73,7 +73,6 @@ set black(say.ro.gl.invalidlevel) "\005\[BT\]\005 Nu poti aplica ban pe nivelul 
 set black(say.ro.gl.nounban) "\005\[BT\]\005 Nu poti scoate banul \002%msg.1%\002, deoarece este de nivel mai mare ca al tau."
 set black(say.ro.gl.hasop) "\005\[BT\]\005 Are OP si nu pot executa."
 set black(say.ro.gl.notonline) "\005\[BT\]\005 \002%msg.1%\002 nu este ONLINE."
-set black(say.ro.gl.xonlyban) "\005\[BT\]\005 Am adaugat ban pe \001%msg.1%\001 prin \002%msg.2%\002 pe \001%chan%\001 \[Modul \002XonlY\002 activat.\]"
 set black(say.ro.gl.showline) "#\004%msg.1%\004 %msg.8%"
 set black(say.ro.gl.wordexists) "\005\[BT\]\005 Cuvantul \001%msg.1%\001 este deja in lista canalului \002%chan%\002."
 set black(say.ro.gl.noset) "N/A"
@@ -208,7 +207,7 @@ set black(say.ro.badquitpart.6) "\005\[BT\]\005 Am adaugat in lista de badquitpa
 set black(say.ro.antibadquitpart.7) "\005\[BT\]\005 Lista de \002badquitpart\002 pentru %chan% este:"
 set black(say.ro.antibadquitpart.8) "\005\[BT\]\005 Pentru afisarea urmatoarelor inregistrari foloseste: \001%char%badquitpart list -next\001 (\002%counter%\002 inregistrari ramase)"
 set black(say.ro.antibadquitpart.9) "\005\[BT\]\005 Pentru afisarea urmatoarelor inregistrari foloseste: \001%char%badquitpart %chan% list -next\001 (\002%counter%\002 inregistrari ramase)"
-set black(say.ro.antibadquitpart.10) "\005\[BT\]\005 Am adaugat in lista de badquitpart ca exceptie \001%msg.8%\001 cu nr.\002%msg.1%\002 pentru \002%chan%\002."
+set black(say.ro.badquitpart.10) "\005\[BT\]\005 Am adaugat in lista de badquitpart ca exceptie \001%msg.8%\001 cu nr.\002%msg.1%\002 pentru \002%chan%\002."
 
 ################################### AntiJoinPart ###############################
 
@@ -377,7 +376,7 @@ set black(say.ro.topwords.22) "TopWords Total: (\001%msg.1%\001) Host: \001%msg.
 set black(say.ro.topwords.23) "\005\[BT\]\005 Nu sunt persoane in top pe \002%chan%\002 in aceasta saptamana."
 set black(say.ro.topwords.24) "\002TopWords\002 Aceasta Saptamana: \001%msg%\001"
 set black(say.ro.topwords.25) "(Pentru urmatoarele clasari, tastati: \002%char%topwords\002 %chan% week -next\002)"
-set black(say.ro.topwords.26) "(Pentru urmatoarele clasari, tastati: \002%char%topwords week -next\002)" 
+set black(say.ro.topwords.26) "(Pentru urmatoarele clasari, tastati: \002%char%topwords %chan% week -next\002)"
 set black(say.ro.topwords.27) "\005\[BT\]\005 Nu am gasit inregistrari legate de \002%msg.1%\002, cred ca nu a vorbit ;("
 set black(say.ro.topwords.28) "TopWords Aceasta Saptamana: (\001%msg.1%\001) Host: \001%msg.2%\001 Cuvinte: \002%msg.3%\002 Linii: \002%msg.4%\002 Litere: \002%msg.12%\002 Zambete: \002%msg.13%\002 Actiuni: \002%msg.15%\002 Intrebari: \002%msg.17%\002 (Locul \002%msg.19%\002/\002%msg.21%\002 useri)."
 set black(say.ro.topwords.29) "\005\[BT\]\005 Am resetat topwords pentru \001%msg.1%\001 de pe \002%chan%\002."
@@ -505,7 +504,7 @@ set black(say.ro.seen.7) "\005\[BT\]\005 %msg.1% este pe %chan% deja"
 set black(say.ro.seen.8) "nu stiu exact cat a stat."
 set black(say.ro.seen.9) "dupa ce a stat %staytime% pe %chan%."
 set black(say.ro.seen.10) " %newnick% este inca pe %chan%."
-set black(say.ro.seen.11) " Nu il vad pe %newnick% momentan pe %chan%"
+set black(say.ro.seen.11) " Nu il vad pe \002%userentry%\002 momentan pe \002%chan%\002"
 set black(say.ro.seen.12) "\005\[BT\]\005 %entry% (%host%) a iesit de pe %chan% acum %output% %date% zicand: \"%reason%\", %staymsg%"
 set black(say.ro.seen.13) "\005\[BT\]\005 %entry% (%host%) a iesit de pe IRC acum %output% %date% zicand: \"%reason%\", %staymsg%"
 set black(say.ro.seen.14) "\005\[BT\]\005 %entry% (%host%) a intrat pe %chan% acum %output% %date%.%nowon%"
@@ -535,7 +534,7 @@ set black(say.ro.seen.37) "\005\[BT\]\005 Am gasit mai mult de (%num%) rezultate
 set black(say.ro.seen.38) "\005\[BT\]\005 Am gasit mai mult de (%num%) rezultate. Cel mai recent \002%latest%\002 (%host%) si-a schimbat nick-ul in %newnick% acum %output% %date%. %nowon%"
 set black(say.ro.seen.39) "\005\[BT\]\005 Salut \002%msg.1%\002, ar trebui sa stii ca \001%msg.2%\001 te-a cautat cu \002seen\002 pe \002%chan%\002 in data de \002%msg.3%\002."
 set black(say.ro.seen.40) "\005\[BT\]\005 Am gasit mai mult de (%num%) rezultate. Cel mai recent \002%latest%\002 (%host%) a fost vazut ultima oara pe %chan%.%nowon%"
-set black(say.ro.seen.41) "\005\[BT\]\005 Am gasit mai mult de (100) rezultate. Te rog restructureaza cautarea."
+set black(say.ro.seen.41) "\005\[BT\]\005 Am gasit mai mult de (\002100\002) rezultate. Te rog restructureaza cautarea."
 
 ################################# Greet ######################################
 
@@ -942,7 +941,7 @@ set black(say.ro.ignore.9) "\005\[BT\]\005 Am scos ignore pentru \002%msg.1%\002
 
 set black(say.ro.show.4) "\005\[BT\]\005 \002%msg.1%\002 este setat la: \001%msg.2%\001. Timp pana la urmatorul timer : \001%msg.3%\001 minute"
 set black(say.ro.show.5) "\005\[BT\]\005 Nu am putut obtine informatii despre \002%msg.1%\002."
-set black(say.ro.show.6) "\005\[BT\]\005 \002%msg.1%\002 este setat la: \001%msg.8%\001"
+set black(say.ro.show.6) "\005\[BT\]\005 \002%msg.1%\002 este setat la: \001%msg.8%\001 pe \002%chan%\002."
 set black(say.ro.show.7) "\005\[BT\]\005 Flagul \001%msg.1%\001 este activat pe \002%chan%\002."
 set black(say.ro.show.8) "\005\[BT\]\005 Flagul \001%msg.1%\001 este dezactivat pe \002%chan%\002."
 

@@ -1,4 +1,23 @@
  2026-10-18 speakzzz
+  * Version 3.1.10
+  * New tools/langcheck.tcl: a translation checker run from the shell
+    (tclsh BlackTools/tools/langcheck.tcl). It compares every language
+    file with English and lists missing messages, misspelled names,
+    messages set twice, and %placeholders% a translation leaves out.
+  * Fixed everything it found:
+    - FR: !seen and !info failed (seen.27-41 and info.20 were missing),
+      the SILENCE messages were filed under the wrong name, an untranslated
+      English copy of the Private messages removed, vote list shows Expires
+    - ES: added autoupdate.49 and gl.noxonly; fixed broken placeholders
+      ("% msg.1%", "% chan%", "char%") that showed up literally, the
+      voiceme text that was split over several lines, unfinished unban
+      replies, ban replies now show the ban ID, stray "005" text removed
+    - RO: badquitpart.10 had the wrong name, manual for
+      badchan-floodcontrol added, small manual gaps filled
+    - All: autobroadcast.6 showed no number (it used %msg.2%), seen.41
+      showed a literal %num%, private.11 printed "none", ub.4 had a
+      colour code instead of bold, man.1181 showed "%set%set"
+ 2026-10-18 speakzzz
   * Version 3.1.9
   * A refused ban now says why instead of doing nothing silently: the
     mask would match the bot itself (b.15), or a protected user, who

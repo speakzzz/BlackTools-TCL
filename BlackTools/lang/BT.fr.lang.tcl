@@ -94,8 +94,8 @@ set black(say.fr.gl.nobanlevel) "\005\[BT\]\005 Désolé, vous n'avez pas l'acc�
 
 set black(say.fr.antiflood.1) "\005\[BT\]\005 Vous envoyez des requêtes trop rapidement. Calmez-vous et réessayez après \002%msg.1% minute\002. Merci!"
 set black(say.fr.antiflood.2) "\005\[BT\]\005 Ignorer \002%msg.1%\002. Raison: \002%msg.8%\002"
-set black(say.fr.gl.antiflood.3) "\002\005\[BT\]\005\002 SILENCE activé. Raison :\002%msg%\002"
-set black(say.fr.gl.antiflood.4) "\002\005\[BT\]\005\002 SILENCE désactivé."
+set black(say.fr.antiflood.3) "\002\005\[BT\]\005\002 SILENCE activé. Raison :\002%msg%\002"
+set black(say.fr.antiflood.4) "\002\005\[BT\]\005\002 SILENCE désactivé."
 
 #############################################################################################################################
 #                                                                                                                           #
@@ -410,16 +410,6 @@ set black(say.fr.clonescan.11) "\005\[BT\]\005 Recherche de clones en cours..."
 
 ################################# Private ######################################
 
-set black(say.fr.private.1) "\002Restricted\002 Channel"
-set black(say.fr.private.5) "%msg%"
-set black(say.fr.private.6) "\005\[BT\]\005 \001%msg.1%\001 is not added as an exception."
-set black(say.fr.private.7) "\005\[BT\]\005 \001%msg.1%\001 is already in my database. Adding as an exception on \002%chan%\002."
-set black(say.fr.private.8) "\005\[BT\]\005 Added \001%msg.1%\001 with mask \002%msg.2%\002 as an exception on \001%chan%\001."
-set black(say.fr.private.9) "\005\[BT\]\005 Removed \001%msg.1%\001 from my \002Exception List\002 on \002%chan%\002."
-set black(say.fr.private.10) "\005\[BT\]\005 \001%msg.1%\001 added as an exception on \002%chan%\002."
-set black(say.fr.private.11) "\005\[BT\]\005 Users in \002Exception List\002 from \002%chan%\002 are: \001%msg%\001."
-
-
 set black(say.fr.private.1) "\002Canal\002 Restreint"
 set black(say.fr.private.5) "%msg%"
 set black(say.fr.private.6) "\005\[BT\]\005 \001%msg.1%\001 n'est pas ajouté comme exception."
@@ -427,7 +417,7 @@ set black(say.fr.private.7) "\005\[BT\]\005 \001%msg.1%\001 est déjà dans ma b
 set black(say.fr.private.8) "\005\[BT\]\005 Ajout de \001%msg.1%\001 avec le masque \002%msg.2%\002 en tant qu'exception sur \001%chan%\001."
 set black(say.fr.private.9) "\005\[BT\]\005 Suppression de \001%msg.1%\001 de ma \002Liste d'Exceptions\002 sur \002%chan%\002."
 set black(say.fr.private.10) "\005\[BT\]\005 \001%msg.1%\001 ajouté en tant qu'exception sur \002%chan%\002."
-set black(say.fr.private.11) "\005\[BT\]\005 Les utilisateurs de la \002Liste d'Exceptions\002 de \002%chan%\002 sont : \001%msg%\001."
+set black(say.fr.private.11) "\005\[BT\]\005 Les utilisateurs de la \002Liste d'Exceptions\002 de \002%chan%\002 sont :"
 
 ################################# BadChan ######################################
 
@@ -484,7 +474,7 @@ set black(say.fr.autobroadcast.2) "\005\[BT\]\005 ÉCHEC : Aucune entrée corres
 set black(say.fr.autobroadcast.3) "\005\[BT\]\005 La \002DIFFUSION AUTOMATIQUE\002 est déjà activée."
 set black(say.fr.autobroadcast.4) "\005\[BT\]\005 Module \002DIFFUSION AUTOMATIQUE\002 activé."
 set black(say.fr.autobroadcast.5) "\005\[BT\]\005 Module \002DIFFUSION AUTOMATIQUE\002 désactivé."
-set black(say.fr.autobroadcast.6) "\005\[BT\]\005 Diffusion automatique avec le numéro \001%msg.2%\001 ajoutée à ma liste de base de données."
+set black(say.fr.autobroadcast.6) "\005\[BT\]\005 Diffusion automatique avec le numéro \001%msg.1%\001 ajoutée à ma liste de base de données."
 set black(say.fr.autobroadcast.7) "#\002%msg.1%\002) %msg.8%"
 set black(say.fr.autobroadcast.8) "\005\[BT\]\005 Il n'y a pas de \002Diffusions Automatiques\002 dans ma liste de base de données..."
 set black(say.fr.autobroadcast.9) "\005\[BT\]\005 La \002Liste des Diffusions Automatiques\002 est :"
@@ -534,6 +524,21 @@ set black(say.fr.seen.23) "\005\[BT\]\005 Trouvé (\002%num%\002) résultats \"%
 set black(say.fr.seen.24) "\005\[BT\]\005 Trouvé (\002%num%\002) résultats \"%entry%\". Plus récemment \002%latest%\002 (%host%) est parti dans *.net *.split il y a %output% environ %date%, %staymsg%"
 set black(say.fr.seen.25) "\005\[BT\]\005 Trouvé (\002%num%\002) résultats \"%entry%\". Plus récemment \002%latest%\002 (%host%) a été expulsé de %chan% il y a %output% environ %date% avec la raison \"%reason%\", %staymsg%"
 set black(say.fr.seen.26) "\005\[BT\]\005 Trouvé (\002%num%\002) résultats \"%entry%\". Plus récemment \002%latest%\002 (%host%) a changé son pseudo pour %newnick% il y a %output% environ %date%.%nowon%"
+set black(say.fr.seen.27) "%msg%"
+set black(say.fr.seen.28) "\005\[BT\]\005 Plus de (%msg.1%) résultats trouvés"
+set black(say.fr.seen.29) "\005\[BT\]\005 %entry% (%host%) a été vu pour la dernière fois sur %chan%.%nowon%"
+set black(say.fr.seen.30) "\005\[BT\]\005 Trouvé (%num%) résultats \"%entry%\". Plus récemment \002%latest%\002 (%host%) a été vu pour la dernière fois sur %chan%.%nowon%"
+set black(say.fr.seen.31) "\005\[BT\]\005 À ma connaissance, \002%userentry%\002 n'a rien dit."
+set black(say.fr.seen.32) "\005\[BT\]\005 À ma connaissance, il y a %output%, \002%userentry%\002 (%host%) a dit sur %chan% : \"%lastmsg%\""
+set black(say.fr.seen.33) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a quitté %chan% il y a %output% environ %date% avec le message : \"%reason%\", %staymsg%"
+set black(say.fr.seen.34) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a quitté IRC il y a %output% environ %date% avec le message : \"%reason%\", %staymsg%"
+set black(say.fr.seen.35) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a rejoint %chan% il y a %output% environ %date%.%nowon%"
+set black(say.fr.seen.36) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) est parti dans *.net *.split il y a %output% environ %date%, %staymsg%"
+set black(say.fr.seen.37) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a été expulsé de %chan% il y a %output% environ %date% avec la raison : \"%reason%\", %staymsg%"
+set black(say.fr.seen.38) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a changé son pseudo pour %newnick% il y a %output% environ %date%. %nowon%"
+set black(say.fr.seen.39) "\005\[BT\]\005 Salut %msg.1%, sache que \002%msg.2%\002 t'a cherché avec \002seen\002 sur \002%chan%\002 il y a environ \002%msg.3%\002."
+set black(say.fr.seen.40) "\005\[BT\]\005 Plus de (\002%num%\002) résultats trouvés. Plus récemment \002%latest%\002 (%host%) a été vu pour la dernière fois sur %chan%.%nowon%"
+set black(say.fr.seen.41) "\005\[BT\]\005 Plus de (\002100\002) résultats trouvés. Merci d'être plus précis."
 
 ################################# Greet ######################################
 
@@ -1089,7 +1094,7 @@ set black(say.fr.info.16) "\005\[BT\]\005 \[GESTIONNAIRE\] \002%msg%\002"
 set black(say.fr.info.17) "\005\[BT\]\005 \[SUJET\] \002%msg%\002"
 set black(say.fr.info.18) "\005\[BT\]\005 \[URL\] \002%msg%\002"
 set black(say.fr.info.19) "\005\[BT\]\005 \[STATUT\] \002%msg%\002"
-set black(sayen.info.20) "\005\[BT\]\005 \[ENREGISTRÉ\] \002%msg.1%\002 (\002%msg.8%\002)"
+set black(say.fr.info.20) "\005\[BT\]\005 \[ENREGISTRÉ\] \002%msg.1%\002 (\002%msg.8%\002)"
 set black(say.fr.info.21) "\005\[BT\]\005 \[STATS\] joins : \002%msg.1%\002 | utilisateurs : \002%msg.2%\002 (%msg.3% avec accès) | bans : \002%msg.4%\002 | vu : \002%msg.5%\002"
 set black(say.fr.info.22) "\001SUSPENDU\001"
 set black(say.fr.info.23) "\001PAS sur le canal\001"
@@ -1455,7 +1460,7 @@ set black(say.fr.vote.21) "\005\[BT\]\005 Veuillez indiquer une option de vote v
 set black(say.fr.vote.22) "\005\[BT\]\005 Il n'y a pas d'option avec la lettre \002%msg.1%\002 pour ce vote. Les options de vote sont : %msg.2%"
 set black(say.fr.vote.23) "\005\[BT\]\005 Vous avez déjà choisi votre option pour ce vote."
 set black(say.fr.vote.24) "\005\[BT\]\005 Vote \002%msg.1%\002 pour le vote avec ID : \002%msg.2%\002 et NOM : \002%msg.3%\002"
-set black(say.fr.vote.25) "\005\[BT\]\005 ID : \002%msg.1%\002 ; Nom du vote : \002%msg.2%\002 ; Ajouté par : \002%msg.7%\002 ; Statut : \002%msg.4%\002 ; Audience : \002%msg.5%\002 ; Détails de la commande : \002%char%vote %msg.1%\002"
+set black(say.fr.vote.25) "\005\[BT\]\005 ID : \002%msg.1%\002 ; Nom du vote : \002%msg.2%\002 ; Ajouté par : \002%msg.7%\002 ; Statut : \002%msg.4%\002 ; Audience : \002%msg.5%\002 ; Expire : \002%msg.6%\002 ; Détails de la commande : \002%char%vote %msg.1%\002"
 set black(say.fr.vote.26) "\005\[BT\]\005 Fin de la liste de vote"
 set black(say.fr.vote.27) "\005\[BT\]\005 Pour voir la suite des votes, tapez : \001%char%vote list -next\001 (\002%counter%\002 votes restants)"
 set black(say.fr.vote.28) "\005\[BT\]\005 Pour voir la suite des votes, tapez : \001%char%vote %chan% list -next\001 (\002%counter%\002 votes restants)"

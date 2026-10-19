@@ -609,7 +609,7 @@ set black(say.ro.man.438_1) "\[MAN\] SINTAXA FOLOSIRE:"
 set black(say.ro.man.438) "\[MAN\] \002%char%set\002 (+/-)seen ; \002%botnick% set\002 (+/-)seen ; \002(PRIVMSG) set\002 <#canal> (+/-)seen"
 set black(say.ro.man.438_2) "\[MAN\] \002%char%seen\002 <nick|ip|host> ; \002%botnick% seen\002 <nick|ip|host> ; \002(PRIVMSG) seen\002 \[#canal\] <nick|ip|host>"
 set black(say.ro.man.438_3) "\[MAN\] \002%char%seen\002 \[global\] <nick|ip|host> ; \002%botnick% seen\002 \[global\] <nick|ip|host> ; \002(PRIVMSG) seen\002 \[#canal|global\] <nick|ip|host>"
-set black(say.ro.man.439) "\[MAN\] Setari optionale: \002seenreply\002"
+set black(say.ro.man.439) "\[MAN\] Setari optionale: \002%char%seenreply\002"
 set black(say.ro.man.440) "Vizualizare setari optiuni: \002%char%show\002 <setare> ; \002%botnick% show\002 <setare> ; \002(PRIVMSG) show\002 <#canal> <setare>"
 
 #Greet
@@ -760,7 +760,7 @@ set black(say.ro.man.631) "\[MAN\] \002%char%ignore list\002 ; \002%char%ignore 
 
 #Chat
 
-set black(say.ro.man.632) "\[MAN\] \002Chat\002 este o comanda prin care va puteti conecta la botnet-ul eggdrop-ului dvs."
+set black(say.ro.man.632) "\[MAN\] \002Chat\002 este o comanda prin care va puteti conecta la botnet-ul eggdrop-ului dvs. (la fel ca \002/CTCP CHAT\002 %botnick%)."
 set black(say.ro.man.633) "\[MAN\] SINTAXA FOLOSIRE:"
 set black(say.ro.man.634) "\[MAN\] \002%char%chat\002 ; %botnick% chat ; \002(PRIVMSG) chat\002"
 
@@ -843,7 +843,7 @@ set black(say.ro.man.678) "\[MAN\] \002%char%addinfo\002 <text|reset> ; \002%bot
 
 set black(say.ro.man.679) "\[MAN\] \002Invite\002 este o comanda care data pe PRIVAT pentru a primi invite pe un anumit canal."
 set black(say.ro.man.680) "\[MAN\] SINTAXA FOLOSIRE:"
-set black(say.ro.man.680) "\[MAN\] \002%char%invite\002 <#canal> <nick> ; \002%botnick% invite\002 <#canal> <nick> ; \002(PRIVMSG) invite\002 <#canal> <nick>"
+set black(say.ro.man.680_1) "\[MAN\] \002%char%invite\002 <#canal> <nick> ; \002%botnick% invite\002 <#canal> <nick> ; \002(PRIVMSG) invite\002 <#canal> <nick>"
 
 #Say
 
@@ -1145,7 +1145,7 @@ set black(say.ro.man.963) "\[MAN\] Vizualizare setari optiuni: \002%char%show\00
 #SeenReply
 
 set black(say.ro.man.964) "\[MAN\] \002SeenReply\002 este o extra optiune a modulului \002seen\002 care va face ca eggdrop-ul sa trimita un mesaj de informare celui care tocmai a fost cautat prin comanda \002%char%seen\002."
-set black(say.ro.man.965) "\[MAN\] Respectivul mesaj de avertizare include informatii despre persoana care l-a cautat, precum si data, ora sau canalul unde a avut loc cautarea."
+set black(say.ro.man.965) "\[MAN\] Respectivul mesaj de avertizare include informatii despre persoana care l-a cautat, precum si data, ora sau canalul unde a fost folosita comanda \002%char%seen\002."
 set black(say.ro.man.966) "\[MAN\] SINTAXA FOLOSIRE:"
 set black(say.ro.man.967) "\[MAN\] \002%char%set\002 (+/-)seenreply ; \002%botnick% set\002 (+/-)seenreply ; \002(PRIVMSG) set\002 <#canal> (+/-)seenreply"
 
@@ -1279,7 +1279,7 @@ set black(say.ro.man.1113_1) "\[MAN\] \002%char%set away\002; \002%botnick% set 
 set black(say.ro.man.1115) "\[MAN\] \002DefaultOutput\002 este o comanda prin care puteti schimba metoda implicita de primire a mesajelor de la eggdrop (metoda implicita este \002CHAN\002)."
 set black(say.ro.man.1115_1) "\[MAN\] Metode disponibile: \0020\002 = NOTICE ; \002 1\002 = CHAN ; \002 2\002 = PRIVMSG"
 set black(say.ro.man.1116) "\[MAN\] SINTAXA FOLOSIRE:"
-set black(say.ro.man.1117) "\[MAN\] \002%char%set defaultoutput\002 <metoda> ; \002(PRIVMSG) set defaultoutput\002 <metoda>"
+set black(say.ro.man.1117) "\[MAN\] \002%char%set defaultoutput\002 <metoda> ; \002%botnick% set defaultoutput\002 <metoda> ; \002(PRIVMSG) set defaultoutput\002 <metoda>"
 
 #Egg FloodMenuProt
 
@@ -1492,6 +1492,13 @@ set black(say.ro.man.1270) "\[MAN\] Variabile disponibile: \002%countchan%\002 =
 set black(say.ro.man.1271) "\[MAN\] SYNTAXA FOLOSIRE:"
 set black(say.ro.man.1272) "\[MAN\] \002%char%greet\002 set <text> ; \002%botnick% greet\002 set <text> ; \002(PRIVMSG) greet\002 <#canal> set <text>"
 set black(say.ro.man.1273) "\[MAN\] \001Exemplu\001: Bine ai venit %nick%, esti persoana cu numarul %count% care intra pe %countchan% din %time%."
+
+#BadChan-FloodControl
+
+set black(say.ro.man.1274) "\[MAN\] \002BadChan-FloodControl\002 este o optiune suplimentara a modulului \002BadChan\002, care protejeaza eggdrop-ul de actiunile de tip \002massjoin\002 oprind scanarea userilor la intrare pentru o perioada de\002 30\002 de secunde. Dupa expirarea acestei perioade, modulul \002BadChan\002 isi reia functionarea normala."
+set black(say.ro.man.1275) "\[MAN\] SINTAXA FOLOSIRE:"
+set black(say.ro.man.1276) "\[MAN\] \002%char%set\002 (+/-)badchan-floodcontrol <nr. intrari>:<nr. secunde> ; \002%botnick% set\002 (+/-)badchan-floodcontrol <nr. intrari>:<nr. secunde> ; \002(PRIVMSG) set\002 <#canal> (+/-)badchan-floodcontrol <nr. intrari>:<nr. secunde>"
+set black(say.ro.man.1277) "Vizualizare setari optiuni: \002%char%show\002 <setare> ; \002%botnick% show\002 <setare> ; \002(PRIVMSG) show\002 <#canal> <setare>"
 
 #Exempt
 

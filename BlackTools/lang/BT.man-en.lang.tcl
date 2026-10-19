@@ -843,7 +843,7 @@ set black(say.en.man.678) "\[MAN\] \002%char%addinfo\002 <text|reset> ; \002%bot
 
 set black(say.en.man.679) "\[MAN\] \002Invite\002 invites a user to the channel. The eggdrop must be a channel operator (@)."
 set black(say.en.man.680) "\[MAN\] USAGE SYNTAX:"
-set black(say.en.man.680) "\[MAN\] \002%char%invite\002 <#chan> <nick> ; \002%botnick% invite\002 <#chan> <nick> ; \002(PRIVMSG) invite\002 <#chan> <nick>"
+set black(say.en.man.680_1) "\[MAN\] \002%char%invite\002 <#chan> <nick> ; \002%botnick% invite\002 <#chan> <nick> ; \002(PRIVMSG) invite\002 <#chan> <nick>"
 
 #Say
 
@@ -1376,7 +1376,7 @@ set black(say.en.man.1177) "\[MAN\] \002%char%set\002 antispam-scantime <period>
 set black(say.en.man.1179) "\[MAN\] \002Idle-ScanTime\002 is an extra option for the \002idle\002 module that allows you to define the maximum time interval between scans after users with \002op (@)\002 or \002voice (+v)\002 who are idleing."
 set black(say.en.man.1179_1) "\[MAN\] Format period: <X>\002m\002 = minutes ; <X>\002h\002 = hours"
 set black(say.en.man.1180) "\[MAN\] USAGE SYNTAX:"
-set black(say.en.man.1181) "\[MAN\] \002%set%set\002 idle-scantime <period> ; \002%botnick% set\002 idle-scantime <period> ; \002(PRIVMSG) set\002 idle-scantime <period>"
+set black(say.en.man.1181) "\[MAN\] \002%char%set\002 idle-scantime <period> ; \002%botnick% set\002 idle-scantime <period> ; \002(PRIVMSG) set\002 idle-scantime <period>"
 
 #CloneScan-ScanTime
 
