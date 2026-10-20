@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792518229"
+set black(current_modif) "1792522008"
 
 ############################### Information files ############################
 
@@ -595,6 +595,17 @@ if {$label ne "" && ![regexp {[*?]} $label]} { incr literal }
 #miss their own timers, so an old timer could reset a flood counter early.
 proc blacktools:glob_escape {text} {
 	return [string map [list "\\" "\\\\" "*" "\\*" "?" "\\?" "\[" "\\\[" "\]" "\\\]"] $text]
+}
+
+############################### Broken lines ##################################
+#Fork change (speakzzz, 2026): data files can end up with a broken line (a
+#crash or a full disk while writing). Readers skip such lines instead of
+#failing; this logs it once per file until the next rehash.
+proc blacktools:bad_lines {file count} {
+	global black
+if {[info exists black(bad_lines_logged:$file)]} { return }
+	set black(bad_lines_logged:$file) 1
+	putlog "\[BT\] WARNING: skipped $count broken line(s) in [file tail $file]. The rest of the file is used as normal."
 }
 
 ############################### Atomic write ##################################
@@ -2787,8 +2798,14 @@ if {![file exists $black(uptime_file)]} {
 	close $file
 	set get_uptime 0
 	set get_online 0
-	set get_uptime [lindex $data 0]
-	set get_online [lindex $data 1]
+#Fork change (speakzzz, 2026): a broken file counts as no record yet (it
+#made this fail every minute); it is rewritten below.
+if {[regexp {^\s*(\d+)\s+(\d+)\s*$} $data -> u o]} {
+	set get_uptime $u
+	set get_online $o
+} elseif {[string trim $data] ne ""} {
+	blacktools:bad_lines $black(uptime_file) 1
+}
 
 if {$read_uptime > $get_uptime} {
 	set add_uptime $read_uptime

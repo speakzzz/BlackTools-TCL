@@ -1,4 +1,15 @@
  2026-10-20 speakzzz
+  * Version 3.1.17: a broken line in a data file can't stop the bot
+  * One broken line in the bans file or the votes file (half-written after
+    a crash or a full disk) stopped the bot from starting: the core failed
+    to load and eggdrop shut down. Such lines are now skipped, the rest of
+    the file is used, and the bot logs once how many lines it skipped.
+  * A broken uptime record made the once-a-minute uptime job fail every
+    minute; it now counts as no record yet and is rewritten. !uptime
+    also no longer fails on an incomplete record.
+  * All 14 data files were tested with broken lines; the others already
+    coped.
+ 2026-10-20 speakzzz
   * Version 3.1.16: the updater can no longer hang, and keeps settings
   * Settings in BlackTools.tcl survive updates again. During an update the
     bot runs from a renamed copy, and the step that carries settings over

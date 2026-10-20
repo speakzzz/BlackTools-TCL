@@ -15,6 +15,25 @@
 #########################################################################
 
 ###
+#Fork change (speakzzz, 2026): a line of the votes file must be a valid Tcl
+#list starting with VOTING or VOTE, and a VOTING line must have whole numbers
+#for its times. A broken line stopped the bot from starting (the vote timer
+#is set up while the core loads). Lines that fail are skipped; files that
+#are rewritten leave them out.
+proc blacktools:vote_line_ok {line} {
+	global black
+if {[string trim $line] eq ""} { return 0 }
+if {[catch {llength $line} n]} {
+	blacktools:bad_lines $black(voting_file) 1
+	return 0
+}
+	set kind [string toupper [lindex $line 0]]
+if {$kind eq "VOTE"} { return [expr {$n >= 7}] }
+if {$kind eq "VOTING" && $n >= 10 && [string is integer -strict [lindex $line 6]] && [string is integer -strict [lindex $line 7]]} { return 1 }
+	blacktools:bad_lines $black(voting_file) 1
+	return 0
+}
+
 proc blacktools:vote:greetshow {nick host hand chan} {
     global black
 if {[setting:get $chan votegreet]} {
@@ -92,6 +111,7 @@ proc blacktools:vote:expire {} {
 	set temp "$black(tempdir)/vote_temp.$timestamp"
 	set tempwrite [open $temp w]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set expire [lindex $line 7]
 if {[string equal -nocase [lindex $line 0] "VOTE"]} {
     puts $tempwrite $line  
@@ -423,6 +443,7 @@ proc blacktools:get_votes {chan id} {
     set output ""
     array set votes [list]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 1]
 if {[string equal -nocase $chan $read_chan] && [string equal -nocase [lindex $line 0] "VOTE"] && [string equal -nocase [lindex $line 2] $id]} {
     lappend votes([lindex $line 5]) 1
@@ -449,6 +470,7 @@ proc blacktools:vote:already_vote {chan id hand host type} {
     set file [open $black(voting_file) r]
     set found_vote 0
     while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 1]
 if {[string equal -nocase $chan $read_chan] && [string equal -nocase [lindex $line 0] "VOTE"] && [string equal -nocase [lindex $line 2] $id] && ([string equal -nocase [lindex $line 3] $hand] && $type == "0" || [string equal -nocase [lindex $line 4] $host] && $type == "1")} {
     set found_vote 1
@@ -466,6 +488,7 @@ proc blacktools:vote_now {hand host chan id type vote} {
     set file [open $black(voting_file) r]
     set found_vote 0
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 1]
 if {[string equal -nocase $chan $read_chan] && [string equal -nocase [lindex $line 0] "VOTE"] && [string equal -nocase [lindex $line 2] $id] && ([string equal -nocase [lindex $line 3] $hand] && $type == "0" || [string equal -nocase [lindex $line 4] $host] && $type == "1")} {
     set found_vote [list [lindex $line 4] [lindex $line 5]]
@@ -489,6 +512,7 @@ proc blacktools:voting_delete {chan id} {
 	set temp "$black(tempdir)/vote_temp.$timestamp"
 	set tempwrite [open $temp w]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
     set read_chan_vote [lindex $line 1]
     set read_id [lindex $line 1]
@@ -513,6 +537,7 @@ proc blacktools:voting_extend {chan id time} {
 	set temp "$black(tempdir)/vote_temp.$timestamp"
 	set tempwrite [open $temp w]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
     set read_id [lindex $line 1]
 if {[string equal -nocase $read_chan $chan] && [string equal -nocase $read_id $id]} {
@@ -538,6 +563,7 @@ proc blacktools:voting_end {chan id} {
 	set temp "$black(tempdir)/vote_temp.$timestamp"
 	set tempwrite [open $temp w]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
     set read_id [lindex $line 1]
 if {[string equal -nocase $read_chan $chan] && [string equal -nocase $read_id $id]} {
@@ -561,6 +587,7 @@ proc blacktools:voting_list {chan lang text who} {
     set counter 0
     set file [open $black(voting_file) r]
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
     set read_type [lindex $line 0]
     set access [lindex $line 9]
@@ -614,6 +641,7 @@ proc blacktools:voting_exists {chan get type} {
     set file [open $black(voting_file) r]
     set found_it -1
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
     set read_id [lindex $line 1]
     set read_name [lindex $line 4]
@@ -632,6 +660,7 @@ proc blacktools:voting_id {chan} {
     set file [open $black(voting_file) r]
     set ids ""
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
     set read_chan [lindex $line 2]
 if {[string equal -nocase $chan $read_chan] && [string equal -nocase [lindex $line 0] "VOTING"]} {
     lappend ids [lindex $line 1]
@@ -653,6 +682,7 @@ if {![file exists $black(voting_file)]} {return 0}
     set file [open $black(voting_file) r]
     set times ""
 while {[gets $file line] != -1} {
+if {![blacktools:vote_line_ok $line]} { continue }
 if {[string equal -nocase [lindex $line 0] "VOTING"]} {
     set expire [lindex $line 7]
     set status [lindex $line 8]

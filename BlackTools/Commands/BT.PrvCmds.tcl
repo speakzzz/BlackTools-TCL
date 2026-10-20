@@ -1729,7 +1729,7 @@ if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set file [open $black(uptime_file) "r"]
 	set data [read -nonewline $file]
 	close $file
-if {$data == ""} {
+if {![regexp {^\s*\d+\s+\d+\s*$} $data]} {
 	set read_maxup "-"
 	set read_maxon "-"
 } else {

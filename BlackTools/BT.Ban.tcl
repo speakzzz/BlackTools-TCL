@@ -49,13 +49,30 @@ proc blacktools:banlist:gl {} {
 }
 
 ###
+#Fork change (speakzzz, 2026): only well-formed ban lines are loaded. A
+#broken line (half-written after a crash or a full disk) stopped the bot from
+#starting: the core failed to load and eggdrop shut down. A line is
+#"type id chan mask hand bantime created sticky global reason...", with id,
+#bantime and created whole numbers.
 proc blacktools:banlist:all {} {
 	global black
 	set file [open $black(bans_file) r]
 	set size [file size $black(bans_file)]
 	set data [split [read $file $size] \n]
 	close $file
-	set banlist [lsearch -all -inline $data "*"]
+	set banlist {}
+	set bad 0
+foreach line $data {
+if {[string trim $line] eq ""} { continue }
+	set w [split $line]
+if {[llength $w] < 9 || ![string is integer -strict [lindex $w 1]] || ![string is integer -strict [lindex $w 5]] || ![string is integer -strict [lindex $w 6]]} {
+	incr bad
+	continue
+}
+	lappend banlist $line
+}
+if {$bad} { blacktools:bad_lines $black(bans_file) $bad }
+	return $banlist
 }
 
 ###
