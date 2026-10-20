@@ -1436,6 +1436,14 @@ set black(say.fr.autoupdate.46) "\005\[BT\]\005 Redémarrage automatique dans 10
 set black(say.fr.autoupdate.47) "\005\[BT\]\005 La dernière mise à jour (\001%msg.1%\001) a été installée par un autre eggdrop du même archive. Utilisez \001%char%update start\001 pour terminer la mise à jour."
 set black(say.fr.autoupdate.48) "\005\[BT\]\005 Dernière mise à jour (\001%msg.1%\001) installée par un autre eggdrop du même archive. Terminer la mise à jour.."
 set black(say.fr.autoupdate.49) "\005\[BT\]\005 \001AutoUpdate\001 est désactivé."
+set black(say.fr.autoupdate.50) "\005\[BT\]\005 Mise à jour ÉCHOUÉE : impossible d'obtenir la liste des fichiers de GitHub (\002%msg.1%\002)."
+set black(say.fr.autoupdate.51) "\005\[BT\]\005 Mise à jour ÉCHOUÉE : impossible de télécharger \001%msg.1%\001 après %msg.2% essais (\002%msg.3%\002)."
+set black(say.fr.autoupdate.52) "\005\[BT\]\005 Mise à jour ÉCHOUÉE : la nouvelle version devrait avoir \002%msg.1%\002 fichiers, mais GitHub en liste \002%msg.2%\002."
+set black(say.fr.autoupdate.53) "\005\[BT\]\005 Mise à jour ÉCHOUÉE : le téléchargement a pris plus de \002%msg.1%\002 minutes."
+set black(say.fr.autoupdate.54) "\005\[BT\]\005 Mise à jour ÉCHOUÉE : impossible de mettre les nouveaux fichiers en place (\002%msg.1%\002)."
+set black(say.fr.autoupdate.55) "\005\[BT\]\005 Rien n'a été modifié : BlackTools \001%msg.1%\001 continue de tourner avec tous ses réglages et données. Vous pouvez réessayer plus tard avec \002update start\002."
+set black(say.fr.autoupdate.56) "\005\[BT\]\005 La mise à jour n'a PAS pu être annulée complètement (\002%msg.1%\002). Le bot tourne pour l'instant avec l'ancienne version depuis \001%msg.2%\001. Ne le redémarrez pas ; voir \001%msg.3%\001."
+set black(say.fr.autoupdate.57) "\005\[BT\]\005 Impossible de lancer la mise à jour : \001%msg.1%\001 n'a pas de ligne \002source %msg.2%\002. Rien n'a été modifié."
 
 ######################################## ALIAS ###################################
 

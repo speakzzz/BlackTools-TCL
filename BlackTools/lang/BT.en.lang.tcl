@@ -1410,6 +1410,14 @@ set black(say.en.autoupdate.46) "\005\[BT\]\005 Automatic \002restart\002 in 10 
 set black(say.en.autoupdate.47) "\005\[BT\]\005 Latest update (\001%msg.1%\001) was installed by another eggdrop from the same archive. Use \001%char%update start\001 to finish update."
 set black(say.en.autoupdate.48) "\005\[BT\]\005 Found latest (\001%msg.1%\001) update installed by another eggdrop from the same archive. Finishing update.."
 set black(say.en.autoupdate.49) "\005\[BT\]\005 \001AutoUpdate\001 is disabled."
+set black(say.en.autoupdate.50) "\005\[BT\]\005 Update FAILED: couldn't get the list of files from GitHub (\002%msg.1%\002)."
+set black(say.en.autoupdate.51) "\005\[BT\]\005 Update FAILED: couldn't download \001%msg.1%\001 after %msg.2% tries (\002%msg.3%\002)."
+set black(say.en.autoupdate.52) "\005\[BT\]\005 Update FAILED: the new version should have \002%msg.1%\002 files, but GitHub lists \002%msg.2%\002."
+set black(say.en.autoupdate.53) "\005\[BT\]\005 Update FAILED: the download took longer than \002%msg.1%\002 minutes."
+set black(say.en.autoupdate.54) "\005\[BT\]\005 Update FAILED: couldn't put the new files in place (\002%msg.1%\002)."
+set black(say.en.autoupdate.55) "\005\[BT\]\005 Nothing was changed: BlackTools \001%msg.1%\001 keeps running with all its settings and data. You can try again later with \002update start\002."
+set black(say.en.autoupdate.56) "\005\[BT\]\005 The update could NOT be undone completely (\002%msg.1%\002). The bot keeps running the old version from \001%msg.2%\001 for now. Don't restart it; see \001%msg.3%\001."
+set black(say.en.autoupdate.57) "\005\[BT\]\005 Can't start the update: \001%msg.1%\001 has no line \002source %msg.2%\002. Nothing was changed."
 
 ######################################## ALIAS ###################################
 

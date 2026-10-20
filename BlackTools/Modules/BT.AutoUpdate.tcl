@@ -42,7 +42,7 @@ if {[catch {package require github} no_github] != 0} {
 
 ###
 #Update source defaults (used if an older BlackTools.tcl config lacks them)
-foreach {bt_var bt_default} {update_owner speakzzz update_repo BlackTools-TCL update_branch master update_verify_cert 1} {
+foreach {bt_var bt_default} {update_owner speakzzz update_repo BlackTools-TCL update_branch master update_verify_cert 1 update_timeout 10} {
 if {![info exists black($bt_var)]} { set black($bt_var) $bt_default }
 }
 unset -nocomplain bt_var bt_default
@@ -288,16 +288,10 @@ if {[catch {file copy -force $black(tclconfig) $black(backup_dir)} error_b] != 0
     set black(update_version) $new_version
     set black(update_last_modify) $last_modify
     set black(update_chan) $chan
-blacktools:every 1000 {
-if {[file isdirectory "$black(backup_dir)/BlackTools"]} {
-    set after_file_num [blacktools:size "$black(backup_dir)/BlackTools"]
-    set current_file_num [blacktools:size "$black(actdir)/BlackTools"]
-if {$current_file_num == $after_file_num} {
+#Fork change (speakzzz, 2026): "file copy" has finished when it returns. The
+#old loop compared the total size of both folders every second and waited
+#forever if the bot saved anything (seen, notes...) in between.
     blacktools:update_backup
-    break
-            }
-        }
-    }
 }
 
 ###
@@ -359,6 +353,24 @@ if {[file isdirectory "$black(dirname)/BlackTools/FILES/TOPWORDS"]} {
 ###
 proc blacktools:backup_run {hand chan new_version last_modify} {
     global black config
+#Fork change (speakzzz, 2026): make sure the eggdrop config has the line that
+#loads BlackTools before anything is changed. Without it the update would
+#rename BlackTools.tcl and the bot couldn't load it again.
+    set file [open $config r]
+    set confdata [read -nonewline $file]
+    close $file
+    set wanted "source $black(dirname)/$black(tclname)"
+    set found 0
+foreach line [split $confdata \n] {
+if {[string equal [string map {\" ""} [string trim $line]] $wanted]} { set found 1 }
+}
+if {!$found} {
+    blacktools:update_put $hand $chan 57 [list $config "$black(dirname)/$black(tclname)"]
+    blacktools:update_unsetflag
+    #update_backup clears update_version, update_hand and update_chan itself
+    unset -nocomplain black(update_last_modify) black(finish_action) black(update_from) black(download_size) black(update_file_saved) black(update_file_topwords)
+    return
+}
     set black(update_old_data) [blacktools:update_data 0 ""]
     set bt_file "$black(dirname)/$black(tclname)"
     set file [open $bt_file r]
@@ -374,12 +386,18 @@ proc blacktools:backup_run {hand chan new_version last_modify} {
     set file [open $config r]
     set data [read -nonewline $file]
     close $file
-    set reg "source $black(dirname)/$black(tclname)"
     set black(restore_config_file) $black(tclname)
     set timestamp [clock format [clock seconds] -format {%Y%m%d%H%M%S}]
     set black(old_config_file) "BlackTools.${timestamp}.tcl"
-    regsub $reg $data "source $black(dirname)/$black(old_config_file)" data
-    blacktools:write_atomic $config $data
+    set out {}
+foreach line [split $data \n] {
+if {[string equal [string map {\" ""} [string trim $line]] $wanted]} {
+    lappend out "source $black(dirname)/$black(old_config_file)"
+} else {
+    lappend out $line
+    }
+}
+    blacktools:write_atomic $config [join $out \n]
     file rename -force "$black(dirname)/$black(tclname)" "$black(dirname)/$black(old_config_file)"
     utimer 5 [list blacktools:update_start_download $hand $chan $new_version $last_modify]
 }
@@ -396,23 +414,282 @@ foreach f $files {
 }
 
 ###
+#Fork change (speakzzz, 2026): a new download stage. The old one asked
+#GitHub for a file list about a dozen times (60 such requests are allowed
+#per hour), registered HTTPS once (a rehash on goro lost it two seconds in),
+#had no timeouts or retries, deleted scripts/BlackTools first, and then
+#waited forever for its file count. Now:
+# - one request lists every file (with its size), HTTPS is registered
+#   again before every request, each request has a timeout and up to 3 tries
+# - files go to scripts/BT.new and replace scripts/BlackTools only once all
+#   of them have arrived with the right size
+# - requests run in the background (the bot keeps working meanwhile)
+# - after black(update_timeout) minutes, or on any failure, the update is
+#   undone (blacktools:update_fail) and the old version keeps running
 proc blacktools:update_start_download {hand chan new_version last_modify} {
     global black
     rehash
     set black(update_hand) $hand
     set black(update_chan) $chan
-    file delete -force "$black(actdir)/BlackTools"
+    set black(update_run) [clock clicks]
+    set black(update_stage) "$black(actdir)/BT.new"
+    file delete -force $black(update_stage)
+    file mkdir $black(update_stage)
+    set minutes $black(update_timeout)
+if {![string is double -strict $minutes] || $minutes <= 0} { set minutes 10 }
+    set black(update_timeout_used) $minutes
+    set black(update_watchdog) [after [expr {int($minutes * 60000)}] [list blacktools:update_dl_timeout $black(update_run)]]
+    #start after the rehash above has run
+    after 3000 [list blacktools:update_dl_list $black(update_run) 1]
+}
+
+#Is this callback still part of the running update?
+proc blacktools:update_dl_alive {run} {
+    global black
+    return [expr {[info exists black(update_run)] && $black(update_run) eq $run}]
+}
+
+#One HTTPS request in the background; calls back with the token, or with
+#"" and the error if the request could not even start
+proc blacktools:update_dl_get {url callback} {
+    global black
+if {[catch {
     blacktools:update_tls_register
-    ::github::github update $black(update_owner) $black(update_repo) $black(actdir) $black(update_branch)
-    blacktools:every 1000 {
-if {[file isdirectory $black(actdir)/BlackTools]} {
-    set size [llength [glob-r "$black(actdir)/BlackTools"]]
-if {$size == $black(download_size)} {
-    blacktools:update_start_restore
-    break
-            }
-        }
+    ::http::config -useragent "BlackTools-updater"
+    ::http::geturl $url -binary 1 -timeout 30000 -command $callback
+} err]} {
+    after 0 [concat $callback [list "" $err]]
     }
+}
+
+#What went wrong with a finished request, or "" if it worked
+proc blacktools:update_dl_problem {tok err} {
+if {$tok eq ""} { return $err }
+    set status [::http::status $tok]
+if {$status ne "ok"} { return $status }
+    set code [::http::ncode $tok]
+if {$code != 200} { return "HTTP $code" }
+    return ""
+}
+
+proc blacktools:update_dl_list {run try} {
+    global black
+if {![blacktools:update_dl_alive $run]} { return }
+    set url "https://api.github.com/repos/$black(update_owner)/$black(update_repo)/git/trees/$black(update_branch)?recursive=1"
+    blacktools:update_dl_get $url [list blacktools:update_dl_list_done $run $try]
+}
+
+proc blacktools:update_dl_list_done {run try tok {err ""}} {
+    global black
+if {![blacktools:update_dl_alive $run]} {
+if {$tok ne ""} { catch {::http::cleanup $tok} }
+    return
+}
+if {[catch {
+    set problem [blacktools:update_dl_problem $tok $err]
+    set body ""
+if {$tok ne ""} {
+    set body [::http::data $tok]
+    ::http::cleanup $tok
+}
+if {$problem ne ""} {
+if {$try < 3} {
+    after 5000 [list blacktools:update_dl_list $run [expr {$try + 1}]]
+    return
+}
+    blacktools:update_fail 50 [list $problem]
+    return
+}
+    set tree [json::json2dict $body]
+if {[dict exists $tree truncated] && [dict get $tree truncated] eq "true"} {
+    blacktools:update_fail 50 [list "the list is incomplete"]
+    return
+}
+    set files {}
+    set inside 0
+foreach item [dict get $tree tree] {
+if {[dict get $item type] ne "blob"} { continue }
+    set path [dict get $item path]
+    #skip hidden files such as .gitignore
+if {[regexp {(^|/)\.} $path]} { continue }
+    lappend files [list $path [dict get $item size]]
+if {[string match "BlackTools/*" $path]} { incr inside }
+}
+if {$inside != $black(download_size)} {
+    blacktools:update_fail 52 [list $black(download_size) $inside]
+    return
+}
+if {[lsearch -exact -index 0 $files $black(restore_config_file)] < 0} {
+    blacktools:update_fail 50 [list "$black(restore_config_file) is missing"]
+    return
+}
+    set black(update_files) $files
+    blacktools:update_dl_file $run 0 1
+} err] == 1} {
+    blacktools:update_fail 50 [list $err]
+    }
+}
+
+#raw.githubusercontent.com address of a file, with unusual characters escaped
+proc blacktools:update_dl_url {path} {
+    set enc ""
+foreach c [split $path ""] {
+if {[regexp {[A-Za-z0-9._~/-]} $c]} {
+    append enc $c
+} else {
+    foreach byte [split [encoding convertto utf-8 $c] ""] { append enc [format %%%02X [scan $byte %c]] }
+    }
+}
+    return [blacktools:update_rawurl $enc]
+}
+
+proc blacktools:update_dl_file {run idx try} {
+    global black
+if {![blacktools:update_dl_alive $run]} { return }
+    set path [lindex $black(update_files) $idx 0]
+    blacktools:update_dl_get [blacktools:update_dl_url $path] [list blacktools:update_dl_file_done $run $idx $try]
+}
+
+proc blacktools:update_dl_file_done {run idx try tok {err ""}} {
+    global black
+if {![blacktools:update_dl_alive $run]} {
+if {$tok ne ""} { catch {::http::cleanup $tok} }
+    return
+}
+if {[catch {
+    lassign [lindex $black(update_files) $idx] path size
+    set problem [blacktools:update_dl_problem $tok $err]
+    set data ""
+if {$tok ne ""} {
+    set data [::http::data $tok]
+    ::http::cleanup $tok
+}
+if {$problem eq "" && [string length $data] != $size} {
+    set problem "got [string length $data] of $size bytes"
+}
+if {$problem ne ""} {
+if {$try < 3} {
+    after 3000 [list blacktools:update_dl_file $run $idx [expr {$try + 1}]]
+    return
+}
+    blacktools:update_fail 51 [list $path $try $problem]
+    return
+}
+    set target [file join $black(update_stage) $path]
+    file mkdir [file dirname $target]
+    set f [open $target w]
+    fconfigure $f -translation binary
+    puts -nonewline $f $data
+    close $f
+    incr idx
+if {$idx < [llength $black(update_files)]} {
+    after 200 [list blacktools:update_dl_file $run $idx 1]
+} else {
+    blacktools:update_dl_install $run
+}
+} err] == 1} {
+    blacktools:update_fail 51 [list [lindex $black(update_files) $idx 0] $try $err]
+    }
+}
+
+#Every file has arrived: put them in place, then restore settings and data
+proc blacktools:update_dl_install {run} {
+    global black
+if {![blacktools:update_dl_alive $run]} { return }
+    after cancel $black(update_watchdog)
+    set stage $black(update_stage)
+    set act $black(actdir)
+    set got [llength [glob-r "$stage/BlackTools"]]
+if {$got != $black(download_size) || ![file exists "$stage/$black(restore_config_file)"]} {
+    blacktools:update_fail 54 [list "only $got of $black(download_size) files are there"]
+    return
+}
+if {[catch {
+if {[file isdirectory "$act/BlackTools"]} {
+    file rename "$act/BlackTools" "$stage/BlackTools.old"
+}
+if {[catch {file rename "$stage/BlackTools" "$act/BlackTools"} err]} {
+    catch {file rename "$stage/BlackTools.old" "$act/BlackTools"}
+    error $err
+}
+foreach f [glob -nocomplain -types f -directory $stage *] {
+    file rename -force $f "$act/[file tail $f]"
+}
+} err]} {
+    blacktools:update_fail 54 [list $err]
+    return
+}
+    catch {file delete -force $stage}
+    unset -nocomplain black(update_run) black(update_files) black(update_stage) black(update_watchdog) black(update_timeout_used)
+    blacktools:update_start_restore
+}
+
+proc blacktools:update_dl_timeout {run} {
+    global black
+if {![blacktools:update_dl_alive $run]} { return }
+    blacktools:update_fail 53 [list $black(update_timeout_used)]
+}
+
+###
+#Fork change (speakzzz, 2026): undo an update that failed, so the bot is
+#left exactly as before: its own program folder, BlackTools.tcl and
+#eggdrop config line, plus the data it saved while running from the backup.
+#The old code waited forever instead, or deleted the backup.
+proc blacktools:update_fail {num args_list} {
+    global black
+    set hand [expr {[info exists black(update_hand)] ? $black(update_hand) : ""}]
+    set chan [expr {[info exists black(update_chan)] ? $black(update_chan) : ""}]
+    #stop everything still running for this update
+    unset -nocomplain black(update_run)
+if {[info exists black(update_watchdog)]} { after cancel $black(update_watchdog) }
+    blacktools:update_put $hand $chan $num $args_list
+    set act $black(actdir)
+    set backup $black(backup_dir)
+    set problems {}
+if {[info exists black(old_config_file)]} {
+    set name $black(restore_config_file)
+if {![file isdirectory "$act/BlackTools"]} {
+if {[catch {file copy -force "$backup/BlackTools" $act} err]} { lappend problems "program folder: $err" }
+} elseif {[catch {blacktools:update_restore_files} err]} {
+    lappend problems "data files: $err"
+}
+if {[catch {file copy -force "$backup/$name" "$act/$name"} err]} { lappend problems "$name: $err" }
+if {[catch {blacktools:update_conf_restore} err]} { lappend problems "eggdrop config: $err" }
+if {![llength $problems]} { catch {file delete -force "$act/$black(old_config_file)"} }
+}
+if {[info exists black(update_stage)]} { catch {file delete -force $black(update_stage)} }
+foreach v {backup_update update_hand update_chan update_files update_stage update_watchdog update_timeout_used
+    old_config_file restore_config_file update_old_data start_update update_last_modify finish_action
+    update_from download_size update_file_saved update_file_topwords update_version} {
+    unset -nocomplain black($v)
+}
+if {[llength $problems]} {
+    blacktools:update_put $hand $chan 56 [list [join $problems "; "] $backup $black(log_file)]
+    return
+}
+    blacktools:update_put $hand $chan 55 [list $black(vers)]
+    #load the old version from its own folder again
+    rehash
+}
+
+#Point the eggdrop config back at BlackTools.tcl (the update pointed it at
+#the renamed copy it runs from meanwhile)
+proc blacktools:update_conf_restore {} {
+    global black config
+    set f [open $config r]
+    set data [read -nonewline $f]
+    close $f
+    set out {}
+    set changed 0
+foreach line [split $data \n] {
+if {[string match -nocase "*/$black(old_config_file)*" $line] && [regexp {^\s*source\s} $line]} {
+    lappend out "source $black(actdir)/$black(restore_config_file)"
+    incr changed
+} else {
+    lappend out $line
+    }
+}
+if {$changed} { blacktools:write_atomic $config [join $out \n] }
 }
 ###
 #https://wiki.tcl-lang.org/page/glob
@@ -442,45 +719,40 @@ proc blacktools:update_start_restore {} {
     set hand $black(update_hand)
     set chan $black(update_chan)
     set userlang [blacktools:update_userlang $hand]
-if {![file isdirectory "$black(actdir)/BlackTools"]} {
-    blacktools:update_put $hand $chan 16 ""
-    file delete -force $black(backup_dir)
-    blacktools:update_unsetflag
-    return
-} elseif {![file exists "$black(actdir)/$black(tclname)"]} {
-    blacktools:update_put $hand $chan 16 ""
-    file delete -force $black(backup_dir)
-    blacktools:update_unsetflag
+#Fork change (speakzzz, 2026): on a problem, undo the update. The old code
+#deleted the backup here, which is what the bot was running from.
+if {![file isdirectory "$black(actdir)/BlackTools"] || ![file exists "$black(actdir)/$black(restore_config_file)"]} {
+    blacktools:update_fail 54 [list "the new files are not in place"]
     return
 }
     set end_download [unixtime]
     set dif [expr {$end_download - $black(start_update)}]
     blacktools:update_put "" "" 17 [list [return_time $userlang $dif]]
-    set newdata [blacktools:update_data 0 ""]
+#Fork change (speakzzz, 2026): read and write the new BlackTools.tcl by its
+#real name. update_data uses $dirname/$tclname, which during an update point
+#at the renamed copy in BT.backup, so nothing was ever restored and every
+#update reset BlackTools.tcl to the defaults.
+    set newcfg "$black(actdir)/$black(restore_config_file)"
+    set f [open $newcfg r]
+    set newdata [read -nonewline $f]
+    close $f
     blacktools:update_put $hand $chan 18 ""
     set restore_config [blacktools:update_restore $black(update_old_data) $newdata]
     unset black(update_old_data)
     set newdata [lindex $restore_config 0]
     set num_var [lindex $restore_config 1]
 if {$num_var > 0} {
-    set newdata [blacktools:update_data 1 $newdata]
+    blacktools:write_atomic $newcfg $newdata
     blacktools:update_put $hand $chan 19 [list $num_var]
 } else {
     blacktools:update_put "" "" 20 ""
 }
     blacktools:update_put $hand $chan 21 ""
-    blacktools:update_restore_files
-blacktools:every 1000 {
-    set info_files_num [llength [glob -nocomplain -directory "$black(actdir)/BlackTools/FILES" "*.txt"]]
-if {[file isdirectory "$black(actdir)/BlackTools/FILES/TOPWORDS"]} {
-    set info_files_topwords [llength [glob -nocomplain -directory "$black(actdir)/BlackTools/FILES/TOPWORDS" "*.txt"]]
-    set info_files_num [expr {$info_files_num + $info_files_topwords}]
-}
-if {$info_files_num == $black(update_file_saved)} {
-    blacktools:update_end $info_files_num
-    break
-        }
-    }
+#Fork change (speakzzz, 2026): the copy has finished when this returns. The
+#old loop waited for the number of data files to match the count from the
+#start, forever if the bot created a new one meanwhile (a first !history
+#entry, a vote...).
+    blacktools:update_end [blacktools:update_restore_files]
 }
 
 ###

@@ -1,4 +1,27 @@
  2026-10-20 speakzzz
+  * Version 3.1.16: the updater can no longer hang, and keeps settings
+  * Settings in BlackTools.tcl survive updates again. During an update the
+    bot runs from a renamed copy, and the step that carries settings over
+    looked for the new BlackTools.tcl under the wrong name, found nothing,
+    and left the defaults: every update reset BlackTools.tcl (X login,
+    chanserv, flood limits, language...).
+  * New download: one request lists all files with their sizes (the old
+    one used about a dozen of GitHub's 60 per hour), HTTPS is registered
+    again before every request (a rehash removed it on one bot and the
+    update hung), every request has a 30 second timeout and up to 3
+    tries, every file is checked against its size, and files go to
+    scripts/BT.new and only replace scripts/BlackTools once all arrived.
+    Requests run in the background, so the bot keeps working meanwhile.
+  * A failed update is undone: the bot keeps its version, folder,
+    BlackTools.tcl, eggdrop config line and the data it saved meanwhile,
+    and says why it failed. It used to wait forever or delete the backup.
+  * New setting black(update_timeout), default 10 minutes.
+  * No more waits that never end: the backup and the data restore no
+    longer wait for byte totals or file counts to match exactly.
+  * The update doesn't start if the eggdrop config has no line that loads
+    BlackTools (it would have renamed BlackTools.tcl and lost it).
+  * New messages autoupdate.50-57 in EN, RO, FR, ES.
+ 2026-10-20 speakzzz
   * Version 3.1.15
   * !history lines also say how long ago the change happened, such as
     (2h15m ago), so admins in different time zones can read them

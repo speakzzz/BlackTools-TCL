@@ -1409,6 +1409,14 @@ set black(say.es.autoupdate.46) "\005\[BT\]\005 005 Automatic \002restart\002 en
 set black(say.es.autoupdate.47) "\005\[BT\]\005 La última actualización (\001%msg.1%\001) fue instalada por otro eggdrop del mismo archivo. Usa \001%char%update start\001 para finalizar la actualización"
 set black(say.es.autoupdate.48) "\005\[BT\]\005 Se encontró la última actualización (\001%msg.1%\001) instalada por otro eggdrop del mismo archivo. Finalizando la actualización..."
 set black(say.es.autoupdate.49) "\005\[BT\]\005 \001AutoUpdate\001 está desactivado."
+set black(say.es.autoupdate.50) "\005\[BT\]\005 Actualización FALLIDA: no se pudo obtener la lista de archivos de GitHub (\002%msg.1%\002)."
+set black(say.es.autoupdate.51) "\005\[BT\]\005 Actualización FALLIDA: no se pudo descargar \001%msg.1%\001 después de %msg.2% intentos (\002%msg.3%\002)."
+set black(say.es.autoupdate.52) "\005\[BT\]\005 Actualización FALLIDA: la nueva versión debería tener \002%msg.1%\002 archivos, pero GitHub muestra \002%msg.2%\002."
+set black(say.es.autoupdate.53) "\005\[BT\]\005 Actualización FALLIDA: la descarga tardó más de \002%msg.1%\002 minutos."
+set black(say.es.autoupdate.54) "\005\[BT\]\005 Actualización FALLIDA: no se pudieron poner los archivos nuevos en su lugar (\002%msg.1%\002)."
+set black(say.es.autoupdate.55) "\005\[BT\]\005 No se cambió nada: BlackTools \001%msg.1%\001 sigue funcionando con todas sus configuraciones y datos. Puedes intentarlo de nuevo más tarde con \002update start\002."
+set black(say.es.autoupdate.56) "\005\[BT\]\005 La actualización NO se pudo deshacer por completo (\002%msg.1%\002). Por ahora el bot sigue con la versión anterior desde \001%msg.2%\001. No lo reinicies; consulta \001%msg.3%\001."
+set black(say.es.autoupdate.57) "\005\[BT\]\005 No se puede iniciar la actualización: \001%msg.1%\001 no tiene la línea \002source %msg.2%\002. No se cambió nada."
 
 ######################################## ALIAS ###################################
 

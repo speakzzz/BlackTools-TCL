@@ -1409,6 +1409,14 @@ set black(say.ro.autoupdate.46) "\005\[BT\]\005 Restart automat in 10 secunde pe
 set black(say.ro.autoupdate.47) "\005\[BT\]\005 Ultimul update (\001%msg.1%\001) a fost instalat de catre alt eggdrop din aceeasi arhiva. Foloseste \001%char%update start\001 pentru a finaliza update."
 set black(say.ro.autoupdate.48) "\005\[BT\]\005 Ultimul update (\001%msg.1%\001) gasit ca instalat de catre alt eggdrop din aceeasi arhiva. Finalizez update.."
 set black(say.ro.autoupdate.49) "\005\[BT\]\005 \001AutoUpdate\001 este oprit definitiv."
+set black(say.ro.autoupdate.50) "\005\[BT\]\005 Update ESUAT: nu am putut obtine lista de fisiere de la GitHub (\002%msg.1%\002)."
+set black(say.ro.autoupdate.51) "\005\[BT\]\005 Update ESUAT: nu am putut descarca \001%msg.1%\001 dupa %msg.2% incercari (\002%msg.3%\002)."
+set black(say.ro.autoupdate.52) "\005\[BT\]\005 Update ESUAT: noua versiune ar trebui sa aiba \002%msg.1%\002 fisiere, dar GitHub arata \002%msg.2%\002."
+set black(say.ro.autoupdate.53) "\005\[BT\]\005 Update ESUAT: descarcarea a durat mai mult de \002%msg.1%\002 minute."
+set black(say.ro.autoupdate.54) "\005\[BT\]\005 Update ESUAT: nu am putut pune fisierele noi la locul lor (\002%msg.1%\002)."
+set black(say.ro.autoupdate.55) "\005\[BT\]\005 Nu s-a schimbat nimic: BlackTools \001%msg.1%\001 ruleaza in continuare cu toate setarile si datele. Poti incerca din nou mai tarziu cu \002update start\002."
+set black(say.ro.autoupdate.56) "\005\[BT\]\005 Update-ul NU a putut fi anulat complet (\002%msg.1%\002). Botul ruleaza deocamdata versiunea veche din \001%msg.2%\001. Nu il reporni; vezi \001%msg.3%\001."
+set black(say.ro.autoupdate.57) "\005\[BT\]\005 Nu pot porni update-ul: \001%msg.1%\001 nu are linia \002source %msg.2%\002. Nu s-a schimbat nimic."
 
 ######################################## ALIAS ###################################
 
