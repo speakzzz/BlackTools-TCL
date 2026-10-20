@@ -10,8 +10,10 @@
 ##   Records who changed users and settings, and when, so a channel   ##
 ##   with several managers can see what happened.                      ##
 ##                                                                     ##
-##   !history [#chan] [number]   changes on a channel (MANAGER+)       ##
-##   !history global [number]    global changes (BOSS, OWNER, MASTER)  ##
+##   !history [#chan] [user] [number]   changes on a channel (MANAGER+)##
+##   !history global [user] [number]    global changes (BOSS, OWNER,  ##
+##                                      MASTER)                        ##
+##   With a user, only changes made by that user or about them.        ##
 ##                                                                     ##
 ##   Nothing is recorded by the commands themselves: when the bot      ##
 ##   sends one of the confirmation messages below (user added, access ##
@@ -40,6 +42,14 @@ set black(history:globalkeys) {
 }
 
 set black(history:keys) [concat $black(history:chankeys) $black(history:globalkeys)]
+
+#Messages whose first detail is the user the change is about (chuser.1 also
+#names the new handle second), for "!history <user>"
+set black(history:userkeys) {
+	add.10 add.19 add.20 del.1 delacc.1 delacc.2 delacc.4 chuser.1
+	addhost.2 delhost.2 s.2 s.5 us.2 us.3
+	auto.10 auto.11 auto.12 auto.13 auto.18 auto.19 auto.20 auto.21
+}
 
 ###################### recording ######################
 
@@ -119,6 +129,33 @@ if {[string first $prefix $tpl] == 0} {
 	return [string map [list {\"} \" {\[} \[ {\]} \] {\?} \? {\\} \\] $reply]
 }
 
+#Is an entry by or about this user? (case doesn't matter)
+proc blacktools:history:about {entry user} {
+	global black
+	lassign $entry time scope echan ehand enick key earg
+if {[string equal -nocase $ehand $user] || [string equal -nocase $enick $user]} { return 1 }
+if {[lsearch -exact $black(history:userkeys) $key] < 0} { return 0 }
+	set words [split $earg]
+if {[string equal -nocase [lindex $words 0] $user]} { return 1 }
+if {$key eq "chuser.1" && [string equal -nocase [lindex $words 1] $user]} { return 1 }
+	return 0
+}
+
+#How long ago, in one word: 45s, 12m, 2h15m, 3d4h, 21d
+proc blacktools:history:age {seconds} {
+if {$seconds < 0} { set seconds 0 }
+if {$seconds < 60} { return "${seconds}s" }
+	set m [expr {$seconds / 60}]
+if {$m < 60} { return "${m}m" }
+	set h [expr {$m / 60}]
+	set m [expr {$m % 60}]
+if {$h < 24} { return [expr {$m ? "${h}h${m}m" : "${h}h"}] }
+	set d [expr {$h / 24}]
+	set h [expr {$h % 24}]
+if {$d < 7 && $h} { return "${d}d${h}h" }
+	return "${d}d"
+}
+
 ###################### !history ######################
 
 proc history:process {nick host hand chan chan1 args_text type} {
@@ -133,10 +170,11 @@ if {[matchattr $hand -|q $chan]} { blacktools:tell $nick $host $hand $chan $chan
 if {$cmd_status == "1"} {
 	return
 }
-	#!history [#chan|global] [number], in any order
+	#!history [#chan|global] [user] [number], in any order
 	set global 0
 	set count 10
 	set target $chan
+	set user ""
 foreach w [split $args_text] {
 if {$w == ""} { continue }
 if {[string equal -nocase $w "global"]} {
@@ -145,6 +183,8 @@ if {[string equal -nocase $w "global"]} {
 	set target $w
 } elseif {[string is digit -strict $w]} {
 	set count $w
+} else {
+	set user $w
 	}
 }
 if {$count < 1} { set count 1 }
@@ -169,29 +209,47 @@ if {![matchattr $hand nmo|M $target]} {
 }
 	set found {}
 foreach e [blacktools:history:read] {
-if {[lindex $e 1] eq $scope} { lappend found $e }
+if {[lindex $e 1] ne $scope} { continue }
+if {$user ne "" && ![blacktools:history:about $e $user]} { continue }
+	lappend found $e
 }
 if {![llength $found]} {
+if {$user ne ""} {
 if {$global} {
+	blacktools:tell $nick $host $hand $target $chan1 history.10 $user
+} else {
+	blacktools:tell $nick $host $hand $target $chan1 history.9 $user
+	}
+} elseif {$global} {
 	blacktools:tell $nick $host $hand $target $chan1 history.5 none
 } else {
 	blacktools:tell $nick $host $hand $target $chan1 history.3 none
 }
 	return
 }
+	#oldest first by time, whatever order the file is in
+	set found [lsort -integer -index 0 $found]
 	set found [lrange $found end-[expr {$count - 1}] end]
+if {$user ne ""} {
 if {$global} {
+	blacktools:tell $nick $host $hand $target $chan1 history.8 "[llength $found] $user"
+} else {
+	blacktools:tell $nick $host $hand $target $chan1 history.7 "[llength $found] $user"
+	}
+} elseif {$global} {
 	blacktools:tell $nick $host $hand $target $chan1 history.4 [llength $found]
 } else {
 	blacktools:tell $nick $host $hand $target $chan1 history.1 [llength $found]
 }
+	set now [clock seconds]
 foreach e [lreverse $found] {
 	lassign $e time scope echan ehand enick key earg
 	set who $ehand
 if {$who == "" || $who == "*"} { set who $enick }
 	set when [clock format $time -format "%Y-%m-%d %H:%M"]
+	set ago [blacktools:history:age [expr {$now - $time}]]
 	set text [blacktools:history:render $hand $echan $key $earg]
-	blacktools:tell $nick $host $hand $target $chan1 history.2 "$when $who $text"
+	blacktools:tell $nick $host $hand $target $chan1 history.2 "$when $ago $who $text"
 	}
 }
 

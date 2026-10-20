@@ -1788,8 +1788,9 @@ set black(say.fr.man.2229) "\[MAN\] \002%char%vote \002\[#chan\]\002 <ID> <lettr
 
 set black(say.fr.man.history.1) "\[MAN\] \002History\002 montre qui a modifié les utilisateurs et les réglages, et quand : utilisateurs ajoutés, supprimés ou renommés, changements d'accès, masques d'hôte, suspensions, automode, réglages du canal et commandes activées ou désactivées. Les plus récentes d'abord."
 set black(say.fr.man.history.2) "\[MAN\] SYNTAXE D'UTILISATION :"
-set black(say.fr.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[nombre\] ; \002%botnick% history\002 \[#canal\] \[nombre\] ; \002(PRIVMSG) history\002 <#canal> \[nombre\]"
+set black(say.fr.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[utilisateur\] \[nombre\] ; \002%botnick% history\002 \[#canal\] \[utilisateur\] \[nombre\] ; \002(PRIVMSG) history\002 <#canal> \[utilisateur\] \[nombre\]"
 set black(say.fr.man.history.4) "\[MAN\] \002%char%history global\002 \[nombre\] montre les modifications qui ne concernent pas un seul canal (BOSS OWNER, OWNER et MASTER uniquement). 10 entrées par défaut, 30 au maximum."
+set black(say.fr.man.history.5) "\[MAN\] Avec un \002utilisateur\002, seules les modifications faites par lui ou le concernant (accès, masques d'hôte, suspensions, automode) sont affichées. Chaque ligne indique depuis combien de temps, par exemple \002(il y a 2h15m)\002."
 
 #Mask
 

@@ -1790,8 +1790,9 @@ set black(say.en.man.2229) "\[MAN\] \002%char%vote \002\[#chan\]\002 <ID> <lette
 
 set black(say.en.man.history.1) "\[MAN\] \002History\002 shows who changed users and settings, and when: users added, removed or renamed, access changes, hostmasks, suspensions, automode, channel settings and commands enabled or disabled. Newest first."
 set black(say.en.man.history.2) "\[MAN\] USAGE SYNTAX:"
-set black(say.en.man.history.3) "\[MAN\] \002%char%history\002 \[#chan\] \[number\] ; \002%botnick% history\002 \[#chan\] \[number\] ; \002(PRIVMSG) history\002 <#chan> \[number\]"
+set black(say.en.man.history.3) "\[MAN\] \002%char%history\002 \[#chan\] \[user\] \[number\] ; \002%botnick% history\002 \[#chan\] \[user\] \[number\] ; \002(PRIVMSG) history\002 <#chan> \[user\] \[number\]"
 set black(say.en.man.history.4) "\[MAN\] \002%char%history global\002 \[number\] shows changes not tied to one channel (BOSS OWNER, OWNER and MASTER only). Shows 10 entries by default, up to 30."
+set black(say.en.man.history.5) "\[MAN\] With a \002user\002, only changes made by that user or about them (their access, hostmasks, suspensions, automode) are shown. Each line says how long ago it happened, for example \002(2h15m ago)\002."
 
 #Mask
 

@@ -1,3 +1,14 @@
+ 2026-10-20 speakzzz
+  * Version 3.1.15
+  * !history lines also say how long ago the change happened, such as
+    (2h15m ago), so admins in different time zones can read them
+    without converting the bot's clock.
+  * !history [#chan|global] <user> shows only the changes made by that
+    user or about them (their access, hostmasks, suspensions, automode,
+    and both the old and the new handle of !chuser). Case doesn't
+    matter. New lang strings history.7-10 and man.history.5 in EN, RO,
+    FR, ES.
+  * Entries are shown in time order even if the file isn't.
  2026-10-19 speakzzz
   * Version 3.1.14
   * "Update finished" linked to the ChangeLog of the original project,

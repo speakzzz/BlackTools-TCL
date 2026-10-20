@@ -2600,6 +2600,7 @@ if {[matchattr $hand nmo|M $chan]} {
 	blacktools:tell $nick $host $hand $chan $chan1 man.history.2 none
 	blacktools:tell $nick $host $hand $chan $chan1 man.history.3 none
 	blacktools:tell $nick $host $hand $chan $chan1 man.history.4 none
+	blacktools:tell $nick $host $hand $chan $chan1 man.history.5 none
 	blacktools:tell $nick $host $hand $chan $chan1 man.showtip none
 	}
 }

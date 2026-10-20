@@ -1789,8 +1789,9 @@ set black(say.ro.man.2229) "\[MAN\] \002%char%vote \002\[#canal\] <ID> <litera> 
 
 set black(say.ro.man.history.1) "\[MAN\] \002History\002 arata cine a modificat useri si setari, si cand: useri adaugati, stersi sau redenumiti, schimbari de acces, hostmask-uri, suspendari, automode, setari de canal si comenzi activate sau dezactivate. Cele mai noi primele."
 set black(say.ro.man.history.2) "\[MAN\] SINTAXA FOLOSIRE:"
-set black(say.ro.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[numar\] ; \002%botnick% history\002 \[#canal\] \[numar\] ; \002(PRIVMSG) history\002 <#canal> \[numar\]"
+set black(say.ro.man.history.3) "\[MAN\] \002%char%history\002 \[#canal\] \[user\] \[numar\] ; \002%botnick% history\002 \[#canal\] \[user\] \[numar\] ; \002(PRIVMSG) history\002 <#canal> \[user\] \[numar\]"
 set black(say.ro.man.history.4) "\[MAN\] \002%char%history global\002 \[numar\] arata modificarile care nu tin de un canal (doar BOSS OWNER, OWNER si MASTER). Arata 10 inregistrari implicit, maxim 30."
+set black(say.ro.man.history.5) "\[MAN\] Cu un \002user\002, se afiseaza doar modificarile facute de acel user sau despre el (accesul, hostmask-urile, suspendarile, automode). Fiecare linie arata cat timp a trecut, de exemplu \002(acum 2h15m)\002."
 
 #Mask
 
