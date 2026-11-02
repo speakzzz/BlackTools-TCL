@@ -1,3 +1,11 @@
+ 2026-11-02 speakzzz
+  * Version 3.1.18
+  * Bans and kicks failed on a channel whose kick counter was never
+    stored (Tcl error: can't use empty string as operand of "+"), for
+    example .b *!*@1.2.3.4 7d spam on a channel added on this bot. The
+    counter isn't created when a channel is added, and the first ban or
+    kick tried to add 1 to an empty value. A missing or broken counter now
+    counts as 0; existing counters carry on as before.
  2026-10-20 speakzzz
   * Version 3.1.17: a broken line in a data file can't stop the bot
   * One broken line in the bans file or the votes file (half-written after

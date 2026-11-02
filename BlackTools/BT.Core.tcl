@@ -22,7 +22,7 @@ set black(glflags) "nmo"
 set black(tclconfig) "$black(backdir)/$black(tclname)"
 set black(tempdir) "$black(backdir)/BlackTools/temp"
 set black(banflag) "B"
-set black(current_modif) "1792522008"
+set black(current_modif) "1793643432"
 
 ############################### Information files ############################
 
@@ -730,7 +730,7 @@ if {[matchattr $finduser $black(exceptflags) $chan]} {
 if {![botisop $chan] && ![setting:get $chan xonly]} {
 	return
 }
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	
@@ -830,7 +830,7 @@ if {[setting:get $chan $hand-reason] != ""} {
 	set replace(%chan%) $chan
 	set reason [string map [array get replace] $getreason]
 	set thereason [encoding convertfrom utf-8 $reason]
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set show_reason $thereason
 if {[setting:get $chan showid]} {
 	set show_reason "$show_reason \[id: $id\]"
@@ -893,10 +893,10 @@ if {$getxlevel == ""} {
 	}
 }
 	set num [blacktools:ban:find_id]
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	
 	set bantime [blacktools:getbantime $chan $hand]
 if {[string equal -nocase $hand "badchan"]} {
@@ -1085,10 +1085,10 @@ if {$bantime != "0"} {
 } else {
 	set reason_time 0
 }
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	blacktools:banner3_stats $rcmd $chan $gethand $type
 if {$bantime == "0"} {
 	set bl 1
@@ -1339,7 +1339,7 @@ if {$xonly == "1"} {
 if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
-	set getcount [setting:get $c kickcount]
+	set getcount [blacktools:kickcount $c]
 	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
@@ -1400,7 +1400,7 @@ if {$get_count >= "2"} {
 if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
-	set getcount [setting:get $c kickcount]
+	set getcount [blacktools:kickcount $c]
 	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
@@ -1442,7 +1442,7 @@ if {$xonly == "1"} {
 if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
-	set getcount [setting:get $c kickcount]
+	set getcount [blacktools:kickcount $c]
 	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
@@ -1483,7 +1483,7 @@ if {[onchan $nick $chan]} {
 if {$linkchans != ""} {
 foreach c $linkchans {
 	set num [blacktools:ban:find_id]
-	set getcount [setting:get $c kickcount]
+	set getcount [blacktools:kickcount $c]
 	set kcount [expr {$getcount +1}]
 	setting:set $c kickcount $kcount
 	set xban 0
@@ -4966,6 +4966,16 @@ if {[string equal -nocase $c $chan] && [string equal -nocase $gettype "XTRA"] &&
 }
 	close $file
 	return $status
+}
+
+#Fork change (speakzzz, 2026): the channel's kick counter as a number. It is
+#never stored when a channel is added, so on such a channel it came back
+#empty and the first ban or kick failed ("can't use empty string as operand
+#of +"). A missing or broken value counts as 0.
+proc blacktools:kickcount {chan} {
+	set v [string trim [join [setting:get $chan kickcount]]]
+if {![string is integer -strict $v] || $v < 0} { return 0 }
+	return $v
 }
 
 proc setting:get {chan setting} {

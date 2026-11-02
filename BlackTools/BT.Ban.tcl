@@ -265,7 +265,7 @@ if {$length_type > 1} {
 	set unixtime [unixtime]
 	set accdenied 0
 	set xban 0
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set show_reason $reason
 if {$bantime != "0"} {
 	set bantime [expr {$unixtime + $sec_bantime}]
@@ -497,7 +497,7 @@ if {$host == ""} {set fulldns $fullhost} else {set fulldns "$rest_host@$host"}
 	set getlang [string tolower [setting:get $chan lang]]
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }
 	set xban 0
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 if {![botisop $chan] && ![setting:get $chan xonly]} {
 	return
 }
@@ -513,7 +513,7 @@ if {$getxlevel == ""} {
 	}
 }
 	set foundgl 0
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 if {[validuser $hand]} {
 if {[matchattr $hand $black(banflag)]} {
 	set hosts [getuser $hand hosts]
@@ -888,7 +888,7 @@ proc blacktools:auto:ban_act {nick uhost vhost chan realname} {
 	set specified_bmask ""
 if {$vhost == ""} { set fulldns $uhost}
 	set xban 0
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set getlang [string tolower [setting:get $chan lang]]
 	chanserv:ignore_remove
 if {$getlang == ""} { set getlang "[string tolower $black(default_lang)]" }

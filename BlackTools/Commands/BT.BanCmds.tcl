@@ -1182,7 +1182,7 @@ if {[setting:get $chan showhandle]} {
 	set reason "($hand) $getreason"
 	} else { set reason "$getreason"
 }
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	blacktools:banner3_stats "w" $chan $hand ""
@@ -1302,7 +1302,7 @@ if {[setting:get $chan showhandle]} {
 	set reason "($hand) $reason1"
 	} else { set reason "$reason1" 
 }
-	set getcount [setting:get $chan kickcount]
+	set getcount [blacktools:kickcount $chan]
 	set kcount [expr {$getcount +1}]
 	setting:set $chan kickcount $kcount
 	blacktools:banner3_stats "k" $chan $hand ""
